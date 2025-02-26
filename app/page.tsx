@@ -14,9 +14,7 @@ export default function Home() {
                 <span className="whitespace-nowrap"> in Seconds</span>
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Transform your LinkedIn profile into a stunning online
-                appearance + CV with just one click. Stand out from the crowd
-                and land your dream job.
+                Transform your LinkedIn profile into a stunning online appearance + CV in just one minute. Stand out from the crowd and land your dream job.
               </p>
             </div>
             <div className="w-full max-w-md space-y-2">

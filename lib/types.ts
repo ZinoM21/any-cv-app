@@ -57,3 +57,9 @@ type VolunteeringExperience = {
   endDate?: string;
   description: string;
 };
+
+export type NavItem = {
+  name: string;
+  href: string;
+  disabled?: boolean;
+};

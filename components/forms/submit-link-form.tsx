@@ -102,7 +102,7 @@ export function SubmitLinkForm() {
                 <Input
                   type="text"
                   placeholder="linkedin.com/in/first-last"
-                  className="shadow-glow"
+                  className="bg-white shadow-[0_0_15px_hsl(var(--primary)_/_0.3)]"
                   required
                   {...field}
                 />
