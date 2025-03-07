@@ -1,4 +1,14 @@
-import { Inter, Manrope, Roboto } from "next/font/google";
+import { Inter, Manrope, Roboto, Geist, Geist_Mono } from "next/font/google";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,4 +28,4 @@ const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 // // define a custom local font where GreatVibes-Regular.ttf is stored in the styles folder
 // const greatVibes = localFont({ src: "./GreatVibes-Regular.ttf" });
 
-export { inter, roboto, manrope };
+export { geistSans, geistMono, inter, roboto, manrope };
