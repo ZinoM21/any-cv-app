@@ -19,6 +19,7 @@ import { extractUsernameFromLinkedInUrl } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useState } from "react";
+import { ProfileData } from "@/lib/types";
 
 const formSchema = z.object({
   linkedInUrl: z
@@ -74,9 +75,9 @@ export function SubmitLinkForm() {
 
       return response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: (data: ProfileData) => {
       setIsNavigating(true);
-      router.push(`/generate/${data.username}`);
+      router.push(`/generate/choose?username=${data.username}`);
     },
     onError: (error) => {
       console.error(error);
