@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { extractUsernameFromLinkedInUrl } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const formSchema = z.object({
   linkedInUrl: z
@@ -47,6 +48,7 @@ export function SubmitLinkForm() {
   });
 
   const router = useRouter();
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const mutation = useMutation({
     mutationFn: async (username: string) => {
@@ -62,7 +64,8 @@ export function SubmitLinkForm() {
       );
 
       if (response.status === 404) {
-        throw new Error("This Profile does not exits, try again");
+        const { detail: err } = await response.json();
+        throw new Error(err);
       }
 
       if (!response.ok) {
@@ -72,7 +75,7 @@ export function SubmitLinkForm() {
       return response.json();
     },
     onSuccess: (data) => {
-      console.log(data);
+      setIsNavigating(true);
       router.push(`/generate/${data.username}`);
     },
     onError: (error) => {
@@ -118,10 +121,10 @@ export function SubmitLinkForm() {
         <Button
           type="submit"
           className="w-full sm:w-auto"
-          disabled={mutation.isPending}
+          disabled={mutation.isPending || isNavigating}
         >
-          {mutation.isPending ? "Generating..." : "Generate CV"}
-          {mutation.isPending ? (
+          {mutation.isPending || isNavigating ? "Generating..." : "Generate CV"}
+          {mutation.isPending || isNavigating ? (
             <Loader2 className="animate-spin" />
           ) : (
             <FileUser />
