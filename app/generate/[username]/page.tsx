@@ -1,13 +1,20 @@
 // import GenerateUI from "@/components/generate-ui";
 import TheApply from "@/components/templates/the-apply/the-apply";
 import TheBasic from "@/components/templates/the-basic/the-basic";
-import { profileData, profileDataZ } from "@/lib/content";
 
-export default async function GeneratingPage() {
-  // {params: { username }}: {params: { username: string };}
-  // return <GenerateUI username={username} />;
-  // const profileData = sessionStorage.getItem("");
+export default async function GeneratingPage({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const { username } = await params;
 
-  // return <TheApply profileData={profileDataZ} />;
-  return <TheBasic profileData={profileDataZ} />;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${username}`
+  );
+
+  const profileData = await response.json();
+
+  return <TheApply profileData={profileData} />;
+  // return <TheBasic profileData={profileData} />;
 }
