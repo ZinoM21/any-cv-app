@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import MobileHamburgerMenu from "./mobile-hamburger-menu";
+
 import { mainNav } from "@/config/nav";
+import MobileHamburgerMenu from "./mobile-hamburger-menu";
 
 export function Header() {
   return (

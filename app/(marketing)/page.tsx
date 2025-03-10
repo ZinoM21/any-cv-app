@@ -1,11 +1,10 @@
-import { RotatingText } from "@/components/rotating-text";
-import { SubmitLinkForm } from "@/components/forms/submit-link-form";
-import { Toaster } from "sonner";
+import { RotatingText } from "@/app/(marketing)/components/rotating-text";
+import { SubmitLinkForm } from "@/app/(marketing)/components/submit-link-form";
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-      <section className="w-full flex justify-center py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-primary/20 to-background">
+    <div className="mt-[82px] flex flex-col gap-8 row-start-2 items-center sm:items-start">
+      <section className="w-full flex justify-center py-12 md:py-24 lg:py-32 xl:py-48 ">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-8 text-center">
             <div className="space-y-4">
@@ -25,7 +24,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <Toaster position="top-center" richColors closeButton />
-    </main>
+    </div>
   );
 }
