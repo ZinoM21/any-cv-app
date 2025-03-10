@@ -45,7 +45,7 @@ export default async function GeneratingPage({
       >
         <Link href="/">
           <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
-          Back to home
+          Back
         </Link>
       </Button>
       <div className="flex h-full flex-col items-center justify-center">

@@ -19,8 +19,8 @@ import { extractUsernameFromLinkedInUrl } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useProfile } from "@/context/profile-context";
 import { ProfileData } from "@/lib/types";
+import { useProfileStore } from "@/hooks/use-profile";
 
 const formSchema = z.object({
   linkedInUrl: z
@@ -50,7 +50,7 @@ export function SubmitLinkForm() {
   });
 
   const router = useRouter();
-  const { setProfileData } = useProfile();
+  const setProfileData = useProfileStore((state) => state.setProfile);
   const [isNavigating, setIsNavigating] = useState(false);
 
   const mutation = useMutation({
