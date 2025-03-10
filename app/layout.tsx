@@ -21,7 +21,7 @@ export default function RootLayout({
           <main className="bg-gradient-to-b from-primary/20 to-background">
             {children}
           </main>
-          <Toaster position="top-center" richColors closeButton />
+          <Toaster position="top-center" richColors closeButton theme="light" />
         </Providers>
       </body>
     </html>
