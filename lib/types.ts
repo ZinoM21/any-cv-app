@@ -1,3 +1,5 @@
+import { SearchParams } from "next/dist/server/request/search-params";
+
 export type ProfileData = {
   firstName: string;
   lastName: string;
@@ -63,3 +65,5 @@ export type NavItem = {
   href: string;
   disabled?: boolean;
 };
+
+export type PromiseSearchParams = Promise<SearchParams>;

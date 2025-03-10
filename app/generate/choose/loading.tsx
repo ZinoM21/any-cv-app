@@ -5,6 +5,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardFooter,
 } from "@/components/ui/card";
 
 export default function LoadingGenerate() {
@@ -39,6 +40,9 @@ export default function LoadingGenerate() {
             </div>
           </div>
         </CardContent>
+        <CardFooter className="text-sm text-muted-foreground">
+          <Skeleton className="w-72 h-4 mt-2" />
+        </CardFooter>
       </Card>
     </div>
   );
