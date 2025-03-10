@@ -14,20 +14,14 @@ export type ProfileData = {
   volunteering: VolunteeringExperience[];
 };
 
-type Experience = {
+export type Experience = {
   company: string;
   companyProfileUrl?: string;
   companyLogoUrl?: string;
   positions: Position[];
-  //   startDate: string;
-  //   endDate?: string;
-  //   duration?: string;
-  //   description: string;
-  //   location?: string;
-  //   workSetting?: string;
 };
 
-type Position = {
+export type Position = {
   title: string;
   startDate: string;
   endDate?: string;
@@ -37,7 +31,7 @@ type Position = {
   workSetting?: string | null;
 };
 
-type Education = {
+export type Education = {
   school: string;
   schoolProfileUrl?: string;
   schoolPictureUrl?: string; // Added this line
@@ -50,11 +44,11 @@ type Education = {
   description?: string | null;
 };
 
-type VolunteeringExperience = {
+export type VolunteeringExperience = {
   role: string;
   organization: string;
   organizationProfileUrl?: string;
-  Cause: string;
+  cause: string;
   startDate: string;
   endDate?: string;
   description: string;
@@ -64,6 +58,12 @@ export type NavItem = {
   name: string;
   href: string;
   disabled?: boolean;
+};
+
+export type CVTemplate = {
+  id: string;
+  name: string;
+  description: string;
 };
 
 export type PromiseSearchParams = Promise<SearchParams>;
