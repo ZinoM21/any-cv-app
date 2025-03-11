@@ -26,7 +26,7 @@ export type Position = {
   startDate: string;
   endDate?: string;
   duration?: string;
-  description: string;
+  description?: string;
   location?: string;
   workSetting?: string | null;
 };

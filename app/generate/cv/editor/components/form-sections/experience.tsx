@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { z } from "zod";
+import {
+  FieldValues,
+  useFieldArray,
+  useFormContext,
+  UseFormSetValue,
+} from "react-hook-form";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -21,13 +28,79 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { PositionForm } from "./position";
-import { ProfileData } from "@/lib/types";
+import { Experience, ProfileData } from "@/lib/types";
 import { useProfileStore } from "@/hooks/use-profile";
+import Image from "next/image";
+import { EditorForm } from "./editor-form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 
-export function ExperienceForm() {
+const positionSchema = z.object({
+  title: z.string(),
+  startDate: z.string(),
+  endDate: z.string().optional(),
+  description: z.string().optional(),
+  location: z.string().optional(),
+  workSetting: z.string().optional().nullable(),
+});
+
+const experienceSchema = z.object({
+  company: z.string(),
+  companyProfileUrl: z.string().optional(),
+  companyLogoUrl: z.string().optional(),
+  positions: z.array(positionSchema),
+});
+
+const experienceFormSchema = z.object({
+  experiences: z.array(experienceSchema),
+});
+
+type ExperienceFormValues = z.infer<typeof experienceFormSchema>;
+
+export function ExperienceForm({
+  changeToNextTab,
+  activeTab,
+}: {
+  changeToNextTab: (value?: string) => void;
+  activeTab: string;
+}) {
   const profileData = useProfileStore((state) => state.profile);
-  const setProfileData = useProfileStore((state) => state.setProfile);
 
+  const initialValues: ExperienceFormValues = {
+    experiences: profileData?.experiences || [],
+  };
+
+  return (
+    <EditorForm
+      schema={experienceFormSchema}
+      initialValues={initialValues}
+      changeToNextTab={changeToNextTab}
+      activeTab={activeTab}
+      nextTabLabel="Education"
+      title="Work Experience"
+    >
+      {() => <ExperienceFormFields />}
+    </EditorForm>
+  );
+}
+
+const ExperienceFormFields = () => {
+  const { control, setValue, watch } = useFormContext();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "experiences",
+  });
+
+  const experiences: Experience[] = watch("experiences");
+
+  const [expandedExperience, setExpandedExperience] = useState<number | null>(
+    null
+  );
   const [newExperience, setNewExperience] = useState<
     ProfileData["experiences"][0]
   >({
@@ -37,97 +110,64 @@ export function ExperienceForm() {
     positions: [],
   });
 
-  const [expandedExperience, setExpandedExperience] = useState<number | null>(
-    null
-  );
-
-  const handleAddExperience = () => {
-    if (newExperience.company && newExperience.positions.length > 0) {
-      setProfileData({
-        ...profileData,
-        experiences: [...profileData?.experiences, { ...newExperience }],
-      });
-      setNewExperience({
-        company: "",
-        companyProfileUrl: "",
-        companyLogoUrl: "",
-        positions: [],
-      });
-    }
-  };
-
-  const handleRemoveExperience = (index: number) => {
-    setProfileData({
-      ...profileData,
-      experiences: profileData?.experiences.filter((_, i) => i !== index),
-    });
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewExperience({
-      ...newExperience,
-      [name]: value,
-    });
-  };
-
-  const handleCompanyLogoUpload = () => {
-    // In a real app, this would open a file picker and handle the upload
-    const url = prompt("Enter URL for company logo (for demo purposes):");
-    if (url) {
-      setNewExperience({
-        ...newExperience,
-        companyLogoUrl: url,
-      });
-    }
-  };
-
   const toggleExpandExperience = (index: number) => {
     setExpandedExperience(expandedExperience === index ? null : index);
   };
 
-  const updateExistingExperience = (
-    index: number,
-    updatedExperience: ProfileData["experiences"][0]
+  const handleCompanyLogoUpload = (
+    setValue: UseFormSetValue<FieldValues>,
+    index?: number
   ) => {
-    const updatedExperiences = [...profileData?.experiences];
-    updatedExperiences[index] = updatedExperience;
-    setProfileData({
-      ...profileData,
-      experiences: updatedExperiences,
-    });
+    // In a real app, this would open a file picker and handle the upload
+    const url = prompt("Enter URL for company logo (for demo purposes):");
+    if (url) {
+      if (index !== undefined) {
+        setValue(`experiences.${index}.companyLogoUrl`, url);
+      } else {
+        setNewExperience({
+          ...newExperience,
+          companyLogoUrl: url,
+        });
+      }
+    }
   };
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-slate-900">Work Experience</h2>
-
       {/* Existing experiences */}
-      {profileData?.experiences.length > 0 && (
+      {fields.length > 0 && (
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-slate-500">
             Added Experiences
           </h3>
 
-          {profileData?.experiences.map((exp, index) => (
-            <Card key={index}>
+          {fields.map((field, index) => (
+            <Card key={field.id}>
               <CardHeader className="p-4 pb-2">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    {exp.companyLogoUrl && (
-                      <div className="h-10 w-10 overflow-hidden rounded-md bg-slate-100">
-                        <img
-                          src={exp.companyLogoUrl || "/placeholder.svg"}
-                          alt={exp.company}
-                          className="h-full w-full object-contain"
+                    {experiences[index]?.companyLogoUrl && (
+                      <div className="size-10 overflow-hidden rounded-md bg-slate-100">
+                        <Image
+                          src={
+                            experiences[index]?.companyLogoUrl ||
+                            "/placeholder.svg"
+                          }
+                          alt={experiences[index]?.company || ""}
+                          width={80}
+                          height={80}
                         />
                       </div>
                     )}
                     <div>
-                      <CardTitle className="text-base">{exp.company}</CardTitle>
+                      <CardTitle className="text-base">
+                        {experiences[index]?.company}
+                      </CardTitle>
                       <CardDescription>
-                        {exp.positions.length}{" "}
-                        {exp.positions.length === 1 ? "position" : "positions"}
+                        {experiences[index]?.positions?.length || 0}{" "}
+                        {experiences[index]?.positions?.length === 1
+                          ? "position"
+                          : "positions"}
                       </CardDescription>
                     </div>
                   </div>
@@ -148,7 +188,7 @@ export function ExperienceForm() {
                       variant="ghost"
                       size="icon"
                       className="text-slate-400 hover:text-red-500"
-                      onClick={() => handleRemoveExperience(index)}
+                      onClick={() => remove(index)}
                     >
                       <Trash className="h-4 w-4" />
                     </Button>
@@ -160,46 +200,51 @@ export function ExperienceForm() {
                 <CardContent className="px-4 pb-4 pt-0">
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label htmlFor={`company-${index}`}>Company</Label>
-                        <Input
-                          id={`company-${index}`}
-                          value={exp.company}
-                          onChange={(e) =>
-                            updateExistingExperience(index, {
-                              ...exp,
-                              company: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
+                      <FormField
+                        control={control}
+                        name={`experiences.${index}.company`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Company</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
 
-                      <div className="space-y-2">
-                        <Label htmlFor={`companyProfileUrl-${index}`}>
-                          Company Profile URL (Optional)
-                        </Label>
-                        <Input
-                          id={`companyProfileUrl-${index}`}
-                          value={exp.companyProfileUrl || ""}
-                          onChange={(e) =>
-                            updateExistingExperience(index, {
-                              ...exp,
-                              companyProfileUrl: e.target.value,
-                            })
-                          }
-                          placeholder="https://company.com"
-                        />
-                      </div>
+                      <FormField
+                        control={control}
+                        name={`experiences.${index}.companyProfileUrl`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              Company Profile URL (Optional)
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="https://company.com"
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
                     </div>
 
                     <div className="space-y-2">
                       <Label>Company Logo (Optional)</Label>
                       <div className="flex items-center gap-4">
-                        {exp.companyLogoUrl ? (
+                        {experiences[index]?.companyLogoUrl ? (
                           <div className="h-16 w-16 overflow-hidden rounded-md bg-slate-100">
-                            <img
-                              src={exp.companyLogoUrl || "/placeholder.svg"}
-                              alt={exp.company}
+                            <Image
+                              src={
+                                experiences[index]?.companyLogoUrl ||
+                                "/placeholder.svg"
+                              }
+                              alt={experiences[index]?.company || ""}
+                              width={80}
+                              height={80}
                               className="h-full w-full object-contain"
                             />
                           </div>
@@ -212,17 +257,9 @@ export function ExperienceForm() {
                         <Button
                           type="button"
                           variant="outline"
-                          onClick={() => {
-                            const url = prompt(
-                              "Enter URL for company logo (for demo purposes):"
-                            );
-                            if (url) {
-                              updateExistingExperience(index, {
-                                ...exp,
-                                companyLogoUrl: url,
-                              });
-                            }
-                          }}
+                          onClick={() =>
+                            handleCompanyLogoUpload(setValue, index)
+                          }
                         >
                           Change Logo
                         </Button>
@@ -236,19 +273,18 @@ export function ExperienceForm() {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            updateExistingExperience(index, {
-                              ...exp,
-                              positions: [
-                                ...exp.positions,
-                                {
-                                  title: "",
-                                  startDate: "",
-                                  description: "",
-                                  location: "",
-                                  workSetting: null,
-                                },
-                              ],
-                            });
+                            const positions =
+                              experiences[index]?.positions || [];
+                            setValue(`experiences.${index}.positions`, [
+                              ...positions,
+                              {
+                                title: "",
+                                startDate: "",
+                                description: "",
+                                location: "",
+                                workSetting: null,
+                              },
+                            ]);
                           }}
                         >
                           <Plus className="mr-2 h-3 w-3" />
@@ -257,42 +293,51 @@ export function ExperienceForm() {
                       </div>
 
                       <Accordion type="multiple" className="w-full">
-                        {exp.positions.map((position, posIndex) => (
-                          <AccordionItem
-                            key={posIndex}
-                            value={`position-${posIndex}`}
-                          >
-                            <AccordionTrigger className="py-2">
-                              <div className="flex items-center justify-between">
-                                <span>{position.title || "New Position"}</span>
-                              </div>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                              <div className="pt-2">
-                                <PositionForm
-                                  position={position}
-                                  onChange={(updatedPosition) => {
-                                    const updatedPositions = [...exp.positions];
-                                    updatedPositions[posIndex] =
-                                      updatedPosition;
-                                    updateExistingExperience(index, {
-                                      ...exp,
-                                      positions: updatedPositions,
-                                    });
-                                  }}
-                                  onRemove={() => {
-                                    updateExistingExperience(index, {
-                                      ...exp,
-                                      positions: exp.positions.filter(
+                        {experiences[index]?.positions?.map(
+                          (position, posIndex) => (
+                            <AccordionItem
+                              key={posIndex}
+                              value={`position-${index}-${posIndex}`}
+                            >
+                              <AccordionTrigger className="py-2">
+                                <div className="flex items-center justify-between">
+                                  <span>
+                                    {position.title || "New Position"}
+                                  </span>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <div className="pt-2">
+                                  <PositionForm
+                                    position={position}
+                                    onChange={(updatedPosition) => {
+                                      const updatedPositions = [
+                                        ...experiences[index]?.positions,
+                                      ];
+                                      updatedPositions[posIndex] =
+                                        updatedPosition;
+                                      setValue(
+                                        `experiences.${index}.positions`,
+                                        updatedPositions
+                                      );
+                                    }}
+                                    onRemove={() => {
+                                      const updatedPositions = experiences[
+                                        index
+                                      ]?.positions?.filter(
                                         (_, i) => i !== posIndex
-                                      ),
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </AccordionContent>
-                          </AccordionItem>
-                        ))}
+                                      );
+                                      setValue(
+                                        `experiences.${index}.positions`,
+                                        updatedPositions
+                                      );
+                                    }}
+                                  />
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          )
+                        )}
                       </Accordion>
                     </div>
                   </div>
@@ -317,7 +362,12 @@ export function ExperienceForm() {
                 id="company"
                 name="company"
                 value={newExperience.company}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  setNewExperience({
+                    ...newExperience,
+                    company: e.target.value,
+                  });
+                }}
                 placeholder="Acme Inc."
               />
             </div>
@@ -330,7 +380,12 @@ export function ExperienceForm() {
                 id="companyProfileUrl"
                 name="companyProfileUrl"
                 value={newExperience.companyProfileUrl || ""}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  setNewExperience({
+                    ...newExperience,
+                    companyProfileUrl: e.target.value,
+                  });
+                }}
                 placeholder="https://company.com"
               />
             </div>
@@ -356,7 +411,7 @@ export function ExperienceForm() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={handleCompanyLogoUpload}
+                onClick={() => handleCompanyLogoUpload(setValue)}
               >
                 Upload Logo
               </Button>
@@ -441,7 +496,17 @@ export function ExperienceForm() {
         </CardContent>
         <CardFooter>
           <Button
-            onClick={handleAddExperience}
+            onClick={() => {
+              if (newExperience.company && newExperience.positions.length > 0) {
+                append(newExperience);
+                setNewExperience({
+                  company: "",
+                  companyProfileUrl: "",
+                  companyLogoUrl: "",
+                  positions: [],
+                });
+              }
+            }}
             disabled={
               !newExperience.company || newExperience.positions.length === 0
             }
@@ -453,4 +518,4 @@ export function ExperienceForm() {
       </Card>
     </div>
   );
-}
+};
