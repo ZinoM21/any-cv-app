@@ -36,7 +36,9 @@ export function CVPreview({ templateId }: { templateId: string }) {
       {/* Preview toolbar */}
       <div className="z-10 flex items-center justify-between border-b bg-white p-4">
         <h2 className="text-lg font-medium text-slate-900">
-          Preview for {profileData?.firstName}&apos;s {template?.name} CV{" "}
+          Preview for{" "}
+          {profileData?.firstName ? `${profileData.firstName}'s` : ""}{" "}
+          {template?.name} CV{" "}
         </h2>
         <div className="flex items-center gap-2">
           <Button

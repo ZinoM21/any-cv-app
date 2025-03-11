@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 
-import { PersonalInfoForm } from "./form-sections/personal-info";
-import { ProfessionalSummaryForm } from "./form-sections/professional-summary";
+import { SummaryForm } from "./form-sections/summary";
 import { ExperienceForm } from "./form-sections/experience";
 import { EducationForm } from "./form-sections/education";
 import { SkillsForm } from "./form-sections/skills";
@@ -14,7 +13,7 @@ import { ArrowLeft, Download, Save } from "lucide-react";
 import Link from "next/link";
 
 export function CVForm({ username }: { username: string }) {
-  const [activeTab, setActiveTab] = useState("personal");
+  const [activeTab, setActiveTab] = useState("summary");
 
   const handleSave = () => {
     // In a real app, this would save to a database
@@ -51,41 +50,33 @@ export function CVForm({ username }: { username: string }) {
         </div>
       </div>
 
-      {/* Form content */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-6">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-6 grid w-full grid-cols-3 lg:grid-cols-6">
-              <TabsTrigger value="personal">Personal</TabsTrigger>
-              <TabsTrigger value="summary">Summary</TabsTrigger>
-              <TabsTrigger value="experience">Experience</TabsTrigger>
-              <TabsTrigger value="education">Education</TabsTrigger>
-              <TabsTrigger value="skills">Skills</TabsTrigger>
-              <TabsTrigger value="volunteering">Volunteering</TabsTrigger>
+            <TabsList className="mb-6 w-full">
+              <TabsTrigger value="summary" className="grow min-w-0 px-1">
+                <span className="overflow-hidden text-ellipsis">Summary</span>
+              </TabsTrigger>
+              <TabsTrigger value="experience" className="grow min-w-0 px-1">
+                <span className="overflow-hidden text-ellipsis">
+                  Experience
+                </span>
+              </TabsTrigger>
+              <TabsTrigger value="education" className="grow min-w-0 px-1">
+                <span className="overflow-hidden text-ellipsis">Education</span>
+              </TabsTrigger>
+              <TabsTrigger value="skills" className="grow min-w-0 px-1">
+                <span className="overflow-hidden text-ellipsis">Skills</span>
+              </TabsTrigger>
+              <TabsTrigger value="volunteering" className="grow min-w-0 px-1">
+                <span className="overflow-hidden text-ellipsis">
+                  Volunteering
+                </span>
+              </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="personal">
-              <PersonalInfoForm />
-              <div className="mt-6 flex justify-end">
-                <Button onClick={() => setActiveTab("summary")}>
-                  Next: Professional Summary
-                </Button>
-              </div>
-            </TabsContent>
-
             <TabsContent value="summary">
-              <ProfessionalSummaryForm />
-              <div className="mt-6 flex justify-between">
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveTab("personal")}
-                >
-                  Back
-                </Button>
-                <Button onClick={() => setActiveTab("experience")}>
-                  Next: Experience
-                </Button>
-              </div>
+              <SummaryForm changeToNextTab={(value) => setActiveTab(value || "experience")} activeTab={activeTab} />
             </TabsContent>
 
             <TabsContent value="experience">

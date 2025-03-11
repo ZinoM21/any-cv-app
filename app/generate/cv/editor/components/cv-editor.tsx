@@ -18,6 +18,7 @@ export default function CVEditor({
   const setProfileData = useProfileStore((state) => state.setProfile);
 
   useEffect(() => {
+    // Set initial profile data
     setProfileData(profileData);
 
     // Check for mobile view
@@ -28,7 +29,7 @@ export default function CVEditor({
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
-  }, [profileData]);
+  }, [profileData, setProfileData]);
 
   return (
     <>
