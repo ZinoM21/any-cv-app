@@ -12,15 +12,15 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { toast } from "sonner";
 
-import type { ProfileData } from "@/lib/types";
-import { editorTabs, type EditorTab } from "@/config/editor-tabs";
+import type { EditorTab, ProfileData } from "@/lib/types";
+import { editorTabsConfig } from "@/config/editor-tabs";
+import { useEditorTabStore } from "@/hooks/use-editor-tabs";
+import { Save } from "lucide-react";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
   initialValues: z.infer<T>;
   children: (methods: ReturnType<typeof useForm<z.infer<T>>>) => ReactNode;
-  changeToNextTab: (value?: string) => void;
-  activeTab: string;
   tab: EditorTab;
 }
 
@@ -28,12 +28,19 @@ export function EditorForm<T extends z.ZodTypeAny>({
   schema,
   initialValues,
   children,
-  changeToNextTab,
-  activeTab,
   tab,
 }: EditorFormProps<T>) {
   const profileData = useProfileStore((state) => state.profile);
   const setProfileData = useProfileStore((state) => state.setProfile);
+
+  const activeTab = useEditorTabStore((state) => state.activeTab);
+  const setActiveTab = useEditorTabStore((state) => state.setActiveTab);
+
+  const tabIndex = editorTabsConfig.findIndex((t) => t.name === activeTab);
+  const nextTab = editorTabsConfig[tabIndex + 1].name;
+  const previousTab = editorTabsConfig[tabIndex - 1]?.name;
+  const isFirstTab = tabIndex === 0;
+  const isLastTab = tabIndex === editorTabsConfig.length - 1;
 
   const formMethods = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
@@ -42,12 +49,16 @@ export function EditorForm<T extends z.ZodTypeAny>({
 
   const {
     handleSubmit,
-    formState: { dirtyFields, isDirty },
+    formState: { dirtyFields, isDirty, isValid },
     reset,
   } = formMethods;
 
   const { mutateAsync: mutateProfileData } = useMutation({
-    mutationFn: async (newValues: Partial<ProfileData>) => {
+    mutationFn: async (values: {
+      newValues: Partial<ProfileData>;
+      moveToNextTab: boolean;
+    }) => {
+      const { newValues } = values;
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${profileData?.username}`,
         {
@@ -65,7 +76,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
 
       return response.json();
     },
-    onMutate: async (newValues) => {
+    onMutate: async ({ newValues, moveToNextTab }) => {
       // Capture current state for rollback
       const snapshot = { prevProfileData: profileData, previousTab: activeTab };
 
@@ -74,7 +85,9 @@ export function EditorForm<T extends z.ZodTypeAny>({
         ...prevProfileData,
         ...newValues,
       }));
-      changeToNextTab();
+      if (moveToNextTab) {
+        setActiveTab(nextTab);
+      }
 
       return snapshot;
     },
@@ -86,17 +99,22 @@ export function EditorForm<T extends z.ZodTypeAny>({
         ...newValues,
       }));
     },
-    onError: (error, _, snapshot) => {
+    onError: (error, values, snapshot) => {
       // Roll back optimistic update
-      setProfileData(snapshot!.prevProfileData!);
-      changeToNextTab(snapshot?.previousTab);
+      if (snapshot) {
+        setProfileData(snapshot.prevProfileData as ProfileData);
+
+        if (values.moveToNextTab) {
+          setActiveTab(snapshot.previousTab);
+        }
+      }
 
       console.error(error);
       toast.error(error.message);
     },
   });
 
-  const submit = async (data: z.infer<T>) => {
+  const submit = async (data: z.infer<T>, moveToNextTab: boolean = false) => {
     if (isDirty) {
       const values = Object.keys(dirtyFields).reduce((fields, key) => {
         const fieldKey = key as keyof typeof data;
@@ -106,16 +124,11 @@ export function EditorForm<T extends z.ZodTypeAny>({
         };
       }, {});
 
-      await mutateProfileData(values);
+      await mutateProfileData({ newValues: values, moveToNextTab });
+    } else if (moveToNextTab) {
+      setActiveTab(nextTab);
     }
-
-    changeToNextTab();
   };
-
-  const tabIndex = editorTabs.findIndex((t) => t.name === activeTab);
-  const nextTab = editorTabs[tabIndex + 1].name;
-  const isFirstTab = tabIndex === 0;
-  const isLastTab = tabIndex === editorTabs.length - 1;
 
   useEffect(() => {
     if (profileData) {
@@ -124,34 +137,44 @@ export function EditorForm<T extends z.ZodTypeAny>({
   }, [profileData, initialValues, reset]);
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-slate-900">{tab.label}</h2>
+    <Form {...formMethods}>
+      <form
+        onSubmit={handleSubmit(async (data) => submit(data))}
+        className="space-y-6"
+      >
+        <div className="flex gap-2 w-full items-center justify-between">
+          <h2 className="text-xl font-semibold text-slate-900">{tab.label}</h2>
 
-      <Form {...formMethods}>
-        <form onSubmit={handleSubmit(submit)} className="space-y-6">
-          {children(formMethods)}
+          <Button type="submit" disabled={!isDirty || !isValid} variant="ghost">
+            <Save className="h-4 w-4" />
+            Save
+          </Button>
+        </div>
 
-          <div
-            className={`mt-6 flex ${
-              !isFirstTab ? "justify-between" : "justify-end"
-            }`}
-          >
-            {!isFirstTab && (
-              <Button
-                variant="outline"
-                onClick={() => changeToNextTab(editorTabs[tabIndex - 1].name)}
-              >
-                Back
-              </Button>
-            )}
-            {!isLastTab && (
-              <Button type="submit">
-                Save & Next: {editorTabs[tabIndex + 1]?.label}
-              </Button>
-            )}
-          </div>
-        </form>
-      </Form>
-    </div>
+        {children(formMethods)}
+        <div
+          className={`mt-6 flex ${
+            !isFirstTab ? "justify-between" : "justify-end"
+          }`}
+        >
+          {!isFirstTab && (
+            <Button variant="outline" onClick={() => setActiveTab(previousTab)}>
+              Back
+            </Button>
+          )}
+          {!isLastTab && (
+            <Button
+              onClick={handleSubmit((data) => {
+                submit(data, true);
+              })}
+              disabled={!isValid}
+            >
+              {isDirty && "Save & "}Next:{" "}
+              {editorTabsConfig[tabIndex + 1]?.label}{" "}
+            </Button>
+          )}
+        </div>
+      </form>
+    </Form>
   );
 }

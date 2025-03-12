@@ -22,32 +22,21 @@ import { Plus } from "lucide-react";
 
 import { PositionForm } from "./position";
 
-import {
-  FieldValues,
-  useFieldArray,
-  useFormContext,
-  UseFormSetValue,
-} from "react-hook-form";
+import { FieldValues, UseFieldArrayAppend } from "react-hook-form";
 import { Experience } from "@/lib/types";
+import Image from "next/image";
 
 export default function AddNewExperienceForm({
   handleCompanyLogoUpload,
   newExperience,
   setNewExperience,
+  append,
 }: {
-  handleCompanyLogoUpload: (
-    setValue: UseFormSetValue<FieldValues>,
-    index?: number
-  ) => void;
+  handleCompanyLogoUpload: (index?: number) => void;
   newExperience: Experience;
   setNewExperience: Dispatch<SetStateAction<Experience>>;
+  append: UseFieldArrayAppend<FieldValues, "experiences">;
 }) {
-  const { control, setValue } = useFormContext();
-  const { append } = useFieldArray({
-    control,
-    name: "experiences",
-  });
-
   return (
     <Card>
       <CardHeader>
@@ -96,10 +85,12 @@ export default function AddNewExperienceForm({
           <div className="flex items-center gap-4">
             {newExperience.companyLogoUrl ? (
               <div className="h-16 w-16 overflow-hidden rounded-md bg-slate-100">
-                <img
+                <Image
                   src={newExperience.companyLogoUrl || "/placeholder.svg"}
                   alt={newExperience.company}
                   className="h-full w-full object-contain"
+                  width={80}
+                  height={80}
                 />
               </div>
             ) : (
@@ -111,7 +102,7 @@ export default function AddNewExperienceForm({
             <Button
               type="button"
               variant="outline"
-              onClick={() => handleCompanyLogoUpload(setValue)}
+              onClick={() => handleCompanyLogoUpload()}
             >
               Upload Logo
             </Button>

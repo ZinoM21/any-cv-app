@@ -67,3 +67,11 @@ export type CVTemplate = {
 };
 
 export type PromiseSearchParams = Promise<SearchParams>;
+
+export type EditorTab = {
+  name: string;
+  label: string;
+  FormComponent: React.FC<{
+    tab: EditorTab;
+  }>;
+};

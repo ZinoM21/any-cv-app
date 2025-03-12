@@ -26,10 +26,64 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { Education } from "@/lib/types";
+import { EditorTab, Education } from "@/lib/types";
 import Image from "next/image";
+import { EditorForm } from "./editor-form";
+import { useProfileStore } from "@/hooks/use-profile";
+import { z } from "zod";
 
-export function EducationForm() {
+const educationSchema = z.object({
+  education: z.array(
+    z.object({
+      school: z.string(),
+      degree: z.string(),
+      fieldOfStudy: z.string().optional(),
+      startDate: z.string(),
+      endDate: z.string().optional(),
+      description: z.string().optional(),
+      activities: z.string().optional(),
+      grade: z.string().optional(),
+      schoolPictureUrl: z.string().optional(),
+      schoolProfileUrl: z.string().optional(),
+    })
+  ),
+});
+
+type EducationFormValues = z.infer<typeof educationSchema>;
+
+export function EducationForm({ tab }: { tab: EditorTab }) {
+  const profileData = useProfileStore((state) => state.profile);
+
+  const initialValues: EducationFormValues = {
+    education:
+      (profileData?.education &&
+        profileData.education.map((edu) => ({
+          school: edu.school || "",
+          degree: edu.degree || "",
+          grade: edu.grade || undefined,
+          fieldOfStudy: edu.fieldOfStudy || undefined,
+          startDate: edu.startDate || "",
+          endDate: edu.endDate || undefined,
+          description: edu.description || undefined,
+          activities: edu.activities || undefined,
+          schoolPictureUrl: edu.schoolPictureUrl || undefined,
+          schoolProfileUrl: edu.schoolProfileUrl || undefined,
+        }))) ||
+      [],
+  };
+
+  return (
+    <EditorForm
+      schema={educationSchema}
+      initialValues={initialValues}
+      tab={tab}
+    >
+      {() => <EducationFormFields />}
+    </EditorForm>
+  );
+}
+
+export function EducationFormFields() {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -214,7 +268,7 @@ export function EducationForm() {
                                 <Textarea
                                   {...field}
                                   placeholder="Clubs, sports, honors societies, etc."
-                                  rows={2}
+                                  rows={3}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -257,13 +311,6 @@ export function EducationForm() {
         onClick={() =>
           append({
             school: "",
-            degree: "",
-            fieldOfStudy: "",
-            startDate: "",
-            endDate: "",
-            grade: "",
-            activities: "",
-            description: "",
           })
         }
       >

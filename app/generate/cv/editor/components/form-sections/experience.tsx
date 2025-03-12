@@ -35,14 +35,74 @@ import {
 import { Plus, Trash } from "lucide-react";
 
 import { PositionForm } from "./position";
-import { Experience } from "@/lib/types";
+import { EditorTab, Experience } from "@/lib/types";
 
 import AddNewExperienceForm from "./add-new-experience-form";
+import { z } from "zod";
+import { useProfileStore } from "@/hooks/use-profile";
+import { EditorForm } from "./editor-form";
+const positionSchema = z.object({
+  title: z.string(),
+  startDate: z.string(),
+  endDate: z.string().optional(),
+  description: z.string().optional(),
+  location: z.string().optional(),
+  workSetting: z.string().optional().nullable(),
+});
 
-export const ExperiencesForm = () => {
+const experienceSchema = z.object({
+  company: z.string(),
+  companyProfileUrl: z.string().optional(),
+  companyLogoUrl: z.string().optional(),
+  positions: z.array(positionSchema),
+});
+
+const experiencesFormSchema = z.object({
+  experiences: z.array(experienceSchema),
+});
+
+type ExperiencesFormValues = z.infer<typeof experiencesFormSchema>;
+
+export function ExperiencesForm({ tab }: { tab: EditorTab }) {
+  const profileData = useProfileStore((state) => state.profile);
+
+  const initialValues: ExperiencesFormValues = {
+    experiences:
+      (profileData?.experiences &&
+        profileData.experiences.map((exp) => ({
+          company: exp.company || "",
+          companyProfileUrl: exp.companyProfileUrl || "",
+          companyLogoUrl: exp.companyLogoUrl || "",
+          positions:
+            (exp.positions &&
+              exp.positions.map((pos) => ({
+                title: pos.title || "",
+                location: pos.location || "",
+                startDate: pos.startDate || "",
+                endDate: pos.endDate || "",
+                description: pos.description || "",
+                workSetting: pos.workSetting || "",
+              }))) ||
+            [],
+        }))) ||
+      [],
+  };
+
+  return (
+    <EditorForm
+      schema={experiencesFormSchema}
+      initialValues={initialValues}
+      tab={tab}
+    >
+      {() => <ExperienceFormFields />}
+    </EditorForm>
+  );
+}
+
+const ExperienceFormFields = () => {
   const { control, setValue, watch } = useFormContext();
 
-  const { fields, remove } = useFieldArray({
+  const { fields, remove, append } = useFieldArray({
     control,
     name: "experiences",
   });
@@ -56,10 +116,7 @@ export const ExperiencesForm = () => {
     positions: [],
   });
 
-  const handleCompanyLogoUpload = (
-    setValue: UseFormSetValue<FieldValues>,
-    index?: number
-  ) => {
+  const handleCompanyLogoUpload = (index?: number) => {
     // In a real app, this would open a file picker and handle the upload
     const url = prompt("Enter URL for company logo (for demo purposes):");
     if (url) {
@@ -82,7 +139,7 @@ export const ExperiencesForm = () => {
             Added Experiences
           </h3>
 
-          <Accordion type="single" collapsible>
+          <Accordion type="single" collapsible className="space-y-6">
             {(fields as (Experience & { id: string })[]).map(
               (field, expIndex) => (
                 <AccordionItem
@@ -205,7 +262,7 @@ export const ExperiencesForm = () => {
                                 type="button"
                                 variant="outline"
                                 onClick={() =>
-                                  handleCompanyLogoUpload(setValue, expIndex)
+                                  handleCompanyLogoUpload(expIndex)
                                 }
                               >
                                 Change Logo
@@ -306,6 +363,7 @@ export const ExperiencesForm = () => {
         handleCompanyLogoUpload={handleCompanyLogoUpload}
         newExperience={newExperience}
         setNewExperience={setNewExperience}
+        append={append}
       />
     </div>
   );
