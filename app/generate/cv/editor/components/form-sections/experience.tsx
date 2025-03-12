@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { z } from "zod";
 
 import {
   FieldValues,
@@ -35,68 +34,12 @@ import {
 } from "@/components/ui/form";
 import { Plus, Trash } from "lucide-react";
 
-import { EditorForm } from "./editor-form";
 import { PositionForm } from "./position";
-import { useProfileStore } from "@/hooks/use-profile";
 import { Experience } from "@/lib/types";
 
 import AddNewExperienceForm from "./add-new-experience-form";
-import { EditorTab, editorTabs } from "@/config/editor-tabs";
 
-const positionSchema = z.object({
-  title: z.string(),
-  startDate: z.string(),
-  endDate: z.string().optional(),
-  description: z.string().optional(),
-  location: z.string().optional(),
-  workSetting: z.string().optional().nullable(),
-});
-
-const experienceSchema = z.object({
-  company: z.string(),
-  companyProfileUrl: z.string().optional(),
-  companyLogoUrl: z.string().optional(),
-  positions: z.array(positionSchema),
-});
-
-const experiencesFormSchema = z.object({
-  experiences: z.array(experienceSchema),
-});
-
-type ExperiencesFormValues = z.infer<typeof experiencesFormSchema>;
-
-export function ExperiencesForm({
-  changeToNextTab,
-  activeTab,
-  tab,
-}: {
-  changeToNextTab: (value?: string) => void;
-  activeTab: string;
-  tab: EditorTab;
-}) {
-  const profileData = useProfileStore((state) => state.profile);
-
-  const initialValues: ExperiencesFormValues = {
-    experiences: profileData?.experiences || [],
-  };
-
-  const tabIndex = editorTabs.findIndex((t) => t.name === "experience");
-
-  return (
-    <EditorForm
-      schema={experiencesFormSchema}
-      initialValues={initialValues}
-      changeToNextTab={changeToNextTab}
-      activeTab={activeTab}
-      tab={tab}
-      tabIndex={tabIndex}
-    >
-      {() => <ExperienceFormFields />}
-    </EditorForm>
-  );
-}
-
-const ExperienceFormFields = () => {
+export const ExperiencesForm = () => {
   const { control, setValue, watch } = useFormContext();
 
   const { fields, remove } = useFieldArray({

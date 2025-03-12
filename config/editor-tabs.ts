@@ -3,15 +3,12 @@ import { ExperiencesForm } from "@/app/generate/cv/editor/components/form-sectio
 import { SkillsForm } from "@/app/generate/cv/editor/components/form-sections/skills";
 import { SummaryForm } from "@/app/generate/cv/editor/components/form-sections/summary";
 import { VolunteeringForm } from "@/app/generate/cv/editor/components/form-sections/volunteering";
+import { UseFormReturn } from "react-hook-form";
 
 export type EditorTab = {
   name: string;
   label: string;
-  FormComponent: React.FC<{
-    changeToNextTab: (value?: string) => void;
-    activeTab: EditorTab["name"];
-    tab: EditorTab;
-  }>;
+  FormComponent: React.FC<{}>;
 };
 
 export const editorTabs: EditorTab[] = [

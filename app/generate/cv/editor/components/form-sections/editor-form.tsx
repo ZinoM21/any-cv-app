@@ -22,7 +22,6 @@ interface EditorFormProps<T extends z.ZodSchema> {
   changeToNextTab: (value?: string) => void;
   activeTab: string;
   tab: EditorTab;
-  tabIndex: number;
 }
 
 export function EditorForm<T extends z.ZodTypeAny>({
@@ -32,7 +31,6 @@ export function EditorForm<T extends z.ZodTypeAny>({
   changeToNextTab,
   activeTab,
   tab,
-  tabIndex,
 }: EditorFormProps<T>) {
   const profileData = useProfileStore((state) => state.profile);
   const setProfileData = useProfileStore((state) => state.setProfile);
@@ -114,6 +112,8 @@ export function EditorForm<T extends z.ZodTypeAny>({
     changeToNextTab();
   };
 
+  const tabIndex = editorTabs.findIndex((t) => t.name === activeTab);
+  const nextTab = editorTabs[tabIndex + 1].name;
   const isFirstTab = tabIndex === 0;
   const isLastTab = tabIndex === editorTabs.length - 1;
 

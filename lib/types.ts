@@ -34,14 +34,14 @@ export type Position = {
 export type Education = {
   school: string;
   schoolProfileUrl?: string;
-  schoolPictureUrl?: string; // Added this line
-  degree: string;
+  schoolPictureUrl?: string;
+  degree?: string;
   fieldOfStudy?: string;
-  startDate: string;
+  startDate?: string;
   endDate?: string;
   grade?: string;
-  activities?: string | null;
-  description?: string | null;
+  activities?: string;
+  description?: string;
 };
 
 export type VolunteeringExperience = {
