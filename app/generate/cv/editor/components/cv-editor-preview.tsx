@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
 import { useProfileStore } from "@/hooks/use-profile";
 import { getTemplateById } from "@/config/templates";
 
-export function CVPreview({ templateId }: { templateId: string }) {
+export function CVEditorPreview({ templateId }: { templateId: string }) {
   const profileData = useProfileStore((state) => state.profile);
 
   const template = getTemplateById(templateId);

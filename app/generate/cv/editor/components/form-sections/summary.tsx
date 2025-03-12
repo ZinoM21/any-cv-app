@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 
 import { EditorForm } from "./editor-form";
+import { editorTabs, EditorTab } from "@/config/editor-tabs";
 
 const summaryFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -27,9 +28,11 @@ const summaryFormSchema = z.object({
 export function SummaryForm({
   changeToNextTab,
   activeTab,
+  tab,
 }: {
   changeToNextTab: (value?: string) => void;
   activeTab: string;
+  tab: EditorTab;
 }) {
   const profileData = useProfileStore((state) => state.profile);
 
@@ -39,6 +42,8 @@ export function SummaryForm({
     headline: profileData?.headline || "",
     about: profileData?.about || "",
   };
+
+  const tabIndex = editorTabs.findIndex((t) => t.name === "summary");
 
   // const handleProfilePictureUpload = () => {
   //   // In a real app, this would open a file picker and handle the upload
@@ -61,8 +66,8 @@ export function SummaryForm({
       initialValues={initialValues}
       changeToNextTab={changeToNextTab}
       activeTab={activeTab}
-      nextTabLabel="Experience"
-      title="Summary"
+      tab={tab}
+      tabIndex={tabIndex}
     >
       {({ control }) => (
         <div className="grid gap-4">

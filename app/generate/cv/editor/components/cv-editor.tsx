@@ -3,8 +3,8 @@
 import { useProfileStore } from "@/hooks/use-profile";
 import { ProfileData } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { CVForm } from "./cv-form";
-import { CVPreview } from "./cv-preview";
+import { CVEditorForm } from "./cv-editor-form";
+import { CVEditorPreview } from "./cv-editor-preview";
 
 export default function CVEditor({
   profileData,
@@ -59,25 +59,23 @@ export default function CVEditor({
       )}
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Form Section - Left */}
         <div
           className={`${
             isMobileView && activeView !== "form" ? "hidden" : "flex"
           } w-full flex-col lg:w-[40%] lg:max-w-xl`}
         >
           <div className="flex-1 overflow-y-auto bg-white">
-            <CVForm username={profileData.username} />
+            <CVEditorForm username={profileData.username} />
           </div>
         </div>
 
-        {/* Preview Section - Right */}
         <div
           className={`${
             isMobileView && activeView !== "preview" ? "hidden" : "flex"
           } w-full flex-1 flex-col bg-slate-100`}
         >
           <div className="flex-1 overflow-y-auto">
-            <CVPreview templateId={templateId} />
+            <CVEditorPreview templateId={templateId} />
           </div>
         </div>
       </div>

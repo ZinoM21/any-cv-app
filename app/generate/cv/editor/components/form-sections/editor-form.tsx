@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { toast } from "sonner";
 
-import { ProfileData } from "@/lib/types";
-import { profileDataZ } from "@/lib/content";
+import type { ProfileData } from "@/lib/types";
+import { editorTabs, type EditorTab } from "@/config/editor-tabs";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -21,8 +21,8 @@ interface EditorFormProps<T extends z.ZodSchema> {
   children: (methods: ReturnType<typeof useForm<z.infer<T>>>) => ReactNode;
   changeToNextTab: (value?: string) => void;
   activeTab: string;
-  nextTabLabel: string;
-  title: string;
+  tab: EditorTab;
+  tabIndex: number;
 }
 
 export function EditorForm<T extends z.ZodTypeAny>({
@@ -31,8 +31,8 @@ export function EditorForm<T extends z.ZodTypeAny>({
   children,
   changeToNextTab,
   activeTab,
-  nextTabLabel,
-  title,
+  tab,
+  tabIndex,
 }: EditorFormProps<T>) {
   const profileData = useProfileStore((state) => state.profile);
   const setProfileData = useProfileStore((state) => state.setProfile);
@@ -48,53 +48,36 @@ export function EditorForm<T extends z.ZodTypeAny>({
     reset,
   } = formMethods;
 
-  useEffect(() => {
-    if (profileData) {
-      reset(initialValues);
-    }
-  }, [profileData, initialValues, reset]);
-
   const { mutateAsync: mutateProfileData } = useMutation({
     mutationFn: async (newValues: Partial<ProfileData>) => {
-      // const response = await fetch(
-      //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${profileData?.username}`,
-      //   {
-      //     method: "PATCH",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(newValues),
-      //   }
-      // );
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${profileData?.username}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newValues),
+        }
+      );
 
-      // if (!response.ok) {
-      //   throw new Error("Failed to update profile");
-      // }
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
 
-      // return response.json();
-
-      // simulate for dev:
-      console.log(newValues);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      //   throw new Error("Surprise!!");
-      return profileDataZ;
+      return response.json();
     },
     onMutate: async (newValues) => {
-      // Using this for optimistic updates
-      // Snapshot the previous value
+      // Capture current state for rollback
       const snapshot = { prevProfileData: profileData, previousTab: activeTab };
-      console.log("SNAP", snapshot);
 
-      // Optimistically update to the new value
+      // Optimistically update state & tab
       setProfileData((prevProfileData) => ({
         ...prevProfileData,
         ...newValues,
       }));
-
-      // Optimistically change to next tab
       changeToNextTab();
 
-      // Return a context with the previous data
       return snapshot;
     },
     onSuccess: (newValues: Partial<ProfileData>) => {
@@ -105,10 +88,10 @@ export function EditorForm<T extends z.ZodTypeAny>({
         ...newValues,
       }));
     },
-    onError: (error, _, context) => {
-      // If mutation fails, use context from onMutate to roll back
-      setProfileData(context!.prevProfileData!);
-      changeToNextTab(context?.previousTab);
+    onError: (error, _, snapshot) => {
+      // Roll back optimistic update
+      setProfileData(snapshot!.prevProfileData!);
+      changeToNextTab(snapshot?.previousTab);
 
       console.error(error);
       toast.error(error.message);
@@ -131,15 +114,41 @@ export function EditorForm<T extends z.ZodTypeAny>({
     changeToNextTab();
   };
 
+  const isFirstTab = tabIndex === 0;
+  const isLastTab = tabIndex === editorTabs.length - 1;
+
+  useEffect(() => {
+    if (profileData) {
+      reset(initialValues);
+    }
+  }, [profileData, initialValues, reset]);
+
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+      <h2 className="text-xl font-semibold text-slate-900">{tab.label}</h2>
 
       <Form {...formMethods}>
         <form onSubmit={handleSubmit(submit)} className="space-y-6">
           {children(formMethods)}
-          <div className="mt-6 flex justify-end">
-            <Button type="submit">Next: {nextTabLabel}</Button>
+
+          <div
+            className={`mt-6 flex ${
+              !isFirstTab ? "justify-between" : "justify-end"
+            }`}
+          >
+            {!isFirstTab && (
+              <Button
+                variant="outline"
+                onClick={() => changeToNextTab(editorTabs[tabIndex - 1].name)}
+              >
+                Back
+              </Button>
+            )}
+            {!isLastTab && (
+              <Button type="submit">
+                Save & Next: {editorTabs[tabIndex + 1]?.label}
+              </Button>
+            )}
           </div>
         </form>
       </Form>
