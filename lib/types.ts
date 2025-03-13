@@ -51,7 +51,7 @@ export type VolunteeringExperience = {
   cause: string;
   startDate: string;
   endDate?: string;
-  description: string;
+  description?: string;
 };
 
 export type NavItem = {
@@ -67,11 +67,3 @@ export type CVTemplate = {
 };
 
 export type PromiseSearchParams = Promise<SearchParams>;
-
-export type EditorTab = {
-  name: string;
-  label: string;
-  FormComponent: React.FC<{
-    tab: EditorTab;
-  }>;
-};

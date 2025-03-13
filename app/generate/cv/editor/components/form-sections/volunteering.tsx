@@ -1,368 +1,183 @@
 "use client";
 
-import type React from "react";
-
 import { useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash } from "lucide-react";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Plus, Trash } from "lucide-react";
+import { FormField } from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { VolunteeringExperience } from "@/lib/types";
 import { useProfileStore } from "@/hooks/use-profile";
+import { EditorForm } from "./editor-form";
+import VolunteeringFormFields from "./volunteering-form-fields";
+import AddNewVolunteeringForm from "./add-new-volunteering-form";
+import {
+  editVolunteeringFormSchema,
+  EditVolunteeringFormValues,
+} from "../editor-forms-schemas";
+import { EditorTabName } from "@/config/editor-tabs";
 
-export function VolunteeringForm() {
+export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
   const profileData = useProfileStore((state) => state.profile);
-  const setProfileData = useProfileStore((state) => state.setProfile);
 
-  const [newVolunteering, setNewVolunteering] =
-    useState<VolunteeringExperience>({
-      role: "",
-      organization: "",
-      organizationProfileUrl: "",
-      cause: "",
-      startDate: "",
-      endDate: "",
-      description: "",
-    });
-
-  const handleAddVolunteering = () => {
-    if (
-      newVolunteering.role &&
-      newVolunteering.organization &&
-      newVolunteering.cause
-    ) {
-      setProfileData({
-        ...profileData,
-        volunteering: [...profileData?.volunteering, newVolunteering],
-      });
-      setNewVolunteering({
-        role: "",
-        organization: "",
-        organizationProfileUrl: "",
-        cause: "",
-        startDate: "",
-        endDate: "",
-        description: "",
-      });
-    }
-  };
-
-  const handleRemoveVolunteering = (index: number) => {
-    setProfileData({
-      ...profileData,
-      volunteering: profileData?.volunteering.filter((_, i) => i !== index),
-    });
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setNewVolunteering({
-      ...newVolunteering,
-      [name]: value,
-    });
-  };
-
-  const updateExistingVolunteering = (
-    index: number,
-    field: string,
-    value: string
-  ) => {
-    const updatedVolunteering = [...profileData?.volunteering];
-    updatedVolunteering[index] = {
-      ...updatedVolunteering[index],
-      [field]: value,
-    };
-    setProfileData({
-      ...profileData,
-      volunteering: updatedVolunteering,
-    });
+  const initialValues: EditVolunteeringFormValues = {
+    volunteering:
+      (profileData?.volunteering &&
+        profileData.volunteering.map((vol) => ({
+          role: vol.role || "",
+          organization: vol.organization || "",
+          organizationProfileUrl: vol.organizationProfileUrl || undefined,
+          cause: vol.cause || "",
+          startDate: vol.startDate || "",
+          endDate: vol.endDate || undefined,
+          description: vol.description || undefined,
+        }))) ||
+      [],
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-slate-900">Volunteering</h2>
+    <EditorForm
+      schema={editVolunteeringFormSchema}
+      initialValues={initialValues}
+      tabName={tabName}
+    >
+      <VolunteeringFieldArray />
+    </EditorForm>
+  );
+}
 
-      {/* Existing volunteering entries */}
-      {profileData?.volunteering?.length > 0 && (
+const VolunteeringFieldArray = () => {
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const { control } = useFormContext();
+
+  const { fields, remove, prepend } = useFieldArray({
+    control,
+    name: "volunteering",
+  });
+
+  return (
+    <div className="space-y-6">
+      {fields.length > 0 && (
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-slate-500">
             Added Volunteering Experience
           </h3>
 
-          {profileData?.volunteering.map((vol, index) => (
-            <Card key={index}>
-              <CardHeader className="p-4 pb-2">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-base">{vol.role}</CardTitle>
-                    <CardDescription>{vol.organization}</CardDescription>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-slate-400 hover:text-red-500"
-                    onClick={() => handleRemoveVolunteering(index)}
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="px-4 pb-4 pt-0 text-sm text-slate-600">
-                <div className="grid gap-4">
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor={`role-${index}`}>Role</Label>
-                      <Input
-                        id={`role-${index}`}
-                        value={vol.role}
-                        onChange={(e) =>
-                          updateExistingVolunteering(
-                            index,
-                            "role",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </div>
+          <Accordion type="single" collapsible className="space-y-6">
+            {(fields as (VolunteeringExperience & { id: string })[]).map(
+              (field, index) => (
+                <AccordionItem
+                  key={field.id}
+                  value={`volunteering-${field.id}`}
+                  className="border-none"
+                >
+                  <Card key={field.id}>
+                    <CardHeader className="p-4">
+                      <AccordionTrigger className="py-0">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="text-base">
+                              <FormField
+                                name={`volunteering.${index}.role`}
+                                render={({ field }) =>
+                                  field.value ? (
+                                    <span>{field.value}</span>
+                                  ) : (
+                                    <span>Volunteering {index + 1}</span>
+                                  )
+                                }
+                              />
+                            </CardTitle>
 
-                    <div className="space-y-2">
-                      <Label htmlFor={`organization-${index}`}>
-                        Organization
-                      </Label>
-                      <Input
-                        id={`organization-${index}`}
-                        value={vol.organization}
-                        onChange={(e) =>
-                          updateExistingVolunteering(
-                            index,
-                            "organization",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
+                            <CardDescription>
+                              <FormField
+                                name={`volunteering.${index}.organization`}
+                                render={({ field }) =>
+                                  field.value ? (
+                                    <span>{field.value}</span>
+                                  ) : (
+                                    <span>Organization {index + 1}</span>
+                                  )
+                                }
+                              />
+                            </CardDescription>
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                    </CardHeader>
 
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor={`organizationProfileUrl-${index}`}>
-                        Organization URL (Optional)
-                      </Label>
-                      <Input
-                        id={`organizationProfileUrl-${index}`}
-                        value={vol.organizationProfileUrl || ""}
-                        onChange={(e) =>
-                          updateExistingVolunteering(
-                            index,
-                            "organizationProfileUrl",
-                            e.target.value
-                          )
-                        }
-                        placeholder="https://organization.org"
-                      />
-                    </div>
+                    <AccordionContent>
+                      <CardContent className="px-4 pb-4 pt-0">
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-sm font-medium text-slate-700">
+                              Volunteering Details
+                            </h4>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-slate-400 hover:text-red-500"
+                              onClick={() => remove(index)}
+                            >
+                              <Trash className="size-4" />
+                              Remove
+                            </Button>
+                          </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor={`cause-${index}`}>Cause</Label>
-                      <Input
-                        id={`cause-${index}`}
-                        value={vol.cause}
-                        onChange={(e) =>
-                          updateExistingVolunteering(
-                            index,
-                            "cause",
-                            e.target.value
-                          )
-                        }
-                        placeholder="Education, Environment, etc."
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor={`startDate-${index}`}>Start Date</Label>
-                      <Input
-                        id={`startDate-${index}`}
-                        type="month"
-                        value={vol.startDate}
-                        onChange={(e) =>
-                          updateExistingVolunteering(
-                            index,
-                            "startDate",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor={`endDate-${index}`}>End Date</Label>
-                      <Input
-                        id={`endDate-${index}`}
-                        type="month"
-                        value={vol.endDate || ""}
-                        onChange={(e) =>
-                          updateExistingVolunteering(
-                            index,
-                            "endDate",
-                            e.target.value
-                          )
-                        }
-                        placeholder="Present"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor={`description-${index}`}>Description</Label>
-                    <Textarea
-                      id={`description-${index}`}
-                      value={vol.description}
-                      onChange={(e) =>
-                        updateExistingVolunteering(
-                          index,
-                          "description",
-                          e.target.value
-                        )
-                      }
-                      rows={3}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                          <VolunteeringFormFields
+                            fieldNamePrefix={`volunteering.${index}`}
+                          />
+                        </div>
+                      </CardContent>
+                    </AccordionContent>
+                  </Card>
+                </AccordionItem>
+              )
+            )}
+          </Accordion>
         </div>
       )}
 
-      {/* Add new volunteering form */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            Add Volunteering Experience
-          </CardTitle>
-          <CardDescription>
-            Add your community service and volunteer work
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Input
-                id="role"
-                name="role"
-                value={newVolunteering.role}
-                onChange={handleInputChange}
-                placeholder="Volunteer Coordinator"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="organization">Organization</Label>
-              <Input
-                id="organization"
-                name="organization"
-                value={newVolunteering.organization}
-                onChange={handleInputChange}
-                placeholder="Red Cross"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="organizationProfileUrl">
-                Organization URL (Optional)
-              </Label>
-              <Input
-                id="organizationProfileUrl"
-                name="organizationProfileUrl"
-                value={newVolunteering.organizationProfileUrl || ""}
-                onChange={handleInputChange}
-                placeholder="https://organization.org"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="Cause">Cause</Label>
-              <Input
-                id="Cause"
-                name="Cause"
-                value={newVolunteering.cause}
-                onChange={handleInputChange}
-                placeholder="Education, Environment, etc."
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="startDate">Start Date</Label>
-              <Input
-                id="startDate"
-                name="startDate"
-                type="month"
-                value={newVolunteering.startDate}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="endDate">End Date</Label>
-              <Input
-                id="endDate"
-                name="endDate"
-                type="month"
-                value={newVolunteering.endDate || ""}
-                onChange={handleInputChange}
-                placeholder="Present"
-              />
-              <p className="text-xs text-slate-500">
-                Leave empty if currently volunteering
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              name="description"
-              value={newVolunteering.description}
-              onChange={handleInputChange}
-              placeholder="Describe your responsibilities and achievements..."
-              rows={3}
-            />
-          </div>
-        </CardContent>
-        <CardFooter>
+      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+        <PopoverTrigger asChild>
           <Button
-            onClick={handleAddVolunteering}
-            disabled={
-              !newVolunteering.role ||
-              !newVolunteering.organization ||
-              !newVolunteering.cause
-            }
+            type="button"
+            variant="outline"
+            className="w-full h-20 rounded-md border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500"
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="size-4" />
             Add Volunteering
           </Button>
-        </CardFooter>
-      </Card>
+        </PopoverTrigger>
+        <PopoverContent className="w-[600px] p-4" side="right">
+          <AddNewVolunteeringForm
+            addToVolunteering={(data) => {
+              prepend(data);
+              setPopoverOpen(false);
+            }}
+          />
+        </PopoverContent>
+      </Popover>
     </div>
   );
-}
+};

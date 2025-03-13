@@ -22,24 +22,28 @@ import {
 
 import { Plus, Trash } from "lucide-react";
 
-import { EditorTab, Experience } from "@/lib/types";
+import { Experience } from "@/lib/types";
 
 import AddNewExperienceForm from "./add-new-experience-form";
 import { useProfileStore } from "@/hooks/use-profile";
 import { EditorForm } from "./editor-form";
 import ExperienceFormFields from "./experience-form-fields";
-import { experiencesFormSchema, ExperiencesFormValues } from "../schemas";
+import {
+  editExperiencesFormSchema,
+  EditExperiencesFormValues,
+} from "../editor-forms-schemas";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { FormField } from "@/components/ui/form";
+import { EditorTabName } from "@/config/editor-tabs";
 
-export function ExperiencesForm({ tab }: { tab: EditorTab }) {
+export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
   const profileData = useProfileStore((state) => state.profile);
 
-  const initialValues: ExperiencesFormValues = {
+  const initialValues: EditExperiencesFormValues = {
     experiences:
       (profileData?.experiences &&
         profileData.experiences.map((exp) => ({
@@ -68,9 +72,9 @@ export function ExperiencesForm({ tab }: { tab: EditorTab }) {
 
   return (
     <EditorForm
-      schema={experiencesFormSchema}
+      schema={editExperiencesFormSchema}
       initialValues={initialValues}
-      tab={tab}
+      tabName={tabName}
     >
       <ExperiencesFieldArray />
     </EditorForm>
@@ -112,33 +116,39 @@ const ExperiencesFieldArray = () => {
 
           <Accordion type="single" collapsible className="space-y-6">
             {(fields as (Experience & { id: string })[]).map(
-              (field, expIndex) => (
+              (experienceField, expIndex) => (
                 <AccordionItem
-                  key={field.id}
-                  value={`experience-${field.id}`}
+                  key={experienceField.id}
+                  value={`experience-${experienceField.id}`}
                   className="border-none"
                 >
-                  <Card key={field.id}>
+                  <Card key={experienceField.id}>
                     <CardHeader className="p-4">
                       <AccordionTrigger className="py-0">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-3">
-                            {field?.companyLogoUrl ? (
-                              <div className="size-10 overflow-hidden rounded-md bg-slate-100">
-                                <Image
-                                  src={
-                                    field?.companyLogoUrl || "/placeholder.svg"
-                                  }
-                                  alt={field?.company || ""}
-                                  width={80}
-                                  height={80}
-                                />
-                              </div>
-                            ) : (
-                              <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
-                                Logo
-                              </div>
-                            )}
+                            <FormField
+                              name={`experiences.${expIndex}.companyLogoUrl`}
+                              render={({ field }) => (
+                                <>
+                                  {field?.value ? (
+                                    <div className="size-10 overflow-hidden rounded-md bg-slate-100">
+                                      <Image
+                                        src={field?.value || "/placeholder.svg"}
+                                        alt={experienceField?.company || ""}
+                                        width={80}
+                                        height={80}
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
+                                      Logo
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            />
+
                             <div>
                               <CardTitle className="text-base">
                                 <FormField
@@ -187,11 +197,12 @@ const ExperiencesFieldArray = () => {
                             </h4>
                             <Button
                               variant="ghost"
-                              size="icon"
+                              size="sm"
                               className="text-slate-400 hover:text-red-500"
                               onClick={() => remove(expIndex)}
                             >
-                              <Trash className="h-4 w-4" />
+                              <Trash className="size-4" />
+                              Remove
                             </Button>
                           </div>
 

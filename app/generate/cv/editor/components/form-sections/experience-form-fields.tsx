@@ -154,20 +154,25 @@ export default function ExperienceFormFields({
           type="single"
           collapsible
           className="w-full"
-          defaultValue={`${fieldNamePrefix + "-" || ""}position-0`}
+          defaultValue={`${
+            fieldNamePrefix ? fieldNamePrefix + "." : ""
+          }position-0`}
         >
           {(positionFields as (Position & { id: string })[]).map(
             (position, posIndex) => (
               <AccordionItem
                 key={posIndex}
-                value={`${fieldNamePrefix + "-" || ""}position-${posIndex}`}
+                value={`${
+                  fieldNamePrefix ? fieldNamePrefix + "." : ""
+                }position-${posIndex}`}
               >
                 <AccordionTrigger className="py-2">
                   <div className="flex items-center justify-between">
                     <span>
                       {position.title ||
-                        `Position ${posIndex}` ||
-                        "New Position"}
+                        (fieldNamePrefix
+                          ? `Position ${posIndex + 1}`
+                          : "New Position")}
                     </span>
                   </div>
                 </AccordionTrigger>
@@ -181,16 +186,18 @@ export default function ExperienceFormFields({
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 text-slate-400 hover:text-red-500"
+                          className="text-slate-400 hover:text-red-500"
                           onClick={() => remove(posIndex)}
                         >
-                          <Trash className="mr-1 h-3.5 w-3.5" />
+                          <Trash className="size-4" />
                           Remove
                         </Button>
                       </div>
 
                       <PositionFormFields
-                        fieldNamePrefix={`${fieldNamePrefix}.positions.${posIndex}`}
+                        fieldNamePrefix={`${
+                          fieldNamePrefix ? fieldNamePrefix + "." : ""
+                        }positions.${posIndex}`}
                       />
                     </div>
                   </div>

@@ -23,19 +23,23 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { EditorTab, Education } from "@/lib/types";
+import { Education } from "@/lib/types";
 import Image from "next/image";
 import { EditorForm } from "./editor-form";
 import { useProfileStore } from "@/hooks/use-profile";
 import EducationFormFields from "./education-form-fields";
 import AddNewEducationForm from "./add-new-education-form";
-import { EducationFormValues, educationSchema } from "../schemas";
+import {
+  EditEducationFormValues,
+  editEducationFormSchema,
+} from "../editor-forms-schemas";
 import { useState } from "react";
+import { EditorTabName } from "@/config/editor-tabs";
 
-export function EducationForm({ tab }: { tab: EditorTab }) {
+export function EducationForm({ tabName }: { tabName: EditorTabName }) {
   const profileData = useProfileStore((state) => state.profile);
 
-  const initialValues: EducationFormValues = {
+  const initialValues: EditEducationFormValues = {
     education:
       (profileData?.education &&
         profileData.education.map((edu) => ({
@@ -55,9 +59,9 @@ export function EducationForm({ tab }: { tab: EditorTab }) {
 
   return (
     <EditorForm
-      schema={educationSchema}
+      schema={editEducationFormSchema}
       initialValues={initialValues}
-      tab={tab}
+      tabName={tabName}
     >
       <EducationFieldArray />
     </EditorForm>
@@ -177,11 +181,12 @@ export function EducationFieldArray() {
                           </h4>
                           <Button
                             variant="ghost"
-                            size="icon"
+                            size="sm"
                             className="text-slate-400 hover:text-red-500"
                             onClick={() => remove(index)}
                           >
-                            <Trash className="h-4 w-4" />
+                            <Trash className="size-4" />
+                            Remove
                           </Button>
                         </div>
                         <EducationFormFields

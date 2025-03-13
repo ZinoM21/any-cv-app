@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/form";
 
 import { EditorForm } from "./editor-form";
-import { EditorTab } from "@/lib/types";
 import { useFormContext } from "react-hook-form";
+import { EditorTabName } from "@/config/editor-tabs";
 
 const summaryFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -26,14 +26,14 @@ const summaryFormSchema = z.object({
   about: z.string().optional(),
 });
 
-export function SummaryForm({ tab }: { tab: EditorTab }) {
+export function SummaryForm({ tabName }: { tabName: EditorTabName }) {
   const profileData = useProfileStore((state) => state.profile);
 
   const initialValues = {
     firstName: profileData?.firstName || "",
     lastName: profileData?.lastName || "",
-    headline: profileData?.headline || "",
-    about: profileData?.about || "",
+    // headline: profileData?.headline || "",
+    // about: profileData?.about || "",
   };
 
   // const handleProfilePictureUpload = () => {
@@ -55,7 +55,7 @@ export function SummaryForm({ tab }: { tab: EditorTab }) {
     <EditorForm
       schema={summaryFormSchema}
       initialValues={initialValues}
-      tab={tab}
+      tabName={tabName}
     >
       <SummaryFormFields />
     </EditorForm>

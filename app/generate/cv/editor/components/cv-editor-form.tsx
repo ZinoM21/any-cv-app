@@ -6,15 +6,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { editorTabsConfig, getEditorTabs } from "@/config/editor-tabs";
+import {
+  editorTabFormComponentMap,
+  EditorTabName,
+  editorTabName,
+} from "@/config/editor-tabs";
 import { useEditorTabStore } from "@/hooks/use-editor-tabs";
+import { capitalize } from "@/lib/utils";
 
 export function CVEditorForm({ username }: { username: string }) {
   const [activeTab, setActiveTab] = useEditorTabStore(
     useShallow((state) => [state.activeTab, state.setActiveTab])
   );
 
-  const editorTabs = getEditorTabs();
+  const getFormComponent = (tabName: EditorTabName) => {
+    const Component = editorTabFormComponentMap[tabName];
+    return <Component tabName={tabName} />;
+  };
 
   return (
     <div className="flex h-full flex-col border-r">
@@ -33,24 +41,27 @@ export function CVEditorForm({ username }: { username: string }) {
 
       <div className="flex-1 overflow-y-auto">
         <div className="p-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <Tabs
+            value={activeTab}
+            onValueChange={(string) => setActiveTab(string as EditorTabName)}
+          >
             <TabsList className="mb-6 w-full">
-              {editorTabsConfig.map((tab) => (
+              {Object.values(editorTabName).map((tabName) => (
                 <TabsTrigger
-                  key={tab.name}
-                  value={tab.name}
+                  key={tabName}
+                  value={tabName}
                   className="grow min-w-0 px-1"
                 >
                   <span className="overflow-hidden text-ellipsis">
-                    {tab.label}
+                    {capitalize(tabName)}
                   </span>
                 </TabsTrigger>
               ))}
             </TabsList>
 
-            {editorTabs.map((tab) => (
-              <TabsContent key={tab.name} value={tab.name}>
-                <tab.FormComponent tab={tab} />
+            {Object.values(editorTabName).map((tabName) => (
+              <TabsContent key={tabName} value={tabName}>
+                {getFormComponent(tabName)}
               </TabsContent>
             ))}
           </Tabs>

@@ -1,27 +1,28 @@
 import { Form } from "@/components/ui/form";
-import EducationFormFields from "./education-form-fields";
+import VolunteeringFormFields from "./volunteering-form-fields";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  addNewEducationFormSchema,
-  AddNewEducationFormValues,
+  addNewVolunteeringFormSchema,
+  AddNewVolunteeringFormValues,
 } from "../editor-forms-schemas";
 import { CardTitle } from "@/components/ui/card";
 
 const initialValues = {
-  school: "",
-  degree: "",
+  role: "",
+  organization: "",
+  cause: "",
   startDate: "",
 };
 
-export default function AddNewEducationForm({
-  addToEducations,
+export default function AddNewVolunteeringForm({
+  addToVolunteering,
 }: {
-  addToEducations: (data: AddNewEducationFormValues) => void;
+  addToVolunteering: (data: AddNewVolunteeringFormValues) => void;
 }) {
-  const formMethods = useForm<AddNewEducationFormValues>({
-    resolver: zodResolver(addNewEducationFormSchema),
+  const formMethods = useForm<AddNewVolunteeringFormValues>({
+    resolver: zodResolver(addNewVolunteeringFormSchema),
     defaultValues: initialValues,
     mode: "all",
   });
@@ -32,21 +33,21 @@ export default function AddNewEducationForm({
     formState: { isValid },
   } = formMethods;
 
-  const onSubmitNewEducation = (data: AddNewEducationFormValues) => {
-    addToEducations(data);
+  const onSubmitNewVolunteering = (data: AddNewVolunteeringFormValues) => {
+    addToVolunteering(data);
     reset();
   };
 
   return (
     <Form {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmitNewEducation)}>
+      <form onSubmit={handleSubmit(onSubmitNewVolunteering)}>
         <div className="grid gap-4">
-          <CardTitle>Add New Education</CardTitle>
+          <CardTitle>Add New Volunteering</CardTitle>
 
-          <EducationFormFields />
+          <VolunteeringFormFields />
 
           <Button type="submit" className="w-full" disabled={!isValid}>
-            Add Education
+            Add Volunteering
           </Button>
         </div>
       </form>

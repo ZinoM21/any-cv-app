@@ -1,18 +1,15 @@
-import { editorTabsConfig } from "@/config/editor-tabs";
-import { EditorTab } from "@/lib/types";
+import { EditorTabName, editorTabName } from "@/config/editor-tabs";
 import { create } from "zustand";
 
 interface EditorTabStore {
-  activeTab: EditorTab["name"];
+  activeTab: EditorTabName;
   setActiveTab: (
-    dataOrFn:
-      | EditorTab["name"]
-      | ((prev: EditorTab["name"]) => EditorTab["name"])
+    dataOrFn: EditorTabName | ((prev: EditorTabName) => EditorTabName)
   ) => void;
 }
 
 export const useEditorTabStore = create<EditorTabStore>((set, get) => ({
-  activeTab: editorTabsConfig[0].name,
+  activeTab: editorTabName.Summary,
   setActiveTab: (dataOrFn) =>
     set({
       activeTab:

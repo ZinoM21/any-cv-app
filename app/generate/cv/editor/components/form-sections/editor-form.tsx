@@ -12,23 +12,24 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { toast } from "sonner";
 
-import type { EditorTab, ProfileData } from "@/lib/types";
-import { editorTabsConfig } from "@/config/editor-tabs";
+import type { ProfileData } from "@/lib/types";
 import { useEditorTabStore } from "@/hooks/use-editor-tabs";
 import { Save } from "lucide-react";
+import { EditorTabName, editorTabName } from "@/config/editor-tabs";
+import { capitalize } from "@/lib/utils";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
   initialValues: z.infer<T>;
   children: ReactNode;
-  tab: EditorTab;
+  tabName: EditorTabName;
 }
 
 export function EditorForm<T extends z.ZodTypeAny>({
   schema,
   initialValues,
   children,
-  tab,
+  tabName,
 }: EditorFormProps<T>) {
   const profileData = useProfileStore((state) => state.profile);
   const setProfileData = useProfileStore((state) => state.setProfile);
@@ -36,11 +37,13 @@ export function EditorForm<T extends z.ZodTypeAny>({
   const activeTab = useEditorTabStore((state) => state.activeTab);
   const setActiveTab = useEditorTabStore((state) => state.setActiveTab);
 
-  const tabIndex = editorTabsConfig.findIndex((t) => t.name === activeTab);
-  const nextTab = editorTabsConfig[tabIndex + 1].name;
-  const previousTab = editorTabsConfig[tabIndex - 1]?.name;
+  // Get ordered array of enum values
+  const tabValues = Object.values(editorTabName);
+  const tabIndex = tabValues.indexOf(activeTab as EditorTabName);
+  const nextTab = tabValues[tabIndex + 1];
+  const previousTab = tabValues[tabIndex - 1];
   const isFirstTab = tabIndex === 0;
-  const isLastTab = tabIndex === editorTabsConfig.length - 1;
+  const isLastTab = tabIndex === tabValues.length - 1;
 
   const formMethods = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
@@ -146,7 +149,9 @@ export function EditorForm<T extends z.ZodTypeAny>({
         className="space-y-6"
       >
         <div className="flex gap-2 w-full items-center justify-between">
-          <h2 className="text-xl font-semibold text-slate-900">{tab.label}</h2>
+          <h2 className="text-xl font-semibold text-slate-900">
+            {capitalize(tabName)}
+          </h2>
 
           <Button type="submit" disabled={!canSave} variant="ghost">
             <Save className="h-4 w-4" />
@@ -172,8 +177,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
               })}
               disabled={!isValid}
             >
-              {isDirty && "Save & "}Next:{" "}
-              {editorTabsConfig[tabIndex + 1]?.label}{" "}
+              {isDirty && "Save & "}Next: {capitalize(tabValues[tabIndex + 1])}
             </Button>
           )}
         </div>

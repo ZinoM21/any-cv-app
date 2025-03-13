@@ -5,8 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   addNewExperienceFormSchema,
   AddNewExperienceFormValues,
-} from "../schemas";
+} from "../editor-forms-schemas";
 import ExperienceFormFields from "./experience-form-fields";
+import { CardTitle } from "@/components/ui/card";
 
 const initialValues = {
   company: "",
@@ -44,9 +45,7 @@ export default function AddNewExperienceForm({
     <Form {...formMethods}>
       <form onSubmit={handleSubmit(onSubmitNewExperience)}>
         <div className="grid gap-4">
-          <h4 className="text-sm font-medium text-slate-700">
-            Add New Experience
-          </h4>
+          <CardTitle>Add New Experience</CardTitle>
 
           <ExperienceFormFields />
 

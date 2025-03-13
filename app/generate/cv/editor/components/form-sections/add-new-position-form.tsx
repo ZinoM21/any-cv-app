@@ -2,9 +2,13 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { positionSchema, PositionSchemaValues } from "../schemas";
+import {
+  AddNewPositionSchemaValues,
+  addNewPositionSchema,
+} from "../editor-forms-schemas";
 
 import PositionFormFields from "./position-form-fields";
+import { CardTitle } from "@/components/ui/card";
 
 const initialValues = {
   title: "",
@@ -14,10 +18,10 @@ const initialValues = {
 export default function AddNewPositionForm({
   addToPositions,
 }: {
-  addToPositions: (data: PositionSchemaValues) => void;
+  addToPositions: (data: AddNewPositionSchemaValues) => void;
 }) {
-  const formMethods = useForm<PositionSchemaValues>({
-    resolver: zodResolver(positionSchema),
+  const formMethods = useForm<AddNewPositionSchemaValues>({
+    resolver: zodResolver(addNewPositionSchema),
     defaultValues: initialValues,
     mode: "all",
   });
@@ -28,7 +32,7 @@ export default function AddNewPositionForm({
     formState: { isValid },
   } = formMethods;
 
-  const onSubmitNewPosition = (data: PositionSchemaValues) => {
+  const onSubmitNewPosition = (data: AddNewPositionSchemaValues) => {
     addToPositions(data);
     reset();
   };
@@ -37,9 +41,7 @@ export default function AddNewPositionForm({
     <Form {...formMethods}>
       <form onSubmit={handleSubmit(onSubmitNewPosition)}>
         <div className="grid gap-4">
-          <h4 className="text-sm font-medium text-slate-700">
-            Add New Position
-          </h4>
+          <CardTitle>Add New Position</CardTitle>
 
           <PositionFormFields />
 

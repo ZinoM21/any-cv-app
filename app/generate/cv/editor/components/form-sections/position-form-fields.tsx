@@ -4,6 +4,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,6 +38,7 @@ export default function PositionFormFields({
             <FormControl>
               <Input {...field} placeholder="Senior Developer" />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -53,6 +55,7 @@ export default function PositionFormFields({
               <FormControl>
                 <Input {...field} type="month" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -66,6 +69,7 @@ export default function PositionFormFields({
               <FormControl>
                 <Input {...field} type="month" />
               </FormControl>
+              <FormMessage />
               <FormDescription>
                 Leave empty for current position
               </FormDescription>
@@ -98,6 +102,7 @@ export default function PositionFormFields({
               <FormControl>
                 <Input {...field} placeholder="New York, NY" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -127,6 +132,7 @@ export default function PositionFormFields({
                   </SelectContent>
                 </Select>
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -147,6 +153,7 @@ export default function PositionFormFields({
                 placeholder="Describe your responsibilities and achievements..."
               />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
