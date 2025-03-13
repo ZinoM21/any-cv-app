@@ -35,9 +35,9 @@ export type Education = {
   school: string;
   schoolProfileUrl?: string;
   schoolPictureUrl?: string;
-  degree?: string;
+  degree: string;
   fieldOfStudy?: string;
-  startDate?: string;
+  startDate: string;
   endDate?: string;
   grade?: string;
   activities?: string;

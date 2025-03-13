@@ -28,12 +28,6 @@ export default async function CVEditorPage({
 
   const profileData: ProfileData = await response.json();
 
-  //   return (
-  //     <div className="min-h-screen py-16">
-  //       <div className="max-w-[1400px] mx-auto px-4"></div>
-  //     </div>
-  //   );
-
   return (
     <div className="flex h-screen flex-col">
       <CVEditor profileData={profileData} templateId={templateId as string} />

@@ -1,8 +1,6 @@
 "use client";
 
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash } from "lucide-react";
 import {
@@ -12,44 +10,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormField } from "@/components/ui/form";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 import { EditorTab, Education } from "@/lib/types";
 import Image from "next/image";
 import { EditorForm } from "./editor-form";
 import { useProfileStore } from "@/hooks/use-profile";
-import { z } from "zod";
-
-const educationSchema = z.object({
-  education: z.array(
-    z.object({
-      school: z.string(),
-      degree: z.string(),
-      fieldOfStudy: z.string().optional(),
-      startDate: z.string(),
-      endDate: z.string().optional(),
-      description: z.string().optional(),
-      activities: z.string().optional(),
-      grade: z.string().optional(),
-      schoolPictureUrl: z.string().optional(),
-      schoolProfileUrl: z.string().optional(),
-    })
-  ),
-});
-
-type EducationFormValues = z.infer<typeof educationSchema>;
+import EducationFormFields from "./education-form-fields";
+import AddNewEducationForm from "./add-new-education-form";
+import { EducationFormValues, educationSchema } from "../schemas";
+import { useState } from "react";
 
 export function EducationForm({ tab }: { tab: EditorTab }) {
   const profileData = useProfileStore((state) => state.profile);
@@ -78,14 +59,16 @@ export function EducationForm({ tab }: { tab: EditorTab }) {
       initialValues={initialValues}
       tab={tab}
     >
-      {() => <EducationFormFields />}
+      <EducationFieldArray />
     </EditorForm>
   );
 }
 
-export function EducationFormFields() {
+export function EducationFieldArray() {
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
   const { control } = useFormContext();
-  const { fields, append, remove } = useFieldArray({
+  const { fields, prepend, remove } = useFieldArray({
     control,
     name: "education",
   });
@@ -135,7 +118,7 @@ export function EducationFormFields() {
                     <AccordionTrigger className="py-0">
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
-                          {field.schoolPictureUrl && (
+                          {field.schoolPictureUrl ? (
                             <div className="size-10 overflow-hidden rounded-md bg-slate-100">
                               <Image
                                 src={
@@ -146,20 +129,37 @@ export function EducationFormFields() {
                                 height={80}
                               />
                             </div>
+                          ) : (
+                            <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
+                              Logo
+                            </div>
                           )}
                           <div>
                             <CardTitle className="text-base">
                               <FormField
-                                control={control}
                                 name={`education.${index}.degree`}
-                                render={({ field }) => field.value}
+                                render={({ field }) =>
+                                  field.value ? (
+                                    <span>{field.value}</span>
+                                  ) : (
+                                    <span>Experience {index + 1}</span>
+                                  )
+                                }
                               />
                             </CardTitle>
+
                             <CardDescription>
                               <FormField
-                                control={control}
                                 name={`education.${index}.school`}
-                                render={({ field }) => field.value}
+                                render={({ field }) =>
+                                  field.value ? (
+                                    <span>{field.value}</span>
+                                  ) : (
+                                    <span>
+                                      School of experience {index + 1}
+                                    </span>
+                                  )
+                                }
                               />
                             </CardDescription>
                           </div>
@@ -184,114 +184,8 @@ export function EducationFormFields() {
                             <Trash className="h-4 w-4" />
                           </Button>
                         </div>
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                          <FormField
-                            control={control}
-                            name={`education.${index}.school`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>School</FormLabel>
-                                <FormControl>
-                                  <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={control}
-                            name={`education.${index}.degree`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Degree</FormLabel>
-                                <FormControl>
-                                  <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                          <FormField
-                            control={control}
-                            name={`education.${index}.startDate`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Start Date</FormLabel>
-                                <FormControl>
-                                  <Input type="month" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={control}
-                            name={`education.${index}.endDate`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>End Date</FormLabel>
-                                <FormControl>
-                                  <Input type="month" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={control}
-                            name={`education.${index}.grade`}
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Grade (Optional)</FormLabel>
-                                <FormControl>
-                                  <Input {...field} placeholder="3.8 GPA" />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
-                        <FormField
-                          control={control}
-                          name={`education.${index}.activities`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Activities (Optional)</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  {...field}
-                                  placeholder="Clubs, sports, honors societies, etc."
-                                  rows={3}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={control}
-                          name={`education.${index}.description`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Description (Optional)</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  {...field}
-                                  placeholder="Additional details about your education"
-                                  rows={3}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                        <EducationFormFields
+                          fieldNamePrefix={`education.${index}`}
                         />
                       </div>
                     </CardContent>
@@ -302,21 +196,26 @@ export function EducationFormFields() {
           </Accordion>
         </div>
       )}
-
-      {/* Add new education button */}
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full"
-        onClick={() =>
-          append({
-            school: "",
-          })
-        }
-      >
-        <Plus className="mr-2 h-4 w-4" />
-        Add Education
-      </Button>
+      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full h-20 rounded-md border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500"
+          >
+            <Plus className="size-4" />
+            Add Education
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[600px] p-4" side="right">
+          <AddNewEducationForm
+            addToEducations={(data) => {
+              prepend(data);
+              setPopoverOpen(false);
+            }}
+          />
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

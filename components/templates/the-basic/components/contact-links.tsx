@@ -1,5 +1,3 @@
-// import GitHub from "@/components/icons/github";
-// import LinkedIn from "@/components/icons/linkedin";
 import { Github, Linkedin, Mail, Phone } from "lucide-react";
 
 export default function ContactLinks() {

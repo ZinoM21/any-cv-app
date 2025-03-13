@@ -20,7 +20,7 @@ import { Save } from "lucide-react";
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
   initialValues: z.infer<T>;
-  children: (methods: ReturnType<typeof useForm<z.infer<T>>>) => ReactNode;
+  children: ReactNode;
   tab: EditorTab;
 }
 
@@ -45,6 +45,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
   const formMethods = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
     defaultValues: initialValues,
+    mode: "all",
   });
 
   const {
@@ -52,6 +53,8 @@ export function EditorForm<T extends z.ZodTypeAny>({
     formState: { dirtyFields, isDirty, isValid },
     reset,
   } = formMethods;
+
+  const canSave = isDirty && isValid;
 
   const { mutateAsync: mutateProfileData } = useMutation({
     mutationFn: async (values: {
@@ -139,19 +142,19 @@ export function EditorForm<T extends z.ZodTypeAny>({
   return (
     <Form {...formMethods}>
       <form
-        onSubmit={handleSubmit(async (data) => submit(data))}
+        onSubmit={handleSubmit((data) => submit(data))}
         className="space-y-6"
       >
         <div className="flex gap-2 w-full items-center justify-between">
           <h2 className="text-xl font-semibold text-slate-900">{tab.label}</h2>
 
-          <Button type="submit" disabled={!isDirty || !isValid} variant="ghost">
+          <Button type="submit" disabled={!canSave} variant="ghost">
             <Save className="h-4 w-4" />
-            Save
+            {canSave ? "Save" : "Saved"}
           </Button>
         </div>
 
-        {children(formMethods)}
+        {children}
         <div
           className={`mt-6 flex ${
             !isFirstTab ? "justify-between" : "justify-end"

@@ -1,30 +1,26 @@
 import { Form } from "@/components/ui/form";
+import EducationFormFields from "./education-form-fields";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  addNewExperienceFormSchema,
-  AddNewExperienceFormValues,
+  addNewEducationFormSchema,
+  AddNewEducationFormValues,
 } from "../schemas";
-import ExperienceFormFields from "./experience-form-fields";
 
 const initialValues = {
-  company: "",
-  positions: [
-    {
-      title: "",
-      location: "",
-    },
-  ],
+  school: "",
+  degree: "",
+  startDate: "",
 };
 
-export default function AddNewExperienceForm({
-  addToExperiences,
+export default function AddNewEducationForm({
+  addToEducations,
 }: {
-  addToExperiences: (data: AddNewExperienceFormValues) => void;
+  addToEducations: (data: AddNewEducationFormValues) => void;
 }) {
-  const formMethods = useForm<AddNewExperienceFormValues>({
-    resolver: zodResolver(addNewExperienceFormSchema),
+  const formMethods = useForm<AddNewEducationFormValues>({
+    resolver: zodResolver(addNewEducationFormSchema),
     defaultValues: initialValues,
     mode: "all",
   });
@@ -35,23 +31,23 @@ export default function AddNewExperienceForm({
     formState: { isValid },
   } = formMethods;
 
-  const onSubmitNewExperience = (data: AddNewExperienceFormValues) => {
-    addToExperiences(data);
+  const onSubmitNewEducation = (data: AddNewEducationFormValues) => {
+    addToEducations(data);
     reset();
   };
 
   return (
     <Form {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmitNewExperience)}>
+      <form onSubmit={handleSubmit(onSubmitNewEducation)}>
         <div className="grid gap-4">
           <h4 className="text-sm font-medium text-slate-700">
-            Add New Experience
+            Add New Education
           </h4>
 
-          <ExperienceFormFields />
+          <EducationFormFields />
 
           <Button type="submit" className="w-full" disabled={!isValid}>
-            Add Experience
+            Add Education
           </Button>
         </div>
       </form>
