@@ -92,7 +92,7 @@ const SkillsFormFields = () => {
               placeholder="e.g., JavaScript, Project Management, UX Design"
             />
           </div>
-          <Button onClick={handleAddSkill} disabled={!newSkill.trim()}>
+          <Button onClick={handleAddSkill} disabled={!newSkill.trim() || skills?.includes(newSkill.trim())}>
             <Plus className="mr-2 h-4 w-4" />
             Add
           </Button>

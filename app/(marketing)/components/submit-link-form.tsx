@@ -22,7 +22,7 @@ import { useState } from "react";
 import { ProfileData } from "@/lib/types";
 import { useProfileStore } from "@/hooks/use-profile";
 
-const formSchema = z.object({
+const submitLinkFormSchema = z.object({
   linkedInUrl: z
     .string()
     .min(2, "Please enter a LinkedIn URL or username")
@@ -41,9 +41,11 @@ const formSchema = z.object({
     ),
 });
 
+type SubmitLinkFormValues = z.infer<typeof submitLinkFormSchema>;
+
 export function SubmitLinkForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SubmitLinkFormValues>({
+    resolver: zodResolver(submitLinkFormSchema),
     defaultValues: {
       linkedInUrl: "",
     },
@@ -56,13 +58,12 @@ export function SubmitLinkForm() {
   const mutation = useMutation({
     mutationFn: async (username: string) => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile-info`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/info/${username}`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ link: username }),
         }
       );
 
@@ -88,7 +89,7 @@ export function SubmitLinkForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: SubmitLinkFormValues) {
     const username = extractUsernameFromLinkedInUrl(values.linkedInUrl);
     mutation.mutate(username);
   }
