@@ -1,26 +1,50 @@
+"use client";
+
+import { useEffect } from "react";
+
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/zoom/lib/styles/index.css";
+import { Plugin, Viewer, Worker } from "@react-pdf-viewer/core";
+
 import { usePDF } from "@react-pdf/renderer";
 import { ResumeDocument } from "./resume-two";
-import { Document, Page } from "react-pdf";
 import { ProfileData } from "@/lib/types";
-import { useEffect } from "react";
-import { useProfileStore } from "@/hooks/use-profile";
+import { PDFLoadingSkeleton } from "./pdf-loading";
 
-export const PDF = ({ data }: { data: ProfileData }) => {
-  const profileData = useProfileStore((state) => state.profile);
-
-  const document = <ResumeDocument data={data} />;
+export const PDF = ({
+  data,
+  plugins,
+}: {
+  data: Partial<ProfileData>;
+  plugins?: Plugin[];
+}) => {
+  const getDocument = (data: Partial<ProfileData>) => (
+    <ResumeDocument data={data} />
+  );
 
   const [instance, update] = usePDF({
-    document,
+    document: getDocument(data),
   });
 
   useEffect(() => {
-    update(document);
-  }, [profileData]);
+    update?.(getDocument(data));
+  }, [data, update]);
+
+  if (!instance || instance.loading || !instance.url) {
+    return <PDFLoadingSkeleton />;
+  }
 
   return (
-    <Document file={instance.url}>
-      <Page pageNumber={1} width={1000} />
-    </Document>
+    <Worker
+      workerUrl={"https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js"}
+    >
+      <Viewer
+        fileUrl={instance.url}
+        plugins={plugins}
+        renderLoader={() => <PDFLoadingSkeleton />}
+        theme="light"
+        defaultScale={1}
+      />
+    </Worker>
   );
 };

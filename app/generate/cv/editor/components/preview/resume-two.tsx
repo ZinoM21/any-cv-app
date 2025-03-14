@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Document,
   Page,
@@ -7,10 +6,8 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-import { PDFViewer } from "@react-pdf/renderer";
 import { ProfileData } from "@/lib/types";
 
-// Create styles
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#FFFFFF",
@@ -129,12 +126,16 @@ const styles = StyleSheet.create({
 });
 
 // Resume component
-export const ResumeDocument = ({ data }: { data: ProfileData }) => (
+export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Header Section */}
       <View style={styles.header}>
-        <Image src={data?.profilePictureUrl} style={styles.profileImage} />
+        {data?.profilePictureUrl && (
+          // Alt prop is not available on Image component from react-pdf
+          // eslint-disable-next-line
+          <Image src={data?.profilePictureUrl} style={styles.profileImage} />
+        )}
         <View style={styles.headerContent}>
           <Text style={styles.name}>
             {data?.firstName} {data?.lastName}
@@ -145,89 +146,97 @@ export const ResumeDocument = ({ data }: { data: ProfileData }) => (
       </View>
 
       {/* Experience Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Professional Experience</Text>
-        {data?.experiences.map((experience, index) => (
-          <View key={index} style={styles.experienceItem}>
-            <View style={styles.experienceHeader}>
-              <Text style={styles.companyName}>{experience.company}</Text>
-              {experience.positions.map(
-                (position, posIndex) =>
-                  posIndex === 0 && (
-                    <Text key={posIndex} style={styles.dates}>
-                      {formatDate(position.startDate)} -{" "}
-                      {position.endDate
-                        ? formatDate(position.endDate)
-                        : "Present"}
-                    </Text>
-                  )
-              )}
-            </View>
-
-            {experience.positions.map((position, posIndex) => (
-              <View
-                key={posIndex}
-                style={{
-                  marginBottom:
-                    posIndex < experience.positions.length - 1 ? 10 : 0,
-                }}
-              >
-                <Text style={styles.position}>{position.title}</Text>
-                {position.location && (
-                  <Text style={styles.location}>{position.location}</Text>
-                )}
-                {position.description && (
-                  <Text style={styles.description}>{position.description}</Text>
+      {data?.experiences && data.experiences.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Professional Experience</Text>
+          {data.experiences.map((experience, index) => (
+            <View key={index} style={styles.experienceItem}>
+              <View style={styles.experienceHeader}>
+                <Text style={styles.companyName}>{experience.company}</Text>
+                {experience.positions.map(
+                  (position, posIndex) =>
+                    posIndex === 0 && (
+                      <Text key={posIndex} style={styles.dates}>
+                        {formatDate(position.startDate)} -{" "}
+                        {position.endDate
+                          ? formatDate(position.endDate)
+                          : "Present"}
+                      </Text>
+                    )
                 )}
               </View>
-            ))}
-          </View>
-        ))}
-      </View>
 
-      {/* Education Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Education</Text>
-        {data?.education.map((edu, index) => (
-          <View key={index} style={styles.educationItem}>
-            <View style={styles.experienceHeader}>
-              <Text style={styles.schoolName}>{edu.school}</Text>
-              <Text style={styles.dates}>
-                {formatDate(edu.startDate)} -{" "}
-                {edu.endDate ? formatDate(edu.endDate) : "Present"}
-              </Text>
+              {experience.positions.map((position, posIndex) => (
+                <View
+                  key={posIndex}
+                  style={{
+                    marginBottom:
+                      posIndex < experience.positions.length - 1 ? 10 : 0,
+                  }}
+                >
+                  <Text style={styles.position}>{position.title}</Text>
+                  {position.location && (
+                    <Text style={styles.location}>{position.location}</Text>
+                  )}
+                  {position.description && (
+                    <Text style={styles.description}>
+                      {position.description}
+                    </Text>
+                  )}
+                </View>
+              ))}
             </View>
-            <Text style={styles.degree}>
-              {edu.degree}
-              {edu.fieldOfStudy ? `, ${edu.fieldOfStudy}` : ""}
-            </Text>
-            {edu.activities && (
-              <Text style={styles.activities}>{edu.activities}</Text>
-            )}
-            {edu.description && (
-              <Text style={styles.description}>{edu.description}</Text>
-            )}
-          </View>
-        ))}
-      </View>
-
-      {/* Skills Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Skills</Text>
-        <View style={styles.skills}>
-          {data?.skills.map((skill, index) => (
-            <Text key={index} style={styles.skill}>
-              {skill}
-            </Text>
           ))}
         </View>
-      </View>
+      )}
+
+      {/* Education Section */}
+      {data?.education && data.education.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Education</Text>
+          {data.education.map((edu, index) => (
+            <View key={index} style={styles.educationItem}>
+              <View style={styles.experienceHeader}>
+                <Text style={styles.schoolName}>{edu.school}</Text>
+                <Text style={styles.dates}>
+                  {formatDate(edu.startDate)} -{" "}
+                  {edu.endDate ? formatDate(edu.endDate) : "Present"}
+                </Text>
+              </View>
+              <Text style={styles.degree}>
+                {edu.degree}
+                {edu.fieldOfStudy ? `, ${edu.fieldOfStudy}` : ""}
+              </Text>
+              {edu.activities && (
+                <Text style={styles.activities}>{edu.activities}</Text>
+              )}
+              {edu.description && (
+                <Text style={styles.description}>{edu.description}</Text>
+              )}
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* Skills Section */}
+      {data?.skills && data.skills.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Skills</Text>
+          <View style={styles.skills}>
+            {data.skills.map((skill, index) => (
+              <Text key={index} style={styles.skill}>
+                {skill}
+              </Text>
+            ))}
+          </View>
+        </View>
+      )}
 
       {/* Volunteering Section */}
-      {data?.volunteering && data?.volunteering.length > 0 && (
+      {data?.volunteering && data.volunteering.length > 0 && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Volunteering</Text>
-          {data?.volunteering.map((vol, index) => (
+          {data.volunteering.map((vol, index) => (
             <View key={index} style={styles.volunteering}>
               <View style={styles.experienceHeader}>
                 <Text style={styles.volunteeringOrg}>{vol.organization}</Text>
@@ -278,7 +287,7 @@ const formatDate = (dateString: string) => {
   }
 
   // Handle numeric year
-  if (typeof dateString === "string" && !isNaN(dateString)) {
+  if (typeof dateString === "string" && dateString.length === 4) {
     return dateString;
   }
 
@@ -304,17 +313,9 @@ const formatDate = (dateString: string) => {
     }
   } catch (e) {
     // If parsing fails, return the original string
+    console.log(e);
     return dateString;
   }
 
   return dateString;
 };
-
-// // Main component to render the PDF viewer
-// const ResumePDFViewer = ({ data }: { data: ProfileData }) => (
-//   <PDFViewer style={{ width: "100%", height: "100vh" }}>
-//     <ResumeDocument data={data} />
-//   </PDFViewer>
-// );
-
-// export default ResumePDFViewer;

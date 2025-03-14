@@ -5,6 +5,7 @@ import { ProfileData } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { CVEditorForm } from "./cv-editor-form";
 import { CVEditorPreview } from "./cv-editor-preview";
+import { cn } from "@/lib/utils";
 
 export default function CVEditor({
   profileData,
@@ -70,9 +71,10 @@ export default function CVEditor({
         </div>
 
         <div
-          className={`${
-            isMobileView && activeView !== "preview" ? "hidden" : "flex"
-          } w-full flex-1 flex-col bg-slate-100`}
+          className={cn(
+            isMobileView && activeView !== "preview" ? "hidden" : "flex",
+            "w-full flex-1 flex-col bg-slate-100"
+          )}
         >
           <div className="flex-1 overflow-y-auto">
             <CVEditorPreview templateId={templateId} />
