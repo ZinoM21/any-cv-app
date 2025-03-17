@@ -132,7 +132,7 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
       {/* Header Section */}
       <View style={styles.header}>
         {data?.profilePictureUrl && (
-          // Alt prop is not available on Image component from react-pdf
+          // Alt prop is not available on Image component from react-pdf:
           // eslint-disable-next-line
           <Image src={data?.profilePictureUrl} style={styles.profileImage} />
         )}
@@ -149,14 +149,14 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
       {data?.experiences && data.experiences.length > 0 && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Professional Experience</Text>
-          {data.experiences.map((experience, index) => (
-            <View key={index} style={styles.experienceItem}>
+          {data.experiences.map((experience) => (
+            <View key={experience.company} style={styles.experienceItem}>
               <View style={styles.experienceHeader}>
                 <Text style={styles.companyName}>{experience.company}</Text>
                 {experience.positions.map(
                   (position, posIndex) =>
                     posIndex === 0 && (
-                      <Text key={posIndex} style={styles.dates}>
+                      <Text key={position.title} style={styles.dates}>
                         {formatDate(position.startDate)} -{" "}
                         {position.endDate
                           ? formatDate(position.endDate)
@@ -168,7 +168,7 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
 
               {experience.positions.map((position, posIndex) => (
                 <View
-                  key={posIndex}
+                  key={position.title}
                   style={{
                     marginBottom:
                       posIndex < experience.positions.length - 1 ? 10 : 0,
@@ -194,8 +194,8 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
       {data?.education && data.education.length > 0 && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Education</Text>
-          {data.education.map((edu, index) => (
-            <View key={index} style={styles.educationItem}>
+          {data.education.map((edu) => (
+            <View key={edu.school} style={styles.educationItem}>
               <View style={styles.experienceHeader}>
                 <Text style={styles.schoolName}>{edu.school}</Text>
                 <Text style={styles.dates}>
@@ -223,8 +223,8 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Skills</Text>
           <View style={styles.skills}>
-            {data.skills.map((skill, index) => (
-              <Text key={index} style={styles.skill}>
+            {data.skills.map((skill) => (
+              <Text key={skill} style={styles.skill}>
                 {skill}
               </Text>
             ))}
@@ -236,8 +236,8 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
       {data?.volunteering && data.volunteering.length > 0 && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Volunteering</Text>
-          {data.volunteering.map((vol, index) => (
-            <View key={index} style={styles.volunteering}>
+          {data.volunteering.map((vol) => (
+            <View key={vol.organization} style={styles.volunteering}>
               <View style={styles.experienceHeader}>
                 <Text style={styles.volunteeringOrg}>{vol.organization}</Text>
                 <Text style={styles.dates}>

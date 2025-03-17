@@ -19,23 +19,24 @@ export const PDF = ({
   plugins?: Plugin[];
 }) => {
   const [url, setUrl] = useState<string>();
-  const getDocument = (data: Partial<ProfileData>) => (
-    <ResumeDocument data={data} />
-  );
-
-  const getBlob = async (data: Partial<ProfileData>) => {
-    const DocComponent = getDocument(data);
-    const blob = await pdf(DocComponent).toBlob();
-    return blob;
-  };
-
-  const generateUrl = async (data: Partial<ProfileData>) => {
-    const blob = await getBlob(data);
-    const url = URL.createObjectURL(blob);
-    setUrl(url);
-  };
 
   useEffect(() => {
+    const getDocument = (data: Partial<ProfileData>) => (
+      <ResumeDocument data={data} />
+    );
+
+    const getBlob = async (data: Partial<ProfileData>) => {
+      const DocComponent = getDocument(data);
+      const blob = await pdf(DocComponent).toBlob();
+      return blob;
+    };
+
+    const generateUrl = async (data: Partial<ProfileData>) => {
+      const blob = await getBlob(data);
+      const url = URL.createObjectURL(blob);
+      setUrl(url);
+    };
+
     generateUrl(data);
   }, [data]);
 
