@@ -43,13 +43,13 @@ export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
     volunteering:
       (profileData?.volunteering &&
         profileData.volunteering.map((vol) => ({
-          role: vol.role || "",
-          organization: vol.organization || "",
-          organizationProfileUrl: vol.organizationProfileUrl || undefined,
+          role: vol.role,
+          organization: vol.organization,
+          organizationProfileUrl: vol.organizationProfileUrl || "",
+          startDate: vol.startDate,
+          endDate: vol.endDate || "",
           cause: vol.cause || "",
-          startDate: vol.startDate || "",
-          endDate: vol.endDate || undefined,
-          description: vol.description || undefined,
+          description: vol.description || "",
         }))) ||
       [],
   };

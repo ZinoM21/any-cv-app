@@ -12,8 +12,11 @@ import { CardTitle } from "@/components/ui/card";
 const initialValues = {
   role: "",
   organization: "",
-  cause: "",
+  organizationProfileUrl: "",
   startDate: "",
+  endDate: "",
+  cause: "",
+  description: "",
 };
 
 export default function AddNewVolunteeringForm({

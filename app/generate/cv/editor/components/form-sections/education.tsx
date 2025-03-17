@@ -43,16 +43,16 @@ export function EducationForm({ tabName }: { tabName: EditorTabName }) {
     education:
       (profileData?.education &&
         profileData.education.map((edu) => ({
-          school: edu.school || "",
-          degree: edu.degree || "",
-          grade: edu.grade || undefined,
-          fieldOfStudy: edu.fieldOfStudy || undefined,
-          startDate: edu.startDate || "",
-          endDate: edu.endDate || undefined,
-          description: edu.description || undefined,
-          activities: edu.activities || undefined,
-          schoolPictureUrl: edu.schoolPictureUrl || undefined,
-          schoolProfileUrl: edu.schoolProfileUrl || undefined,
+          school: edu.school,
+          schoolPictureUrl: edu.schoolPictureUrl || "",
+          schoolProfileUrl: edu.schoolProfileUrl || "",
+          degree: edu.degree,
+          fieldOfStudy: edu.fieldOfStudy || "",
+          startDate: edu.startDate,
+          endDate: edu.endDate || "",
+          grade: edu.grade || "",
+          activities: edu.activities || "",
+          description: edu.description || "",
         }))) ||
       [],
   };

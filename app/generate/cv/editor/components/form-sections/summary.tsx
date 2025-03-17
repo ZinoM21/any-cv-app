@@ -32,8 +32,8 @@ export function SummaryForm({ tabName }: { tabName: EditorTabName }) {
   const initialValues = {
     firstName: profileData?.firstName || "",
     lastName: profileData?.lastName || "",
-    // headline: profileData?.headline || "",
-    // about: profileData?.about || "",
+    headline: profileData?.headline || "",
+    about: profileData?.about || "",
   };
 
   // const handleProfilePictureUpload = () => {

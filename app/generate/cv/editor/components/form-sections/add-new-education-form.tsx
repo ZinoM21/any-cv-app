@@ -11,8 +11,15 @@ import { CardTitle } from "@/components/ui/card";
 
 const initialValues = {
   school: "",
+  schoolPictureUrl: "",
+  schoolProfileUrl: "",
   degree: "",
+  fieldOfStudy: "",
   startDate: "",
+  endDate: "",
+  grade: "",
+  description: "",
+  activities: "",
 };
 
 export default function AddNewEducationForm({

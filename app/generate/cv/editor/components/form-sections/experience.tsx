@@ -47,23 +47,27 @@ export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
     experiences:
       (profileData?.experiences &&
         profileData.experiences.map((exp) => ({
-          company: exp.company || "",
+          company: exp.company,
           companyProfileUrl: exp.companyProfileUrl || "",
           companyLogoUrl: exp.companyLogoUrl || "",
           positions:
             (exp.positions
               ? exp.positions.map((pos) => ({
-                  title: pos.title || "",
-                  startDate: pos.startDate || "",
-                  endDate: pos.endDate || undefined,
-                  location: pos.location || undefined,
-                  description: pos.description || undefined,
-                  workSetting: pos.workSetting || undefined,
+                  title: pos.title,
+                  startDate: pos.startDate,
+                  endDate: pos.endDate || "",
+                  description: pos.description || "",
+                  location: pos.location || "",
+                  workSetting: pos.workSetting || "",
                 }))
               : [
                   {
                     title: "",
                     startDate: "",
+                    endDate: "",
+                    description: "",
+                    location: "",
+                    workSetting: "",
                   },
                 ]) || [],
         }))) ||

@@ -12,7 +12,11 @@ import { CardTitle } from "@/components/ui/card";
 
 const initialValues = {
   title: "",
+  startDate: "",
+  endDate: "",
+  description: "",
   location: "",
+  workSetting: "",
 };
 
 export default function AddNewPositionForm({

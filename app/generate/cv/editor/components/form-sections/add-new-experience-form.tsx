@@ -11,10 +11,16 @@ import { CardTitle } from "@/components/ui/card";
 
 const initialValues = {
   company: "",
+  companyProfileUrl: "",
+  companyLogoUrl: "",
   positions: [
     {
       title: "",
+      startDate: "",
+      endDate: "",
+      description: "",
       location: "",
+      workSetting: "",
     },
   ],
 };
