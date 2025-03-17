@@ -184,6 +184,7 @@ export default function ExperienceFormFields({
                           Position Details
                         </h4>
                         <Button
+                          type="button"
                           variant="ghost"
                           size="sm"
                           className="text-slate-400 hover:text-red-500"
