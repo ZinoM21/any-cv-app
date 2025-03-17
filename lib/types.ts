@@ -48,7 +48,7 @@ export type VolunteeringExperience = {
   role: string;
   organization: string;
   organizationProfileUrl?: string;
-  cause: string;
+  cause?: string;
   startDate: string;
   endDate?: string;
   description?: string;

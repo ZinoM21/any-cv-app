@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
 import { Plugin, Viewer, Worker } from "@react-pdf-viewer/core";
 
-import { usePDF } from "@react-pdf/renderer";
+import { pdf } from "@react-pdf/renderer";
 import { ResumeDocument } from "./resume-two";
 import { ProfileData } from "@/lib/types";
 import { PDFLoadingSkeleton } from "./pdf-loading";
@@ -18,19 +18,28 @@ export const PDF = ({
   data: Partial<ProfileData>;
   plugins?: Plugin[];
 }) => {
+  const [url, setUrl] = useState<string>();
   const getDocument = (data: Partial<ProfileData>) => (
     <ResumeDocument data={data} />
   );
 
-  const [instance, update] = usePDF({
-    document: getDocument(data),
-  });
+  const getBlob = async (data: Partial<ProfileData>) => {
+    const DocComponent = getDocument(data);
+    const blob = await pdf(DocComponent).toBlob();
+    return blob;
+  };
+
+  const generateUrl = async (data: Partial<ProfileData>) => {
+    const blob = await getBlob(data);
+    const url = URL.createObjectURL(blob);
+    setUrl(url);
+  };
 
   useEffect(() => {
-    update?.(getDocument(data));
-  }, [data, update]);
+    generateUrl(data);
+  }, [data]);
 
-  if (!instance || instance.loading || !instance.url) {
+  if (!url || url === "") {
     return <PDFLoadingSkeleton />;
   }
 
@@ -39,7 +48,7 @@ export const PDF = ({
       workerUrl={"https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js"}
     >
       <Viewer
-        fileUrl={instance.url}
+        fileUrl={url}
         plugins={plugins}
         renderLoader={() => <PDFLoadingSkeleton />}
         theme="light"
