@@ -17,6 +17,7 @@ import { useEditorTabStore } from "@/hooks/use-editor-tabs";
 import { Save } from "lucide-react";
 import { EditorTabName, editorTabName } from "@/config/editor-tabs";
 import { capitalize } from "@/lib/utils";
+import { isEqual } from "lodash";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -97,13 +98,14 @@ export function EditorForm<T extends z.ZodTypeAny>({
 
       return snapshot;
     },
-    onSuccess: (newValues: Partial<ProfileData>) => {
-      // Revalidate (hopefully always same as optimistic)
-      // Could show toast here if there's a mismatch
-      setProfileData((prevProfileData) => ({
-        ...prevProfileData,
-        ...newValues,
-      }));
+    onSuccess: (fetchedValues: Partial<ProfileData>) => {
+      // Revalidate & only update if mismatch bwtn fetched & optimistic data
+      if (!isEqual(fetchedValues, profileData)) {
+        setProfileData((optimisticProfileData) => ({
+          ...optimisticProfileData,
+          ...fetchedValues,
+        }));
+      }
     },
     onError: (error, values, snapshot) => {
       // Roll back optimistic update
