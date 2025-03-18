@@ -19,6 +19,7 @@ const initialValues = {
       title: "",
       startDate: "",
       endDate: "",
+      duration: null,
       description: "",
       location: "",
       workSetting: "",
