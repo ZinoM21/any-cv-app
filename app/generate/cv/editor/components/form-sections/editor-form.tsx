@@ -169,7 +169,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
             })}
           >
             <Save />
-            {canSave ? "Save" : "Saved"}
+            {isDirty ? "Save" : "Saved"}
           </Button>
         </div>
 

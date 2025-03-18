@@ -55,7 +55,7 @@ export function CVEditorPreview({ templateId }: { templateId: string }) {
           </ZoomOut>
         </div>
       </div>
-      <div className="flex overflow-y-auto justify-center bg-white">
+      <div className="flex overflow-y-auto min-h-screen justify-center bg-white">
         {profileData ? (
           <PDF data={profileData} plugins={[zoomPluginInstance]} />
         ) : (

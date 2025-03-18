@@ -15,8 +15,6 @@ const initialValues = {
   organization: "",
   organizationProfileUrl: "",
   organizationLogoUrl: "",
-  startDate: "",
-  endDate: "",
   cause: "",
   description: "",
 };

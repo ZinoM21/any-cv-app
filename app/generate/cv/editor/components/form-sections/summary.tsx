@@ -145,7 +145,7 @@ const SummaryFormFields = () => {
               name="profilePictureUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Profile Picture</FormLabel>
+                  <FormLabel htmlFor="profilePictureUrl">Profile Picture</FormLabel>
                   <div className="flex items-center gap-4">
                     <Avatar className="size-16">
                       <AvatarImage src={field.value} alt="profile picture" />
@@ -157,7 +157,7 @@ const SummaryFormFields = () => {
                         <Button
                           type="button"
                           variant="outline"
-                          onClick={handleProfilePictureUpload}
+                          // onClick={handleProfilePictureUpload}
                         >
                           <Upload className="mr-2 h-4 w-4" />
                           Upload Photo

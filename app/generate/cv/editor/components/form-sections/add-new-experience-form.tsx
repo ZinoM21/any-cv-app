@@ -17,8 +17,6 @@ const initialValues = {
   positions: [
     {
       title: "",
-      startDate: "",
-      endDate: "",
       duration: null,
       description: "",
       location: "",

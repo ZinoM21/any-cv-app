@@ -1,3 +1,4 @@
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   FormControl,
   FormDescription,
@@ -48,13 +49,14 @@ export default function PositionFormFields({
           control={control}
           name={getFieldName("startDate")}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={getFieldName("startDate")}>
-                Start Date
-              </FormLabel>
-              <FormControl>
-                <Input {...field} type="month" />
-              </FormControl>
+            <FormItem className="flex flex-col">
+              <FormLabel>Start Date</FormLabel>
+              <DatePicker
+                SlotComponent={FormControl}
+                disabled={field.disabled}
+                onSelect={field.onChange}
+                selected={field.value}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -64,15 +66,18 @@ export default function PositionFormFields({
           control={control}
           name={getFieldName("endDate")}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={getFieldName("endDate")}>End Date</FormLabel>
-              <FormControl>
-                <Input {...field} type="month" />
-              </FormControl>
-              <FormMessage />
+            <FormItem className="flex flex-col">
+              <FormLabel>End Date</FormLabel>
+              <DatePicker
+                SlotComponent={FormControl}
+                disabled={field.disabled}
+                onSelect={field.onChange}
+                selected={field.value}
+              />
               <FormDescription>
                 Leave empty for current position
               </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />

@@ -3,8 +3,8 @@ import { z } from "zod";
 // Position
 export const positionSchema = z.object({
   title: z.string().min(1, "Enter a job title"),
-  startDate: z.string().min(1, "Enter a start date"),
-  endDate: z.string().optional(),
+  startDate: z.coerce.date({ required_error: "Enter a start date"}),
+  endDate: z.coerce.date().optional(),
   duration: z.string().optional().nullable(),
   description: z.string().optional(),
   location: z.string().optional(),
@@ -41,8 +41,8 @@ export type AddNewExperienceFormValues = z.infer<
 export const educationSchema = z.object({
   school: z.string().min(1, "Enter a school name"),
   degree: z.string().min(1, "Enter a degree"),
-  startDate: z.string().min(1, "Enter a start date"),
-  endDate: z.string().optional(),
+  startDate: z.coerce.date({ required_error: "Enter a start date"}),
+  endDate: z.coerce.date().optional(),
   fieldOfStudy: z.string().optional(),
   description: z.string().optional(),
   activities: z.string().optional(),
@@ -78,8 +78,8 @@ export const volunteeringSchema = z.object({
   organizationProfileUrl: z.string().optional(),
   organizationLogoUrl: z.string().optional(),
   cause: z.string().optional(),
-  startDate: z.string().min(1, "Enter a start date"),
-  endDate: z.string().optional(),
+  startDate: z.coerce.date({ required_error: "Enter a start date"}),
+  endDate: z.coerce.date().optional(),
   description: z.string().optional(),
 });
 

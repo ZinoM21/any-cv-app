@@ -1,5 +1,7 @@
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -86,11 +88,14 @@ export default function EducationFormFields({
           control={control}
           name={getFieldName("startDate")}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Start Date</FormLabel>
-              <FormControl>
-                <Input type="month" {...field} />
-              </FormControl>
+              <DatePicker
+                SlotComponent={FormControl}
+                disabled={field.disabled}
+                onSelect={field.onChange}
+                selected={field.value}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -100,11 +105,17 @@ export default function EducationFormFields({
           control={control}
           name={getFieldName("endDate")}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>End Date</FormLabel>
-              <FormControl>
-                <Input type="month" {...field} />
-              </FormControl>
+              <DatePicker
+                SlotComponent={FormControl}
+                disabled={field.disabled}
+                onSelect={field.onChange}
+                selected={field.value}
+              />
+              <FormDescription>
+                Leave empty for current education
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

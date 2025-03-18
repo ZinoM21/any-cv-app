@@ -65,8 +65,8 @@ export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
             (exp.positions
               ? exp.positions.map((pos) => ({
                   title: pos.title,
-                  startDate: pos.startDate,
-                  endDate: pos.endDate || "",
+                  startDate: new Date(pos.startDate),
+                  endDate: pos.endDate && new Date(pos.endDate),
                   duration: pos.duration,
                   description: pos.description || "",
                   location: pos.location || "",
@@ -75,8 +75,7 @@ export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
               : [
                   {
                     title: "",
-                    startDate: "",
-                    endDate: "",
+                    startDate: new Date(),
                     duration: null,
                     description: "",
                     location: "",

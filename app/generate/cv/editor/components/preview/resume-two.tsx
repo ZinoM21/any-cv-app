@@ -7,6 +7,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { ProfileData } from "@/lib/types";
+import { format } from "date-fns";
 
 const styles = StyleSheet.create({
   page: {
@@ -159,9 +160,9 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
                   (position, posIndex) =>
                     posIndex === 0 && (
                       <Text key={position.title} style={styles.dates}>
-                        {formatDate(position.startDate)} -{" "}
+                        {format(position.startDate, "MMM uu")} -{" "}
                         {position.endDate
-                          ? formatDate(position.endDate)
+                          ? format(position.endDate, "MMM uu")
                           : "Present"}
                       </Text>
                     )
@@ -201,8 +202,8 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
               <View style={styles.experienceHeader}>
                 <Text style={styles.schoolName}>{edu.school}</Text>
                 <Text style={styles.dates}>
-                  {formatDate(edu.startDate)} -{" "}
-                  {edu.endDate ? formatDate(edu.endDate) : "Present"}
+                  {format(edu.startDate, "MMM uu")} -{" "}
+                  {edu.endDate ? format(edu.endDate, "MMM uu") : "Present"}
                 </Text>
               </View>
               <Text style={styles.degree}>
@@ -243,8 +244,8 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
               <View style={styles.experienceHeader}>
                 <Text style={styles.volunteeringOrg}>{vol.organization}</Text>
                 <Text style={styles.dates}>
-                  {formatDate(vol.startDate)} -{" "}
-                  {vol.endDate ? formatDate(vol.endDate) : "Present"}
+                  {format(vol.startDate, "MMM uu")} -{" "}
+                  {vol.endDate ? format(vol.endDate, "MMM uu") : "Present"}
                 </Text>
               </View>
               <Text style={styles.volunteeringRole}>{vol.role}</Text>
@@ -258,66 +259,3 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
     </Page>
   </Document>
 );
-
-// Helper function to format dates
-const formatDate = (dateString: string) => {
-  if (!dateString) return "";
-
-  // Handle special case for dates like "2222-02"
-  if (dateString.includes("-") && dateString.split("-").length === 2) {
-    const [year, month] = dateString.split("-");
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    return `${monthNames[parseInt(month) - 1]} ${year}`;
-  }
-
-  // Handle already formatted dates like "Nov 2022"
-  if (typeof dateString === "string" && !dateString.includes("-")) {
-    return dateString;
-  }
-
-  // Handle numeric year
-  if (typeof dateString === "string" && dateString.length === 4) {
-    return dateString;
-  }
-
-  // Default case - try to parse as date
-  try {
-    const date = new Date(dateString);
-    if (!isNaN(date.getTime())) {
-      const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-    }
-  } catch (e) {
-    // If parsing fails, return the original string
-    console.log(e);
-    return dateString;
-  }
-
-  return dateString;
-};

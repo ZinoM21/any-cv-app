@@ -16,8 +16,6 @@ const initialValues = {
   schoolProfileUrl: "",
   degree: "",
   fieldOfStudy: "",
-  startDate: "",
-  endDate: "",
   grade: "",
   description: "",
   activities: "",

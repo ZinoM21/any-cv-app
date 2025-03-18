@@ -13,8 +13,6 @@ import { ReactNode } from "react";
 
 const initialValues = {
   title: "",
-  startDate: "",
-  endDate: "",
   duration: null,
   description: "",
   location: "",

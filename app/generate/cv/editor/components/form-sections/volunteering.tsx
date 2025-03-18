@@ -60,8 +60,8 @@ export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
           organization: vol.organization,
           organizationProfileUrl: vol.organizationProfileUrl || "",
           organizationLogoUrl: vol.organizationLogoUrl || "",
-          startDate: vol.startDate,
-          endDate: vol.endDate || "",
+          startDate: new Date(vol.startDate),
+          endDate: vol.endDate && new Date(vol.endDate),
           cause: vol.cause || "",
           description: vol.description || "",
         }))) ||
