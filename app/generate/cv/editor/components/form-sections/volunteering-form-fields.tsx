@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   FormControl,
   FormField,
@@ -7,6 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import Image from "next/image";
 
 import { useFormContext } from "react-hook-form";
 
@@ -15,9 +17,11 @@ export default function VolunteeringFormFields({
 }: {
   fieldNamePrefix?: string;
 }) {
-  const { control } = useFormContext();
+  const { control, getValues } = useFormContext();
   const getFieldName = (fieldName: string) =>
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
+
+  const organizationName = getValues(getFieldName("company"));
 
   return (
     <>
@@ -50,6 +54,46 @@ export default function VolunteeringFormFields({
           )}
         />
       </div>
+
+      <FormField
+        control={control}
+        name={getFieldName("organizationLogoUrl")}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel htmlFor={getFieldName("organizationLogoUrl")}>
+              Organization Logo (Optional)
+            </FormLabel>
+            <FormControl>
+              <div className="flex items-center gap-4">
+                {field.value ? (
+                  <div className="h-16 w-16 overflow-hidden rounded-md bg-slate-100">
+                    <Image
+                      src={field.value || "/placeholder.svg"}
+                      alt={organizationName + "Logo" || ""}
+                      width={80}
+                      height={80}
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <span className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400">
+                    Logo
+                  </span>
+                )}
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  // onClick={() => handleOrganizationLogoUpload(expIndex)}
+                >
+                  Change Logo
+                </Button>
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField

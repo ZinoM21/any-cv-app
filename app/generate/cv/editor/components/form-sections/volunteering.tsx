@@ -35,6 +35,7 @@ import {
   EditVolunteeringFormValues,
 } from "../editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tabs";
+import Image from "next/image";
 
 export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
   const profileData = useProfileStore((state) => state.profile);
@@ -46,6 +47,7 @@ export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
           role: vol.role,
           organization: vol.organization,
           organizationProfileUrl: vol.organizationProfileUrl || "",
+          organizationLogoUrl: vol.organizationLogoUrl || "",
           startDate: vol.startDate,
           endDate: vol.endDate || "",
           cause: vol.cause || "",
@@ -85,42 +87,67 @@ const VolunteeringFieldArray = () => {
 
           <Accordion type="single" collapsible className="space-y-6">
             {(fields as (VolunteeringExperience & { id: string })[]).map(
-              (field, index) => (
+              (volunteeringField, index) => (
                 <AccordionItem
-                  key={field.id}
-                  value={`volunteering-${field.id}`}
+                  key={volunteeringField.id}
+                  value={`volunteering-${volunteeringField.id}`}
                   className="border-none"
                 >
-                  <Card key={field.id}>
+                  <Card key={volunteeringField.id}>
                     <CardHeader className="p-4">
                       <AccordionTrigger className="py-0">
                         <div className="flex items-start justify-between">
-                          <div>
-                            <CardTitle className="text-base">
-                              <FormField
-                                name={`volunteering.${index}.role`}
-                                render={({ field }) =>
-                                  field.value ? (
-                                    <span>{field.value}</span>
+                          <div className="flex items-center gap-3">
+                            <FormField
+                              name={`volunteering.${index}.organizationLogoUrl`}
+                              render={({ field }) => (
+                                <>
+                                  {field?.value ? (
+                                    <div className="size-10 overflow-hidden rounded-md bg-slate-100">
+                                      <Image
+                                        src={field?.value || "/placeholder.svg"}
+                                        alt={
+                                          volunteeringField?.organization || ""
+                                        }
+                                        width={80}
+                                        height={80}
+                                      />
+                                    </div>
                                   ) : (
-                                    <span>Volunteering {index + 1}</span>
-                                  )
-                                }
-                              />
-                            </CardTitle>
+                                    <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
+                                      Logo
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            />
+                            <div>
+                              <CardTitle className="text-base">
+                                <FormField
+                                  name={`volunteering.${index}.role`}
+                                  render={({ field }) =>
+                                    field.value ? (
+                                      <span>{field.value}</span>
+                                    ) : (
+                                      <span>Volunteering {index + 1}</span>
+                                    )
+                                  }
+                                />
+                              </CardTitle>
 
-                            <CardDescription>
-                              <FormField
-                                name={`volunteering.${index}.organization`}
-                                render={({ field }) =>
-                                  field.value ? (
-                                    <span>{field.value}</span>
-                                  ) : (
-                                    <span>Organization {index + 1}</span>
-                                  )
-                                }
-                              />
-                            </CardDescription>
+                              <CardDescription>
+                                <FormField
+                                  name={`volunteering.${index}.organization`}
+                                  render={({ field }) =>
+                                    field.value ? (
+                                      <span>{field.value}</span>
+                                    ) : (
+                                      <span>Organization {index + 1}</span>
+                                    )
+                                  }
+                                />
+                              </CardDescription>
+                            </div>
                           </div>
                         </div>
                       </AccordionTrigger>

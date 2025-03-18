@@ -76,6 +76,7 @@ export const volunteeringSchema = z.object({
   organization: z.string().min(1, "Enter an organization"),
   organizationProfileUrl: z.string().optional(),
   cause: z.string().min(1, "Enter a cause"),
+  organizationLogoUrl: z.string().optional(),
   startDate: z.string().min(1, "Enter a start date"),
   endDate: z.string().optional(),
   description: z.string().optional(),

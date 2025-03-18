@@ -13,6 +13,7 @@ const initialValues = {
   role: "",
   organization: "",
   organizationProfileUrl: "",
+  organizationLogoUrl: "",
   startDate: "",
   endDate: "",
   cause: "",
