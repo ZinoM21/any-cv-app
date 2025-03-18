@@ -1,17 +1,15 @@
+import { useState } from "react";
 import Image from "next/image";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
-import { Plus, Trash } from "lucide-react";
-
 import {
   FormControl,
   FormField,
@@ -20,17 +18,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { Position } from "@/lib/types";
-import AddNewPositionForm from "./add-new-position-form";
-import PositionFormFields from "./position-form-fields";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Plus, Trash } from "lucide-react";
+
+import { Position } from "@/lib/types";
+import AddNewPositionForm from "./add-new-position-form";
+import PositionFormFields from "./position-form-fields";
+import { cn } from "@/lib/utils";
 
 export default function ExperienceFormFields({
   fieldNamePrefix,
@@ -183,16 +192,44 @@ export default function ExperienceFormFields({
                         <h4 className="text-sm font-medium text-slate-700">
                           Position Details
                         </h4>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="text-slate-400 hover:text-red-500"
-                          onClick={() => remove(posIndex)}
-                        >
-                          <Trash className="size-4" />
-                          Remove
-                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="text-slate-400 hover:text-red-500"
+                            >
+                              <Trash className="size-4" />
+                              Remove
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Are you absolutely sure?
+                              </AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This action cannot be undone. This will
+                                permanently remove this position entry from our
+                                servers.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                className={cn(
+                                  buttonVariants({
+                                    variant: "destructive",
+                                  })
+                                )}
+                                onClick={() => remove(posIndex)}
+                              >
+                                Yes, remove
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
 
                       <PositionFormFields

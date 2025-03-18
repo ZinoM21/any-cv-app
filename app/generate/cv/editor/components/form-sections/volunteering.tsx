@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -24,6 +24,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { VolunteeringExperience } from "@/lib/types";
 import { useProfileStore } from "@/hooks/use-profile";
@@ -36,6 +47,7 @@ import {
 } from "../editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tabs";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
   const profileData = useProfileStore((state) => state.profile);
@@ -160,16 +172,44 @@ const VolunteeringFieldArray = () => {
                             <h4 className="text-sm font-medium text-slate-700">
                               Volunteering Details
                             </h4>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="text-slate-400 hover:text-red-500"
-                              onClick={() => remove(index)}
-                            >
-                              <Trash className="size-4" />
-                              Remove
-                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-slate-400 hover:text-red-500"
+                                >
+                                  <Trash className="size-4" />
+                                  Remove
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Are you absolutely sure?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action cannot be undone. This will
+                                    permanently remove this volunteering entry
+                                    from our servers.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    className={cn(
+                                      buttonVariants({
+                                        variant: "destructive",
+                                      })
+                                    )}
+                                    onClick={() => remove(index)}
+                                  >
+                                    Yes, remove
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                           </div>
 
                           <VolunteeringFormFields

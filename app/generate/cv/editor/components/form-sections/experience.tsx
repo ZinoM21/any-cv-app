@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -19,6 +18,23 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { FormField } from "@/components/ui/form";
 
 import { Plus, Trash } from "lucide-react";
 
@@ -32,13 +48,8 @@ import {
   editExperiencesFormSchema,
   EditExperiencesFormValues,
 } from "../editor-forms-schemas";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { FormField } from "@/components/ui/form";
 import { EditorTabName } from "@/config/editor-tabs";
+import { cn } from "@/lib/utils";
 
 export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
   const profileData = useProfileStore((state) => state.profile);
@@ -199,16 +210,44 @@ const ExperiencesFieldArray = () => {
                             <h4 className="text-sm font-medium text-slate-700">
                               Experience Details
                             </h4>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="text-slate-400 hover:text-red-500"
-                              onClick={() => remove(expIndex)}
-                            >
-                              <Trash className="size-4" />
-                              Remove
-                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-slate-400 hover:text-red-500"
+                                >
+                                  <Trash />
+                                  Remove
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Are you absolutely sure?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action cannot be undone. This will
+                                    permanently remove this experience entry
+                                    from our servers.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    className={cn(
+                                      buttonVariants({
+                                        variant: "destructive",
+                                      })
+                                    )}
+                                    onClick={() => remove(expIndex)}
+                                  >
+                                    Yes, remove
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                           </div>
 
                           <ExperienceFormFields

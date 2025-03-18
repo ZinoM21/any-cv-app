@@ -1,7 +1,7 @@
 "use client";
 
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Plus, Trash } from "lucide-react";
 import {
   Card,
@@ -22,6 +22,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { Education } from "@/lib/types";
 import Image from "next/image";
@@ -35,6 +46,7 @@ import {
 } from "../editor-forms-schemas";
 import { useState } from "react";
 import { EditorTabName } from "@/config/editor-tabs";
+import { cn } from "@/lib/utils";
 
 export function EducationForm({ tabName }: { tabName: EditorTabName }) {
   const profileData = useProfileStore((state) => state.profile);
@@ -179,16 +191,44 @@ export function EducationFieldArray() {
                           <h4 className="text-sm font-medium text-slate-700">
                             Education Details
                           </h4>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            className="text-slate-400 hover:text-red-500"
-                            onClick={() => remove(index)}
-                          >
-                            <Trash className="size-4" />
-                            Remove
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="text-slate-400 hover:text-red-500"
+                              >
+                                <Trash />
+                                Remove
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently remove this education entry from
+                                  our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className={cn(
+                                    buttonVariants({
+                                      variant: "destructive",
+                                    })
+                                  )}
+                                  onClick={() => remove(index)}
+                                >
+                                  Yes, remove
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                         <EducationFormFields
                           fieldNamePrefix={`education.${index}`}
