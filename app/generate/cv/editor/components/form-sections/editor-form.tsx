@@ -14,7 +14,7 @@ import { toast } from "sonner";
 
 import type { ProfileData } from "@/lib/types";
 import { useEditorTabStore } from "@/hooks/use-editor-tabs";
-import { Save } from "lucide-react";
+import { ChevronLeft, Save } from "lucide-react";
 import { EditorTabName, editorTabName } from "@/config/editor-tabs";
 import { capitalize } from "@/lib/utils";
 import { isEqual } from "lodash";
@@ -155,8 +155,20 @@ export function EditorForm<T extends z.ZodTypeAny>({
             {capitalize(tabName)}
           </h2>
 
-          <Button type="submit" disabled={!canSave} variant="ghost">
-            <Save className="h-4 w-4" />
+          <Button
+            // type="submit"
+            disabled={!canSave}
+            variant="ghost"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+              }
+            }}
+            onClick={handleSubmit((data) => {
+              submit(data, true);
+            })}
+          >
+            <Save />
             {canSave ? "Save" : "Saved"}
           </Button>
         </div>
@@ -169,6 +181,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
         >
           {!isFirstTab && (
             <Button variant="outline" onClick={() => setActiveTab(previousTab)}>
+              <ChevronLeft />
               Back
             </Button>
           )}
@@ -178,8 +191,15 @@ export function EditorForm<T extends z.ZodTypeAny>({
                 submit(data, true);
               })}
               disabled={!isValid}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit((data) => {
+                    submit(data, true);
+                  });
+                }
+              }}
             >
-              {isDirty && "Save & "}Next: {capitalize(tabValues[tabIndex + 1])}
+              {isDirty && "Save & "}Next: {capitalize(nextTab)}
             </Button>
           )}
         </div>
