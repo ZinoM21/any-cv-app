@@ -14,7 +14,7 @@ export default function TheApply({
   const {
     firstName,
     lastName,
-    jobTitle,
+    headline,
     about,
     experiences,
     education,
@@ -42,7 +42,7 @@ export default function TheApply({
           <h1 className="text-4xl font-semibold mb-2">
             {firstName} {lastName}
           </h1>
-          <p className="text-gray-500 font-medium text-xl">{jobTitle}</p>
+          <p className="text-gray-500 font-medium text-xl">{headline}</p>
         </div>
 
         <Separator className="my-8 bg-black" />

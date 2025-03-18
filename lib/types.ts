@@ -5,13 +5,12 @@ export type ProfileData = {
   lastName: string;
   username: string;
   profilePictureUrl?: string;
-  jobTitle: string;
-  headline: string;
-  about: string;
-  experiences: Experience[];
-  education: Education[];
-  skills: string[];
-  volunteering: VolunteeringExperience[];
+  headline?: string;
+  about?: string;
+  experiences: Experience[] | [];
+  education: Education[] | [];
+  skills: string[] | [];
+  volunteering: VolunteeringExperience[] | [];
 };
 
 export type Experience = {

@@ -11,7 +11,7 @@ export default function TheBasic({
   const {
     firstName,
     lastName,
-    jobTitle,
+    headline,
     about,
     experiences,
     education,
@@ -34,7 +34,7 @@ export default function TheBasic({
           <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
             {firstName} {lastName}
           </h1>
-          <p className="text-xl md:text-2xl text-slate-600 mb-8">{jobTitle}</p>
+          <p className="text-xl md:text-2xl text-slate-600 mb-8">{headline}</p>
           <ContactLinks />
         </div>
       </section>

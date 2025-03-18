@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
-  jobTitle: {
+  headline: {
     fontSize: 14,
     marginBottom: 10,
     color: "#666",
@@ -140,8 +140,10 @@ export const ResumeDocument = ({ data }: { data: Partial<ProfileData> }) => (
           <Text style={styles.name}>
             {data?.firstName} {data?.lastName}
           </Text>
-          <Text style={styles.jobTitle}>{data?.jobTitle}</Text>
-          <Text style={styles.about}>{data?.about}</Text>
+          {data?.headline && (
+            <Text style={styles.headline}>{data?.headline}</Text>
+          )}
+          {data?.about && <Text style={styles.about}>{data?.about}</Text>}
         </View>
       </View>
 
