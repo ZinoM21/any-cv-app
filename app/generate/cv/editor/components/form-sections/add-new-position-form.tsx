@@ -9,6 +9,7 @@ import {
 
 import PositionFormFields from "./position-form-fields";
 import { CardTitle } from "@/components/ui/card";
+import { ReactNode } from "react";
 
 const initialValues = {
   title: "",
@@ -21,8 +22,10 @@ const initialValues = {
 
 export default function AddNewPositionForm({
   addToPositions,
+  cancelButton,
 }: {
   addToPositions: (data: AddNewPositionSchemaValues) => void;
+  cancelButton: ReactNode;
 }) {
   const formMethods = useForm<AddNewPositionSchemaValues>({
     resolver: zodResolver(addNewPositionSchema),
@@ -49,9 +52,12 @@ export default function AddNewPositionForm({
 
           <PositionFormFields />
 
-          <Button type="submit" className="w-full" disabled={!isValid}>
-            Add Position
-          </Button>
+          <div className="flex gap-2 justify-end">
+            {cancelButton}
+            <Button type="submit" disabled={!isValid}>
+              Add Position
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

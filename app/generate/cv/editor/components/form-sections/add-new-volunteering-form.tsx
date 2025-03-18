@@ -8,6 +8,7 @@ import {
   AddNewVolunteeringFormValues,
 } from "../editor-forms-schemas";
 import { CardTitle } from "@/components/ui/card";
+import { ReactNode } from "react";
 
 const initialValues = {
   role: "",
@@ -22,8 +23,10 @@ const initialValues = {
 
 export default function AddNewVolunteeringForm({
   addToVolunteering,
+  cancelButton,
 }: {
   addToVolunteering: (data: AddNewVolunteeringFormValues) => void;
+  cancelButton: ReactNode;
 }) {
   const formMethods = useForm<AddNewVolunteeringFormValues>({
     resolver: zodResolver(addNewVolunteeringFormSchema),
@@ -50,9 +53,12 @@ export default function AddNewVolunteeringForm({
 
           <VolunteeringFormFields />
 
-          <Button type="submit" className="w-full" disabled={!isValid}>
-            Add Volunteering
-          </Button>
+          <div className="flex gap-2 justify-end">
+            {cancelButton}
+            <Button type="submit" disabled={!isValid}>
+              Add Volunteering
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

@@ -259,6 +259,15 @@ export function EducationFieldArray() {
               prepend(data);
               setPopoverOpen(false);
             }}
+            cancelButton={
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setPopoverOpen(false)}
+              >
+                Cancel
+              </Button>
+            }
           />
         </PopoverContent>
       </Popover>

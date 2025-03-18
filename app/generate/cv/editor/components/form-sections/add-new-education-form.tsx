@@ -8,6 +8,7 @@ import {
   AddNewEducationFormValues,
 } from "../editor-forms-schemas";
 import { CardTitle } from "@/components/ui/card";
+import { ReactNode } from "react";
 
 const initialValues = {
   school: "",
@@ -24,8 +25,10 @@ const initialValues = {
 
 export default function AddNewEducationForm({
   addToEducations,
+  cancelButton,
 }: {
   addToEducations: (data: AddNewEducationFormValues) => void;
+  cancelButton: ReactNode;
 }) {
   const formMethods = useForm<AddNewEducationFormValues>({
     resolver: zodResolver(addNewEducationFormSchema),
@@ -52,9 +55,12 @@ export default function AddNewEducationForm({
 
           <EducationFormFields />
 
-          <Button type="submit" className="w-full" disabled={!isValid}>
-            Add Education
-          </Button>
+          <div className="flex gap-2 justify-end">
+            {cancelButton}
+            <Button type="submit" disabled={!isValid}>
+              Add Education
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

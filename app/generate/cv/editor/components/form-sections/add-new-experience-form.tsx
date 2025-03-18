@@ -8,6 +8,7 @@ import {
 } from "../editor-forms-schemas";
 import ExperienceFormFields from "./experience-form-fields";
 import { CardTitle } from "@/components/ui/card";
+import { ReactNode } from "react";
 
 const initialValues = {
   company: "",
@@ -27,8 +28,10 @@ const initialValues = {
 
 export default function AddNewExperienceForm({
   addToExperiences,
+  cancelButton,
 }: {
   addToExperiences: (data: AddNewExperienceFormValues) => void;
+  cancelButton: ReactNode;
 }) {
   const formMethods = useForm<AddNewExperienceFormValues>({
     resolver: zodResolver(addNewExperienceFormSchema),
@@ -55,9 +58,12 @@ export default function AddNewExperienceForm({
 
           <ExperienceFormFields />
 
-          <Button type="submit" className="w-full" disabled={!isValid}>
-            Add Experience
-          </Button>
+          <div className="flex gap-2 justify-end">
+            {cancelButton}
+            <Button type="submit" disabled={!isValid}>
+              Add Experience
+            </Button>
+          </div>
         </div>
       </form>
     </Form>
