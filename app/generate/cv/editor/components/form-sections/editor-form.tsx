@@ -14,11 +14,16 @@ import { toast } from "sonner";
 
 import type { ProfileData } from "@/lib/types";
 import { useEditorTabStore } from "@/hooks/use-editor-tabs";
-import { ChevronLeft, Save } from "lucide-react";
+import { ChevronLeft, FileCheck, FileDown, Save } from "lucide-react";
 import { EditorTabName, editorTabName } from "@/config/editor-tab-names";
 import { capitalize } from "@/lib/utils";
 import { isEqual } from "lodash";
 import { useShallow } from "zustand/react/shallow";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -151,61 +156,84 @@ export function EditorForm<T extends z.ZodTypeAny>({
     <Form {...formMethods}>
       <form
         onSubmit={handleSubmit((data) => submit(data))}
-        className="space-y-6"
+        className="flex flex-col h-full"
       >
-        <div className="flex gap-2 w-full items-center justify-between">
-          <h2 className="text-xl font-semibold text-slate-900">
-            {capitalize(tabName)}
-          </h2>
+        {/* Form Header */}
+        <div className="flex gap-2 w-full items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            {!isFirstTab && (
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() => setActiveTab(previousTab)}
+                className="pl-2 pr-3"
+              >
+                <ChevronLeft />
+              </Button>
+            )}
+            <h2 className="text-xl font-semibold text-slate-900">
+              {capitalize(tabName)}
+            </h2>
+          </div>
 
-          <Button
-            // type="submit"
-            disabled={!canSave}
-            variant="outline"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-              }
-            }}
-            onClick={handleSubmit((data) => {
-              submit(data, false);
-            })}
-          >
-            <Save />
-            {isDirty ? "Save" : "Saved"}
-          </Button>
+          <div className="flex gap-2">
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger asChild>
+                <Button
+                  // type="submit"
+                  disabled={!canSave}
+                  size="icon"
+                  variant="outline"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
+                  onClick={handleSubmit((data) => {
+                    submit(data, false);
+                  })}
+                >
+                  {isDirty ? <Save /> : <FileCheck />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-secondary-foreground">
+                <p>{isDirty ? "Save Changes" : "Changes are saved."}</p>
+              </TooltipContent>
+            </Tooltip>
+            {isLastTab ? (
+              <Button>
+                <FileDown
+                  className="mr-1"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
+                />
+                Download CV
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSubmit((data) => {
+                  submit(data, true);
+                })}
+                disabled={!isValid}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit((data) => {
+                      submit(data, true);
+                    });
+                  }
+                }}
+              >
+                Next: {capitalize(nextTab)}
+              </Button>
+            )}
+          </div>
         </div>
 
-        {children}
-        <div
-          className={`mt-6 flex ${
-            !isFirstTab ? "justify-between" : "justify-end"
-          }`}
-        >
-          {!isFirstTab && (
-            <Button variant="outline" onClick={() => setActiveTab(previousTab)}>
-              <ChevronLeft />
-              Back
-            </Button>
-          )}
-          {!isLastTab && (
-            <Button
-              onClick={handleSubmit((data) => {
-                submit(data, true);
-              })}
-              disabled={!isValid}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSubmit((data) => {
-                    submit(data, true);
-                  });
-                }
-              }}
-            >
-              {isDirty && "Save & "}Next: {capitalize(nextTab)}
-            </Button>
-          )}
-        </div>
+        {/* Scrollable content area */}
+        <div className="overflow-y-auto flex-1 min-h-0">{children}</div>
       </form>
     </Form>
   );

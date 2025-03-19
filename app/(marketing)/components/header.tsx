@@ -3,15 +3,13 @@ import { Button } from "@/components/ui/button";
 
 import { mainNav } from "@/config/nav";
 import MobileHamburgerMenu from "./mobile-hamburger-menu";
+import { GenericHeader } from "@/components/generic-header";
 
 export function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white/85 backdrop-blur-[4px] border-b">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <nav
-          className="flex items-center justify-between p-6"
-          aria-label="Global"
-        >
+    <GenericHeader>
+      <div className="flex-1 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <nav className="flex items-center justify-between" aria-label="Global">
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5 font-semibold text-xl">
               built<span className="text-primary">any</span>cv
@@ -38,6 +36,6 @@ export function Header() {
           </div>
         </nav>
       </div>
-    </header>
+    </GenericHeader>
   );
 }

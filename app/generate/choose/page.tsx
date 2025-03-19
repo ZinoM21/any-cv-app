@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, FileText, Globe } from "lucide-react";
+import { ArrowRight, FileText, Globe } from "lucide-react";
 
 import {
   Card,
@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { ProfileData, PromiseSearchParams } from "@/lib/types";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
 
 export default async function GeneratingPage({
   searchParams,
@@ -36,18 +35,7 @@ export default async function GeneratingPage({
   const profileData: ProfileData = await response.json();
 
   return (
-    <div className="h-screen max-w-[1400px] mx-auto px-4 py-12">
-      <Button
-        variant="link"
-        size="lg"
-        className="group text-muted-foreground absolute"
-        asChild
-      >
-        <Link href="/">
-          <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
-          Back
-        </Link>
-      </Button>
+    <div className="h-full max-w-[1400px] mx-auto px-4 py-12">
       <div className="flex h-full flex-col items-center justify-center">
         <Card className="w-full max-w-md shadow-lg mx-auto">
           <CardHeader>

@@ -29,7 +29,7 @@ export default async function CVEditorPage({
   const profileData: ProfileData = await response.json();
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-full flex-col">
       <CVEditor profileData={profileData} templateId={templateId as string} />
     </div>
   );

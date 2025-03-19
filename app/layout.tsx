@@ -18,9 +18,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.className} antialiased`}>
         <Providers>
-          <main className="bg-gradient-to-b from-primary/20 to-background">
+          <div className="bg-gradient-to-b from-primary/20 to-background">
+          
             {children}
-          </main>
+          </div>
           <Toaster position="top-center" richColors closeButton theme="light" />
         </Providers>
       </body>

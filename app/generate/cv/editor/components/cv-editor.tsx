@@ -3,7 +3,7 @@
 import { useProfileStore } from "@/hooks/use-profile";
 import { ProfileData } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { CVEditorForm } from "./cv-editor-form";
+import { CVEditorTabs } from "./cv-editor-tabs";
 import { CVEditorPreview } from "./cv-editor-preview";
 import { cn } from "@/lib/utils";
 
@@ -66,7 +66,7 @@ export default function CVEditor({
           } w-full flex-col lg:w-[40%] lg:max-w-xl`}
         >
           <div className="flex-1 overflow-y-auto bg-white">
-            <CVEditorForm username={profileData.username} />
+            <CVEditorTabs />
           </div>
         </div>
 

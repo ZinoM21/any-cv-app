@@ -97,7 +97,7 @@ const EducationFieldArray = () => {
   // };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-60">
       {fields.length > 0 && (
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-slate-500">

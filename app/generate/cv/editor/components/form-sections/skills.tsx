@@ -69,7 +69,7 @@ const SkillsFormFields = () => {
   };
 
   return (
-    <Card>
+    <Card className="mb-60">
       <CardHeader>
         <CardTitle className="text-base">Add Skills</CardTitle>
         <CardDescription>

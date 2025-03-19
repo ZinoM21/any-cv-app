@@ -2,9 +2,6 @@ import { ProfileData, PromiseSearchParams } from "@/lib/types";
 import { redirect } from "next/navigation";
 import CVTemplateCard from "./components/cv-template-card";
 import { cvTemplates } from "@/config/templates";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 
 export default async function CVTemplatePage({
   searchParams,
@@ -29,19 +26,8 @@ export default async function CVTemplatePage({
   const profileData: ProfileData = await response.json();
 
   return (
-    <div className="min-h-screen max-w-[1400px] mx-auto px-4 py-12">
-      <Button
-        variant="link"
-        size="lg"
-        className="group text-muted-foreground absolute"
-        asChild
-      >
-        <Link href={`/generate/choose?username=${username}`}>
-          <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
-          Back
-        </Link>
-      </Button>
-      <div className="mb-10 mt-8 text-center">
+    <div className="flex flex-col gap-10 h-full max-w-[1400px] mx-auto pt-12 px-4 sm:px-6 lg:px-8">
+      <div className="text-center">
         <h1 className="mb-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Choose Your CV Template, {profileData.firstName}
         </h1>
