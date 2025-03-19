@@ -172,8 +172,8 @@ const EducationFieldArray = () => {
                   <AccordionContent>
                     <CardContent className="px-4 pb-4 pt-0">
                       <div className="grid gap-4">
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-sm font-medium text-slate-700">
+                        <div className="flex items-center justify-between border-b pb-1">
+                          <h4 className="text-base font-medium text-slate-800">
                             Education Details
                           </h4>
                           <AlertDialog>
