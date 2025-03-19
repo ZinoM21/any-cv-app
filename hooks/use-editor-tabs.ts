@@ -1,4 +1,4 @@
-import { EditorTabName, editorTabName } from "@/config/editor-tabs";
+import { EditorTabName, editorTabName } from "@/config/editor-tab-names";
 import { create } from "zustand";
 
 interface EditorTabStore {

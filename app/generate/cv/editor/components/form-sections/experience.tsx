@@ -45,7 +45,7 @@ import {
   editExperiencesFormSchema,
   EditExperiencesFormValues,
 } from "../editor-forms-schemas";
-import { EditorTabName } from "@/config/editor-tabs";
+import { EditorTabName } from "@/config/editor-tab-names";
 import { cn } from "@/lib/utils";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 

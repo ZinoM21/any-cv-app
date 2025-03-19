@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { EditorForm } from "./editor-form";
-import { EditorTabName } from "@/config/editor-tabs";
+import { EditorTabName } from "@/config/editor-tab-names";
 import {
   editSkillsFormSchema,
   EditSkillsFormValues,

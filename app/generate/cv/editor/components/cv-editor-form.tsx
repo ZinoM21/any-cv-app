@@ -1,18 +1,39 @@
 "use client";
 
+import Link from "next/link";
 import { useShallow } from "zustand/react/shallow";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { capitalize } from "@/lib/utils";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+
+import { useEditorTabStore } from "@/hooks/use-editor-tabs";
 import {
-  editorTabFormComponentMap,
+  SUMMARY,
+  EXPERIENCE,
+  EDUCATION,
+  SKILLS,
+  VOLUNTEERING,
   EditorTabName,
   editorTabName,
-} from "@/config/editor-tabs";
-import { useEditorTabStore } from "@/hooks/use-editor-tabs";
-import { capitalize } from "@/lib/utils";
+} from "@/config/editor-tab-names";
+
+import { EducationForm } from "./form-sections/education";
+import { ExperiencesForm } from "./form-sections/experience";
+import { SkillsForm } from "./form-sections/skills";
+import { SummaryForm } from "./form-sections/summary";
+import { VolunteeringForm } from "./form-sections/volunteering";
+
+const editorTabFormComponentMap: {
+  [P in EditorTabName]: React.FC<{ tabName: EditorTabName }>;
+} = {
+  [SUMMARY]: SummaryForm,
+  [EXPERIENCE]: ExperiencesForm,
+  [EDUCATION]: EducationForm,
+  [SKILLS]: SkillsForm,
+  [VOLUNTEERING]: VolunteeringForm,
+};
 
 export function CVEditorForm({ username }: { username: string }) {
   const [activeTab, setActiveTab] = useEditorTabStore(

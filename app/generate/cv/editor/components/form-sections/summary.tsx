@@ -13,7 +13,7 @@ import {
 
 import { EditorForm } from "./editor-form";
 import { useFormContext } from "react-hook-form";
-import { EditorTabName } from "@/config/editor-tabs";
+import { EditorTabName } from "@/config/editor-tab-names";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import { editSummaryFormSchema } from "../editor-forms-schemas";
 

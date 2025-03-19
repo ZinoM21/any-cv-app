@@ -43,7 +43,7 @@ import {
   editVolunteeringFormSchema,
   EditVolunteeringFormValues,
 } from "../editor-forms-schemas";
-import { EditorTabName } from "@/config/editor-tabs";
+import { EditorTabName } from "@/config/editor-tab-names";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";

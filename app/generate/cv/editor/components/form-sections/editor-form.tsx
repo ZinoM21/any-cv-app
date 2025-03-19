@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import type { ProfileData } from "@/lib/types";
 import { useEditorTabStore } from "@/hooks/use-editor-tabs";
 import { ChevronLeft, Save } from "lucide-react";
-import { EditorTabName, editorTabName } from "@/config/editor-tabs";
+import { EditorTabName, editorTabName } from "@/config/editor-tab-names";
 import { capitalize } from "@/lib/utils";
 import { isEqual } from "lodash";
 import { useShallow } from "zustand/react/shallow";
@@ -161,7 +161,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
           <Button
             // type="submit"
             disabled={!canSave}
-            variant="ghost"
+            variant="outline"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
