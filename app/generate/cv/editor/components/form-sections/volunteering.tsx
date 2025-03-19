@@ -90,15 +90,15 @@ const VolunteeringFieldArray = () => {
               >
                 <Card key={volunteeringField.id}>
                   <CardHeader className="p-4">
-                    <AccordionTrigger className="py-0">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
+                    <AccordionTrigger className="py-0 min-w-0">
+                      <div className="flex flex-1 items-start justify-between min-w-0">
+                        <div className="flex items-center gap-3 min-w-0">
                           <FormField
                             name={`volunteering.${index}.organizationLogoUrl`}
                             render={({ field }) => (
                               <>
                                 {field?.value ? (
-                                  <div className="size-10 overflow-hidden rounded-md bg-slate-100 flex-shrink-0">
+                                  <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
                                     <Image
                                       src={field?.value || "/placeholder.svg"}
                                       alt={
@@ -116,26 +116,29 @@ const VolunteeringFieldArray = () => {
                               </>
                             )}
                           />
-                          <div>
+                          <div className="min-w-0">
                             <CardTitle className="text-base">
                               <FormField
                                 name={`volunteering.${index}.role`}
                                 render={({ field }) =>
                                   field.value ? (
-                                    <span>{field.value}</span>
+                                    <span className="block truncate">
+                                      {field.value}
+                                    </span>
                                   ) : (
                                     <span>Volunteering {index + 1}</span>
                                   )
                                 }
                               />
                             </CardTitle>
-
                             <CardDescription>
                               <FormField
                                 name={`volunteering.${index}.organization`}
                                 render={({ field }) =>
                                   field.value ? (
-                                    <span>{field.value}</span>
+                                    <span className="block truncate">
+                                      {field.value}
+                                    </span>
                                   ) : (
                                     <span>Organization {index + 1}</span>
                                   )

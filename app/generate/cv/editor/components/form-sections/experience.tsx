@@ -106,15 +106,15 @@ const ExperiencesFieldArray = () => {
               >
                 <Card key={experienceField.id}>
                   <CardHeader className="p-4">
-                    <AccordionTrigger className="py-0">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
+                    <AccordionTrigger className="py-0 min-w-0">
+                      <div className="flex flex-1 items-start justify-between min-w-0">
+                        <div className="flex items-center gap-3 min-w-0">
                           <FormField
                             name={`experiences.${expIndex}.companyLogoUrl`}
                             render={({ field }) => (
                               <>
                                 {field?.value ? (
-                                  <div className="size-10 overflow-hidden rounded-md bg-slate-100">
+                                  <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
                                     <Image
                                       src={field?.value || "/placeholder.svg"}
                                       alt={experienceField?.company || ""}
@@ -131,13 +131,15 @@ const ExperiencesFieldArray = () => {
                             )}
                           />
 
-                          <div>
+                          <div className="min-w-0">
                             <CardTitle className="text-base">
                               <FormField
                                 name={`experiences.${expIndex}.company`}
                                 render={({ field }) =>
                                   field.value ? (
-                                    <span>{field.value}</span>
+                                    <span className="block truncate">
+                                      {field.value}
+                                    </span>
                                   ) : (
                                     <span>Company {expIndex + 1}</span>
                                   )
@@ -150,7 +152,7 @@ const ExperiencesFieldArray = () => {
                                 name={`experiences.${expIndex}.positions`}
                                 render={({ field }) =>
                                   field.value ? (
-                                    <span>
+                                    <span className="block truncate">
                                       {field?.value?.length || 0}{" "}
                                       {field?.value?.length === 1
                                         ? "position"

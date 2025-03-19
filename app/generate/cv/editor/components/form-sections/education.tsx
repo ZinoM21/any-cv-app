@@ -113,11 +113,11 @@ const EducationFieldArray = () => {
               >
                 <Card key={field.id}>
                   <CardHeader className="p-4">
-                    <AccordionTrigger className="py-0">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
+                    <AccordionTrigger className="py-0 min-w-0">
+                      <div className="flex flex-1 items-start justify-between min-w-0">
+                        <div className="flex items-center gap-3 min-w-0">
                           {field.schoolPictureUrl ? (
-                            <div className="size-10 overflow-hidden rounded-md bg-slate-100">
+                            <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
                               <Image
                                 src={
                                   field?.schoolPictureUrl || "/placeholder.svg"
@@ -132,26 +132,29 @@ const EducationFieldArray = () => {
                               Logo
                             </div>
                           )}
-                          <div>
+                          <div className="min-w-0">
                             <CardTitle className="text-base">
                               <FormField
                                 name={`education.${index}.degree`}
                                 render={({ field }) =>
                                   field.value ? (
-                                    <span>{field.value}</span>
+                                    <span className="block truncate">
+                                      {field.value}
+                                    </span>
                                   ) : (
                                     <span>Experience {index + 1}</span>
                                   )
                                 }
                               />
                             </CardTitle>
-
                             <CardDescription>
                               <FormField
                                 name={`education.${index}.school`}
                                 render={({ field }) =>
                                   field.value ? (
-                                    <span>{field.value}</span>
+                                    <span className="block truncate">
+                                      {field.value}
+                                    </span>
                                   ) : (
                                     <span>
                                       School of experience {index + 1}
