@@ -34,40 +34,22 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { Education } from "@/lib/types";
 import Image from "next/image";
 import { EditorForm } from "./editor-form";
-import { useProfileStore } from "@/hooks/use-profile";
 import EducationFormFields from "./education-form-fields";
 import AddNewEducationForm from "./add-new-education-form";
 import {
-  EditEducationFormValues,
   editEducationFormSchema,
+  EditEducationFormValues,
 } from "../editor-forms-schemas";
 import { useState } from "react";
 import { EditorTabName } from "@/config/editor-tabs";
 import { cn } from "@/lib/utils";
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 
 export function EducationForm({ tabName }: { tabName: EditorTabName }) {
-  const profileData = useProfileStore((state) => state.profile);
-
-  const initialValues: EditEducationFormValues = {
-    education:
-      (profileData?.education &&
-        profileData.education.map((edu) => ({
-          school: edu.school,
-          schoolPictureUrl: edu.schoolPictureUrl || "",
-          schoolProfileUrl: edu.schoolProfileUrl || "",
-          degree: edu.degree,
-          fieldOfStudy: edu.fieldOfStudy || "",
-          startDate: new Date(edu.startDate),
-          endDate: edu.endDate && new Date(edu.endDate),
-          grade: edu.grade || "",
-          activities: edu.activities || "",
-          description: edu.description || "",
-        }))) ||
-      [],
-  };
+  const { getEducationInitialValues } = useEditorFormInitialValues();
+  const initialValues = getEducationInitialValues();
 
   return (
     <EditorForm
@@ -80,10 +62,10 @@ export function EducationForm({ tabName }: { tabName: EditorTabName }) {
   );
 }
 
-export function EducationFieldArray() {
+const EducationFieldArray = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  const { control } = useFormContext();
+  const { control } = useFormContext<EditEducationFormValues>();
   const { fields, prepend, remove } = useFieldArray({
     control,
     name: "education",
@@ -123,7 +105,7 @@ export function EducationFieldArray() {
           </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
-            {(fields as (Education & { id: string })[]).map((field, index) => (
+            {fields.map((field, index) => (
               <AccordionItem
                 key={field.id}
                 value={`experience-${field.id}`}
@@ -273,4 +255,4 @@ export function EducationFieldArray() {
       </Popover>
     </div>
   );
-}
+};

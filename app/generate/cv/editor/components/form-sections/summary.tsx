@@ -1,9 +1,5 @@
 "use client";
 
-import { z } from "zod";
-
-import { useProfileStore } from "@/hooks/use-profile";
-
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -18,23 +14,12 @@ import {
 import { EditorForm } from "./editor-form";
 import { useFormContext } from "react-hook-form";
 import { EditorTabName } from "@/config/editor-tabs";
-
-const summaryFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  headline: z.string().optional(),
-  about: z.string().optional(),
-});
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
+import { editSummaryFormSchema } from "../editor-forms-schemas";
 
 export function SummaryForm({ tabName }: { tabName: EditorTabName }) {
-  const profileData = useProfileStore((state) => state.profile);
-
-  const initialValues = {
-    firstName: profileData?.firstName || "",
-    lastName: profileData?.lastName || "",
-    headline: profileData?.headline || "",
-    about: profileData?.about || "",
-  };
+  const { getSummaryInitialValues } = useEditorFormInitialValues();
+  const initialValues = getSummaryInitialValues();
 
   // const handleProfilePictureUpload = () => {
   //   // In a real app, this would open a file picker and handle the upload
@@ -53,7 +38,7 @@ export function SummaryForm({ tabName }: { tabName: EditorTabName }) {
 
   return (
     <EditorForm
-      schema={summaryFormSchema}
+      schema={editSummaryFormSchema}
       initialValues={initialValues}
       tabName={tabName}
     >

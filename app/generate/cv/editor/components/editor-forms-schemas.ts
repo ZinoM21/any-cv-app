@@ -1,9 +1,19 @@
 import { z } from "zod";
 
+// Summary
+export const editSummaryFormSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  headline: z.string().optional(),
+  about: z.string().optional(),
+});
+
+export type EditSummaryFormValues = z.infer<typeof editSummaryFormSchema>;
+
 // Position
 export const positionSchema = z.object({
   title: z.string().min(1, "Enter a job title"),
-  startDate: z.coerce.date({ required_error: "Enter a start date"}),
+  startDate: z.coerce.date({ required_error: "Enter a start date" }),
   endDate: z.coerce.date().optional(),
   duration: z.string().optional().nullable(),
   description: z.string().optional(),
@@ -11,17 +21,19 @@ export const positionSchema = z.object({
   workSetting: z.string().optional().nullable(),
 });
 
-export const addNewPositionSchema = positionSchema;
-export type AddNewPositionSchemaValues = z.infer<typeof addNewPositionSchema>;
+const editPositionSchema = z
+  .array(positionSchema)
+  .min(1, "At least one position is required");
+
+export const addNewPositionFormSchema = positionSchema;
+export type AddNewPositionFormValues = z.infer<typeof addNewPositionFormSchema>;
 
 // Experience
-export const experienceSchema = z.object({
+const experienceSchema = z.object({
   company: z.string().min(1, "Enter a company name"),
   companyProfileUrl: z.string().optional(),
   companyLogoUrl: z.string().optional(),
-  positions: z
-    .array(positionSchema)
-    .min(1, "At least one position is required"),
+  positions: editPositionSchema,
 });
 
 export const editExperiencesFormSchema = z.object({
@@ -38,10 +50,10 @@ export type AddNewExperienceFormValues = z.infer<
 >;
 
 // Education
-export const educationSchema = z.object({
+const educationSchema = z.object({
   school: z.string().min(1, "Enter a school name"),
   degree: z.string().min(1, "Enter a degree"),
-  startDate: z.coerce.date({ required_error: "Enter a start date"}),
+  startDate: z.coerce.date({ required_error: "Enter a start date" }),
   endDate: z.coerce.date().optional(),
   fieldOfStudy: z.string().optional(),
   description: z.string().optional(),
@@ -63,22 +75,21 @@ export type AddNewEducationFormValues = z.infer<
 >;
 
 // Skills
-export const skillsSchema = z.array(z.string());
+export const skillSchema = z.string().max(80, "Skill is too long");
 
 export const editSkillsFormSchema = z.object({
-  skills: skillsSchema,
+  skills: z.array(skillSchema),
 });
-
 export type EditSkillsFormValues = z.infer<typeof editSkillsFormSchema>;
 
 // Volunteering
-export const volunteeringSchema = z.object({
-  role: z.string().min(1, "Enter a role"),
-  organization: z.string().min(1, "Enter an organization"),
+const volunteeringSchema = z.object({
+  role: z.string().min(1, "Enter a role").max(60, "Too long"),
+  organization: z.string().min(1, "Enter an organization").max(60, "Too long"),
   organizationProfileUrl: z.string().optional(),
   organizationLogoUrl: z.string().optional(),
   cause: z.string().optional(),
-  startDate: z.coerce.date({ required_error: "Enter a start date"}),
+  startDate: z.coerce.date({ required_error: "Enter a start date" }),
   endDate: z.coerce.date().optional(),
   description: z.string().optional(),
 });

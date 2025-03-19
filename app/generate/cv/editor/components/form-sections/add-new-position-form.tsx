@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  AddNewPositionSchemaValues,
-  addNewPositionSchema,
+  AddNewPositionFormValues,
+  addNewPositionFormSchema,
 } from "../editor-forms-schemas";
 
 import PositionFormFields from "./position-form-fields";
@@ -23,11 +23,11 @@ export default function AddNewPositionForm({
   addToPositions,
   cancelButton,
 }: {
-  addToPositions: (data: AddNewPositionSchemaValues) => void;
+  addToPositions: (data: AddNewPositionFormValues) => void;
   cancelButton: ReactNode;
 }) {
-  const formMethods = useForm<AddNewPositionSchemaValues>({
-    resolver: zodResolver(addNewPositionSchema),
+  const formMethods = useForm<AddNewPositionFormValues>({
+    resolver: zodResolver(addNewPositionFormSchema),
     defaultValues: initialValues,
     mode: "all",
   });
@@ -38,7 +38,7 @@ export default function AddNewPositionForm({
     formState: { isValid },
   } = formMethods;
 
-  const onSubmitNewPosition = (data: AddNewPositionSchemaValues) => {
+  const onSubmitNewPosition = (data: AddNewPositionFormValues) => {
     addToPositions(data);
     reset();
   };

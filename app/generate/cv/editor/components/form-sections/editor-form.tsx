@@ -18,6 +18,7 @@ import { ChevronLeft, Save } from "lucide-react";
 import { EditorTabName, editorTabName } from "@/config/editor-tabs";
 import { capitalize } from "@/lib/utils";
 import { isEqual } from "lodash";
+import { useShallow } from "zustand/react/shallow";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -32,11 +33,13 @@ export function EditorForm<T extends z.ZodTypeAny>({
   children,
   tabName,
 }: EditorFormProps<T>) {
-  const profileData = useProfileStore((state) => state.profile);
-  const setProfileData = useProfileStore((state) => state.setProfile);
+  const [profileData, setProfileData] = useProfileStore(
+    useShallow((state) => [state.profile, state.setProfile])
+  );
 
-  const activeTab = useEditorTabStore((state) => state.activeTab);
-  const setActiveTab = useEditorTabStore((state) => state.setActiveTab);
+  const [activeTab, setActiveTab] = useEditorTabStore(
+    useShallow((state) => [state.activeTab, state.setActiveTab])
+  );
 
   // Get ordered array of enum values
   const tabValues = Object.values(editorTabName);
@@ -165,7 +168,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
               }
             }}
             onClick={handleSubmit((data) => {
-              submit(data, true);
+              submit(data, false);
             })}
           >
             <Save />

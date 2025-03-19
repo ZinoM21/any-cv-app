@@ -37,36 +37,18 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { VolunteeringExperience } from "@/lib/types";
-import { useProfileStore } from "@/hooks/use-profile";
 import { EditorForm } from "./editor-form";
 import VolunteeringFormFields from "./volunteering-form-fields";
 import AddNewVolunteeringForm from "./add-new-volunteering-form";
-import {
-  editVolunteeringFormSchema,
-  EditVolunteeringFormValues,
-} from "../editor-forms-schemas";
+import { editVolunteeringFormSchema } from "../editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tabs";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 
 export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
-  const profileData = useProfileStore((state) => state.profile);
-
-  const initialValues: EditVolunteeringFormValues = {
-    volunteering:
-      (profileData?.volunteering &&
-        profileData.volunteering.map((vol) => ({
-          role: vol.role,
-          organization: vol.organization,
-          organizationProfileUrl: vol.organizationProfileUrl || "",
-          organizationLogoUrl: vol.organizationLogoUrl || "",
-          startDate: new Date(vol.startDate),
-          endDate: vol.endDate && new Date(vol.endDate),
-          cause: vol.cause || "",
-          description: vol.description || "",
-        }))) ||
-      [],
-  };
+  const { getVolunteeringInitialValues } = useEditorFormInitialValues();
+  const initialValues = getVolunteeringInitialValues();
 
   return (
     <EditorForm

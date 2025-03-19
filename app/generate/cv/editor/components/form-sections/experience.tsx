@@ -38,10 +38,7 @@ import { FormField } from "@/components/ui/form";
 
 import { Plus, Trash } from "lucide-react";
 
-import { Experience } from "@/lib/types";
-
 import AddNewExperienceForm from "./add-new-experience-form";
-import { useProfileStore } from "@/hooks/use-profile";
 import { EditorForm } from "./editor-form";
 import ExperienceFormFields from "./experience-form-fields";
 import {
@@ -50,41 +47,11 @@ import {
 } from "../editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tabs";
 import { cn } from "@/lib/utils";
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 
 export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
-  const profileData = useProfileStore((state) => state.profile);
-
-  const initialValues: EditExperiencesFormValues = {
-    experiences:
-      (profileData?.experiences &&
-        profileData.experiences.map((exp) => ({
-          company: exp.company,
-          companyProfileUrl: exp.companyProfileUrl || "",
-          companyLogoUrl: exp.companyLogoUrl || "",
-          positions:
-            (exp.positions
-              ? exp.positions.map((pos) => ({
-                  title: pos.title,
-                  startDate: new Date(pos.startDate),
-                  endDate: pos.endDate && new Date(pos.endDate),
-                  duration: pos.duration,
-                  description: pos.description || "",
-                  location: pos.location || "",
-                  workSetting: pos.workSetting || "",
-                }))
-              : [
-                  {
-                    title: "",
-                    startDate: new Date(),
-                    duration: null,
-                    description: "",
-                    location: "",
-                    workSetting: "",
-                  },
-                ]) || [],
-        }))) ||
-      [],
-  };
+  const { getExperienceInitialValues } = useEditorFormInitialValues();
+  const initialValues = getExperienceInitialValues();
 
   return (
     <EditorForm
@@ -100,7 +67,7 @@ export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
 const ExperiencesFieldArray = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  const { control } = useFormContext();
+  const { control } = useFormContext<EditExperiencesFormValues>();
 
   const { fields, remove, prepend } = useFieldArray({
     control,
@@ -131,136 +98,134 @@ const ExperiencesFieldArray = () => {
           </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
-            {(fields as (Experience & { id: string })[]).map(
-              (experienceField, expIndex) => (
-                <AccordionItem
-                  key={experienceField.id}
-                  value={`experience-${experienceField.id}`}
-                  className="border-none"
-                >
-                  <Card key={experienceField.id}>
-                    <CardHeader className="p-4">
-                      <AccordionTrigger className="py-0">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-center gap-3">
-                            <FormField
-                              name={`experiences.${expIndex}.companyLogoUrl`}
-                              render={({ field }) => (
-                                <>
-                                  {field?.value ? (
-                                    <div className="size-10 overflow-hidden rounded-md bg-slate-100">
-                                      <Image
-                                        src={field?.value || "/placeholder.svg"}
-                                        alt={experienceField?.company || ""}
-                                        width={80}
-                                        height={80}
-                                      />
-                                    </div>
-                                  ) : (
-                                    <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
-                                      Logo
-                                    </div>
-                                  )}
-                                </>
-                              )}
-                            />
-
-                            <div>
-                              <CardTitle className="text-base">
-                                <FormField
-                                  name={`experiences.${expIndex}.company`}
-                                  render={({ field }) =>
-                                    field.value ? (
-                                      <span>{field.value}</span>
-                                    ) : (
-                                      <span>Company {expIndex + 1}</span>
-                                    )
-                                  }
-                                />
-                              </CardTitle>
-
-                              <CardDescription>
-                                <FormField
-                                  name={`experiences.${expIndex}.positions`}
-                                  render={({ field }) =>
-                                    field.value ? (
-                                      <span>
-                                        {field?.value?.length || 0}{" "}
-                                        {field?.value?.length === 1
-                                          ? "position"
-                                          : "positions"}
-                                      </span>
-                                    ) : (
-                                      <span>
-                                        No positions added for this experience
-                                      </span>
-                                    )
-                                  }
-                                />
-                              </CardDescription>
-                            </div>
-                          </div>
-                        </div>
-                      </AccordionTrigger>
-                    </CardHeader>
-
-                    <AccordionContent>
-                      <CardContent className="px-4 pb-4 pt-0">
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-medium text-slate-700">
-                              Experience Details
-                            </h4>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-slate-400 hover:text-red-500"
-                                >
-                                  <Trash />
-                                  Remove
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Are you absolutely sure?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently remove this experience entry
-                                    from our servers.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    className={cn(
-                                      buttonVariants({
-                                        variant: "destructive",
-                                      })
-                                    )}
-                                    onClick={() => remove(expIndex)}
-                                  >
-                                    Yes, remove
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
-
-                          <ExperienceFormFields
-                            fieldNamePrefix={`experiences.${expIndex}`}
+            {fields.map((experienceField, expIndex) => (
+              <AccordionItem
+                key={experienceField.id}
+                value={`experience-${experienceField.id}`}
+                className="border-none"
+              >
+                <Card key={experienceField.id}>
+                  <CardHeader className="p-4">
+                    <AccordionTrigger className="py-0">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <FormField
+                            name={`experiences.${expIndex}.companyLogoUrl`}
+                            render={({ field }) => (
+                              <>
+                                {field?.value ? (
+                                  <div className="size-10 overflow-hidden rounded-md bg-slate-100">
+                                    <Image
+                                      src={field?.value || "/placeholder.svg"}
+                                      alt={experienceField?.company || ""}
+                                      width={80}
+                                      height={80}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
+                                    Logo
+                                  </div>
+                                )}
+                              </>
+                            )}
                           />
+
+                          <div>
+                            <CardTitle className="text-base">
+                              <FormField
+                                name={`experiences.${expIndex}.company`}
+                                render={({ field }) =>
+                                  field.value ? (
+                                    <span>{field.value}</span>
+                                  ) : (
+                                    <span>Company {expIndex + 1}</span>
+                                  )
+                                }
+                              />
+                            </CardTitle>
+
+                            <CardDescription>
+                              <FormField
+                                name={`experiences.${expIndex}.positions`}
+                                render={({ field }) =>
+                                  field.value ? (
+                                    <span>
+                                      {field?.value?.length || 0}{" "}
+                                      {field?.value?.length === 1
+                                        ? "position"
+                                        : "positions"}
+                                    </span>
+                                  ) : (
+                                    <span>
+                                      No positions added for this experience
+                                    </span>
+                                  )
+                                }
+                              />
+                            </CardDescription>
+                          </div>
                         </div>
-                      </CardContent>
-                    </AccordionContent>
-                  </Card>
-                </AccordionItem>
-              )
-            )}
+                      </div>
+                    </AccordionTrigger>
+                  </CardHeader>
+
+                  <AccordionContent>
+                    <CardContent className="px-4 pb-4 pt-0">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium text-slate-700">
+                            Experience Details
+                          </h4>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="text-slate-400 hover:text-red-500"
+                              >
+                                <Trash />
+                                Remove
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently remove this experience entry from
+                                  our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className={cn(
+                                    buttonVariants({
+                                      variant: "destructive",
+                                    })
+                                  )}
+                                  onClick={() => remove(expIndex)}
+                                >
+                                  Yes, remove
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+
+                        <ExperienceFormFields
+                          fieldNamePrefix={`experiences.${expIndex}`}
+                        />
+                      </div>
+                    </CardContent>
+                  </AccordionContent>
+                </Card>
+              </AccordionItem>
+            ))}
           </Accordion>
         </div>
       )}
