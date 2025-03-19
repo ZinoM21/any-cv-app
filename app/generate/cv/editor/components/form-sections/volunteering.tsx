@@ -36,11 +36,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { VolunteeringExperience } from "@/lib/types";
 import { EditorForm } from "./editor-form";
 import VolunteeringFormFields from "./volunteering-form-fields";
 import AddNewVolunteeringForm from "./add-new-volunteering-form";
-import { editVolunteeringFormSchema } from "../editor-forms-schemas";
+import {
+  editVolunteeringFormSchema,
+  EditVolunteeringFormValues,
+} from "../editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tabs";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -64,7 +66,7 @@ export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
 const VolunteeringFieldArray = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  const { control } = useFormContext();
+  const { control } = useFormContext<EditVolunteeringFormValues>();
 
   const { fields, remove, prepend } = useFieldArray({
     control,
@@ -80,130 +82,128 @@ const VolunteeringFieldArray = () => {
           </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
-            {(fields as (VolunteeringExperience & { id: string })[]).map(
-              (volunteeringField, index) => (
-                <AccordionItem
-                  key={volunteeringField.id}
-                  value={`volunteering-${volunteeringField.id}`}
-                  className="border-none"
-                >
-                  <Card key={volunteeringField.id}>
-                    <CardHeader className="p-4">
-                      <AccordionTrigger className="py-0">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-center gap-3">
-                            <FormField
-                              name={`volunteering.${index}.organizationLogoUrl`}
-                              render={({ field }) => (
-                                <>
-                                  {field?.value ? (
-                                    <div className="size-10 overflow-hidden rounded-md bg-slate-100">
-                                      <Image
-                                        src={field?.value || "/placeholder.svg"}
-                                        alt={
-                                          volunteeringField?.organization || ""
-                                        }
-                                        width={80}
-                                        height={80}
-                                      />
-                                    </div>
-                                  ) : (
-                                    <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
-                                      Logo
-                                    </div>
-                                  )}
-                                </>
-                              )}
-                            />
-                            <div>
-                              <CardTitle className="text-base">
-                                <FormField
-                                  name={`volunteering.${index}.role`}
-                                  render={({ field }) =>
-                                    field.value ? (
-                                      <span>{field.value}</span>
-                                    ) : (
-                                      <span>Volunteering {index + 1}</span>
-                                    )
-                                  }
-                                />
-                              </CardTitle>
-
-                              <CardDescription>
-                                <FormField
-                                  name={`volunteering.${index}.organization`}
-                                  render={({ field }) =>
-                                    field.value ? (
-                                      <span>{field.value}</span>
-                                    ) : (
-                                      <span>Organization {index + 1}</span>
-                                    )
-                                  }
-                                />
-                              </CardDescription>
-                            </div>
-                          </div>
-                        </div>
-                      </AccordionTrigger>
-                    </CardHeader>
-
-                    <AccordionContent>
-                      <CardContent className="px-4 pb-4 pt-0">
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-medium text-slate-700">
-                              Volunteering Details
-                            </h4>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-slate-400 hover:text-red-500"
-                                >
-                                  <Trash className="size-4" />
-                                  Remove
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Are you absolutely sure?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently remove this volunteering entry
-                                    from our servers.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    className={cn(
-                                      buttonVariants({
-                                        variant: "destructive",
-                                      })
-                                    )}
-                                    onClick={() => remove(index)}
-                                  >
-                                    Yes, remove
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
-
-                          <VolunteeringFormFields
-                            fieldNamePrefix={`volunteering.${index}`}
+            {fields.map((volunteeringField, index) => (
+              <AccordionItem
+                key={volunteeringField.id}
+                value={`volunteering-${volunteeringField.id}`}
+                className="border-none"
+              >
+                <Card key={volunteeringField.id}>
+                  <CardHeader className="p-4">
+                    <AccordionTrigger className="py-0">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <FormField
+                            name={`volunteering.${index}.organizationLogoUrl`}
+                            render={({ field }) => (
+                              <>
+                                {field?.value ? (
+                                  <div className="size-10 overflow-hidden rounded-md bg-slate-100 flex-shrink-0">
+                                    <Image
+                                      src={field?.value || "/placeholder.svg"}
+                                      alt={
+                                        volunteeringField?.organization || ""
+                                      }
+                                      width={80}
+                                      height={80}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
+                                    Logo
+                                  </div>
+                                )}
+                              </>
+                            )}
                           />
+                          <div>
+                            <CardTitle className="text-base">
+                              <FormField
+                                name={`volunteering.${index}.role`}
+                                render={({ field }) =>
+                                  field.value ? (
+                                    <span>{field.value}</span>
+                                  ) : (
+                                    <span>Volunteering {index + 1}</span>
+                                  )
+                                }
+                              />
+                            </CardTitle>
+
+                            <CardDescription>
+                              <FormField
+                                name={`volunteering.${index}.organization`}
+                                render={({ field }) =>
+                                  field.value ? (
+                                    <span>{field.value}</span>
+                                  ) : (
+                                    <span>Organization {index + 1}</span>
+                                  )
+                                }
+                              />
+                            </CardDescription>
+                          </div>
                         </div>
-                      </CardContent>
-                    </AccordionContent>
-                  </Card>
-                </AccordionItem>
-              )
-            )}
+                      </div>
+                    </AccordionTrigger>
+                  </CardHeader>
+
+                  <AccordionContent>
+                    <CardContent className="px-4 pb-4 pt-0">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-medium text-slate-700">
+                            Volunteering Details
+                          </h4>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="text-slate-400 hover:text-red-500"
+                              >
+                                <Trash className="size-4" />
+                                Remove
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently remove this volunteering entry
+                                  from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className={cn(
+                                    buttonVariants({
+                                      variant: "destructive",
+                                    })
+                                  )}
+                                  onClick={() => remove(index)}
+                                >
+                                  Yes, remove
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+
+                        <VolunteeringFormFields
+                          fieldNamePrefix={`volunteering.${index}`}
+                        />
+                      </div>
+                    </CardContent>
+                  </AccordionContent>
+                </Card>
+              </AccordionItem>
+            ))}
           </Accordion>
         </div>
       )}
