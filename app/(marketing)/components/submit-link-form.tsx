@@ -58,7 +58,7 @@ export function SubmitLinkForm() {
   const mutation = useMutation({
     mutationFn: async (username: string) => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/info/${username}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/info/${username}`,
         {
           method: "GET",
           headers: {

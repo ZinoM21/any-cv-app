@@ -25,7 +25,7 @@ export default async function GeneratingPage({
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${username}`
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/${username}`
   );
 
   if (!response.ok) {

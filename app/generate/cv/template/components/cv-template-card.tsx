@@ -26,7 +26,7 @@ export default function CVTemplateCard({
 
         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover/card:opacity-100">
           <CVPreviewPopup
-            templateId={template.id}
+            cvTemplate={template.id}
             templateName={template.name}
           />
         </div>
@@ -40,7 +40,7 @@ export default function CVTemplateCard({
 
         <Button asChild className="group/button">
           <Link
-            href={`/generate/cv/editor/?username=${username}&templateId=${template.id}`}
+            href={`/generate/cv/editor/?username=${username}&cvTemplate=${template.id}`}
           >
             Use this template
             <ArrowRight className="size-4 transition-transform group-hover/button:translate-x-1" />

@@ -75,7 +75,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
     }) => {
       const { newValues } = values;
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${profileData?.username}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/${profileData?.username}`,
         {
           method: "PATCH",
           headers: {

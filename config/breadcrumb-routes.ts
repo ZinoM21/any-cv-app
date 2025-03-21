@@ -1,4 +1,4 @@
-interface RouteMapping {
+export interface RouteMapping {
   path: string;
   label: string;
   children?: Array<{
@@ -10,13 +10,13 @@ interface RouteMapping {
 export const routeMappings: RouteMapping[] = [
   {
     path: "choose",
-    label: "Choose",
+    label: "Choose Format",
   },
   {
     path: "cv",
     label: "CV",
     children: [
-      { path: "template", label: "Template" },
+      { path: "template", label: "Select Template" },
       { path: "editor", label: "Editor" },
     ],
   },

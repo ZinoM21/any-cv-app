@@ -1,3 +1,5 @@
+import { buttonVariants } from "@/components/ui/button";
+import { VariantProps } from "class-variance-authority";
 import { SearchParams } from "next/dist/server/request/search-params";
 
 export type ProfileData = {
@@ -57,6 +59,7 @@ export type VolunteeringExperience = {
 export type NavItem = {
   name: string;
   href: string;
+  variant: VariantProps<typeof buttonVariants>["variant"];
   disabled?: boolean;
 };
 
