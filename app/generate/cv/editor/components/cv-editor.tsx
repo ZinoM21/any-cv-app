@@ -9,10 +9,10 @@ import { cn } from "@/lib/utils";
 
 export default function CVEditor({
   profileData,
-  templateId,
+  cvTemplate,
 }: {
   profileData: ProfileData;
-  templateId: string;
+  cvTemplate: string;
 }) {
   const [isMobileView, setIsMobileView] = useState(false);
   const [activeView, setActiveView] = useState<"form" | "preview">("form");
@@ -77,7 +77,7 @@ export default function CVEditor({
           )}
         >
           <div className="flex-1 overflow-y-auto">
-            <CVEditorPreview templateId={templateId} />
+            <CVEditorPreview cvTemplate={cvTemplate} />
           </div>
         </div>
       </div>

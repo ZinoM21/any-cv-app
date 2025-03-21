@@ -8,21 +8,21 @@ export default async function CVEditorPage({
   searchParams: PromiseSearchParams;
 }) {
   const params = await searchParams;
-  const { username, templateId } = params;
+  const { username, cvTemplate } = params;
 
   if (!username) {
     redirect("/");
   }
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${username}`
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/${username}`
   );
 
   if (!response.ok) {
     redirect("/");
   }
 
-  if (!templateId) {
+  if (!cvTemplate) {
     redirect(`/generate/cv/template?username=${username}`);
   }
 
@@ -30,7 +30,7 @@ export default async function CVEditorPage({
 
   return (
     <div className="flex h-full flex-col">
-      <CVEditor profileData={profileData} templateId={templateId as string} />
+      <CVEditor profileData={profileData} cvTemplate={cvTemplate as string} />
     </div>
   );
 }

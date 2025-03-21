@@ -23,10 +23,10 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 // ).toString();
 
 export default function CVPreviewPopup({
-  templateId,
+  cvTemplate,
   templateName,
 }: {
-  templateId: string;
+  cvTemplate: string;
   templateName: string;
 }) {
   // const [numPages, setNumPages] = useState<number>(1);
@@ -37,10 +37,10 @@ export default function CVPreviewPopup({
   //   setNumPages(nextNumPages);
   // }
 
-  const pdfUrl = `/cvs/pdfs/${templateId}.pdf`;
+  const pdfUrl = `/cvs/pdfs/${cvTemplate}.pdf`;
 
   return (
-    <Dialog key={templateId}>
+    <Dialog key={cvTemplate}>
       <DialogTrigger asChild>
         <Button variant="secondary" className="bg-white/90 backdrop-blur-sm">
           <Eye className="mr-2 h-4 w-4" />

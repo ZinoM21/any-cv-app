@@ -14,10 +14,10 @@ import {
   zoomPlugin,
 } from "@react-pdf-viewer/zoom";
 
-export function CVEditorPreview({ templateId }: { templateId: string }) {
+export function CVEditorPreview({ cvTemplate }: { cvTemplate: string }) {
   const profileData = useProfileStore((state) => state.profile);
 
-  const template = getTemplateById(templateId);
+  const template = getTemplateById(cvTemplate);
 
   const zoomPluginInstance = zoomPlugin();
   const { ZoomIn, ZoomOut, Zoom } = zoomPluginInstance;
