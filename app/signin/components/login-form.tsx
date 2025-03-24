@@ -153,6 +153,7 @@ export function SignInForm({
           <div className="text-center text-sm">
             Don&apos;t have an account?{" "}
             <Button
+              type="button"
               className="text-primary hover:underline font-normal p-0"
               variant="link"
               onClick={() => signUp()}

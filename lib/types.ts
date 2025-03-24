@@ -69,4 +69,30 @@ export type CVTemplate = {
   description: string;
 };
 
+export type User = {
+  id: string;
+  username: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+};
+
+export type Tokens = {
+  access: string;
+  refresh: string;
+};
+
+export type DecodedToken = {
+  id: string;
+  email: string;
+  username: string;
+  exp: number;
+  iat: number;
+};
+
+export type AuthValidity = {
+  access_until?: number;
+  refresh_until?: number;
+};
+
 export type PromiseSearchParams = Promise<SearchParams>;
