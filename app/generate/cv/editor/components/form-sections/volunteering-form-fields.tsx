@@ -23,7 +23,7 @@ export default function VolunteeringFormFields({
   const getFieldName = (fieldName: string) =>
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
 
-  const organizationName = getValues(getFieldName("company"));
+  const organizationName = getValues(getFieldName("organization"));
 
   return (
     <>

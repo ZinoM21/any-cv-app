@@ -84,14 +84,14 @@ export type EditSkillsFormValues = z.infer<typeof editSkillsFormSchema>;
 
 // Volunteering
 const volunteeringSchema = z.object({
-  role: z.string().min(1, "Enter a role").max(60, "Too long"),
-  organization: z.string().min(1, "Enter an organization").max(60, "Too long"),
-  organizationProfileUrl: z.string().optional(),
-  organizationLogoUrl: z.string().optional(),
-  cause: z.string().optional(),
+  role: z.string().min(1, "Enter a role"),
+  organization: z.string().min(1, "Enter an organization"),
   startDate: z.coerce.date({ required_error: "Enter a start date" }),
   endDate: z.coerce.date().optional(),
   description: z.string().optional(),
+  organizationProfileUrl: z.string().optional(),
+  organizationLogoUrl: z.string().optional(),
+  cause: z.string().optional(),
 });
 
 export const editVolunteeringFormSchema = z.object({

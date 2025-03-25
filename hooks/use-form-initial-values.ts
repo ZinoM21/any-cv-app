@@ -91,7 +91,19 @@ export const useEditorFormInitialValues = () => {
    * Get initial values for Volunteering form
    */
   const getVolunteeringInitialValues = (): EditVolunteeringFormValues => ({
-    volunteering: profileData?.volunteering || [],
+    volunteering:
+      (profileData?.volunteering &&
+        profileData?.volunteering.map((vol) => ({
+          organization: vol.organization,
+          role: vol.role,
+          startDate: vol.startDate,
+          endDate: vol.endDate && new Date(vol.endDate),
+          description: vol.description || "",
+          organizationProfileUrl: vol.organizationProfileUrl || "",
+          organizationLogoUrl: vol.organizationLogoUrl || "",
+          cause: vol.cause || "",
+        }))) ||
+      [],
   });
 
   return {
