@@ -1,5 +1,12 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { TemplateId } from "./types";
+
+import minimal from "@/public/cvs/images/minimal.jpg";
+import creative from "@/public/cvs/images/creative.jpg";
+import classic from "@/public/cvs/images/classic.jpg";
+
+import { StaticImageData } from "next/image";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,4 +41,17 @@ export function extractUsernameFromLinkedInUrl(username: string): string {
 
 export const capitalize = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+export const getCVImage = (templateId: TemplateId): StaticImageData => {
+  switch (templateId) {
+    case TemplateId.Creative:
+      return creative;
+    case TemplateId.Classic:
+      return classic;
+    case TemplateId.Minimal:
+      return minimal;
+    default:
+      return classic;
+  }
 };

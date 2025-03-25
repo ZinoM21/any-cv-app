@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { ZoomIn as ZoomInIcon, ZoomOut as ZoomOutIcon } from "lucide-react";
 import { useProfileStore } from "@/hooks/use-profile";
-import { getTemplateById } from "@/config/templates";
 
 import { PDF } from "./preview/pdf";
 import { PDFLoadingSkeleton } from "./preview/pdf-loading";
@@ -11,16 +10,16 @@ import {
   RenderZoomInProps,
   RenderZoomOutProps,
   RenderZoomProps,
-  zoomPlugin,
 } from "@react-pdf-viewer/zoom";
 
-export function CVEditorPreview({ cvTemplate }: { cvTemplate: string }) {
+import { CVTemplate } from "@/lib/types";
+import { usePdfPlugins } from "@/hooks/use-pdf-plugins";
+
+export function CVEditorPreview({ template }: { template: CVTemplate }) {
   const profileData = useProfileStore((state) => state.profile);
 
-  const template = getTemplateById(cvTemplate);
-
-  const zoomPluginInstance = zoomPlugin();
-  const { ZoomIn, ZoomOut, Zoom } = zoomPluginInstance;
+  const { filePluginInstance, zoomPluginInstance, ZoomIn, ZoomOut, Zoom } =
+    usePdfPlugins();
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -57,7 +56,11 @@ export function CVEditorPreview({ cvTemplate }: { cvTemplate: string }) {
       </div>
       <div className="flex overflow-y-auto min-h-screen justify-center bg-white">
         {profileData ? (
-          <PDF data={profileData} plugins={[zoomPluginInstance]} />
+          <PDF
+            data={profileData}
+            plugins={[zoomPluginInstance, filePluginInstance]}
+            template={template}
+          />
         ) : (
           <PDFLoadingSkeleton />
         )}

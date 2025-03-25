@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, ReactNode } from "react";
 
 import { z } from "zod";
@@ -6,24 +7,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
+import { useShallow } from "zustand/react/shallow";
+import { isEqual } from "lodash";
+
 import { useProfileStore } from "@/hooks/use-profile";
+import { useEditorTabStore } from "@/hooks/use-editor-tabs";
+import { usePdfPlugins } from "@/hooks/use-pdf-plugins";
+
+import { EditorTabName, editorTabName } from "@/config/editor-tab-names";
+
+import type { ProfileData } from "@/lib/types";
+import { capitalize } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { toast } from "sonner";
-
-import type { ProfileData } from "@/lib/types";
-import { useEditorTabStore } from "@/hooks/use-editor-tabs";
-import { ChevronLeft, FileCheck, FileDown, Save } from "lucide-react";
-import { EditorTabName, editorTabName } from "@/config/editor-tab-names";
-import { capitalize } from "@/lib/utils";
-import { isEqual } from "lodash";
-import { useShallow } from "zustand/react/shallow";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { toast } from "sonner";
+import { ChevronLeft, FileCheck, FileDown, Save } from "lucide-react";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -41,6 +45,8 @@ export function EditorForm<T extends z.ZodTypeAny>({
   const [profileData, setProfileData] = useProfileStore(
     useShallow((state) => [state.profile, state.setProfile])
   );
+
+  const { Download } = usePdfPlugins();
 
   const [activeTab, setActiveTab] = useEditorTabStore(
     useShallow((state) => [state.activeTab, state.setActiveTab])
@@ -201,17 +207,24 @@ export function EditorForm<T extends z.ZodTypeAny>({
               </TooltipContent>
             </Tooltip>
             {isLastTab ? (
-              <Button>
-                <FileDown
-                  className="mr-1"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                    }
-                  }}
-                />
-                Download CV
-              </Button>
+              <Download>
+                {({ onClick }) => (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      onClick();
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    <FileDown className="mr-1" />
+                    Download CV
+                  </Button>
+                )}
+              </Download>
             ) : (
               <Button
                 onClick={handleSubmit((data) => {

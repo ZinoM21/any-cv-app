@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import CVPreviewPopup from "@/app/generate/cv/template/components/cv-preview-popup";
 import { CVTemplate } from "@/lib/types";
+import { getCVImage } from "@/lib/utils";
 
 export default function CVTemplateCard({
   template,
@@ -17,10 +18,12 @@ export default function CVTemplateCard({
     <Card className="group/card flex flex-col overflow-hidden transition-all hover:shadow-md">
       <CardContent className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
         <Image
-          src={`/cvs/images/${template.id}.jpg`}
-          alt={`${template.name} CV Template`}
-          fill
+          src={getCVImage(template.id)}
+          alt={`${template.name} CV Template Preview`}
           className="object-cover object-center"
+          placeholder="blur"
+          sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, (max-width: 1024px) 33vw "
+          fill
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity group-hover/card:opacity-100"></div>
 

@@ -63,8 +63,14 @@ export type NavItem = {
   disabled?: boolean;
 };
 
+export enum TemplateId {
+  Minimal = "minimal",
+  Creative = "creative",
+  Classic = "classic",
+}
+
 export type CVTemplate = {
-  id: string;
+  id: TemplateId;
   name: string;
   description: string;
 };

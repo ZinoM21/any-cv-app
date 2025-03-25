@@ -2,7 +2,7 @@ import { signInSchema } from "@/lib/auth-schema";
 import { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { ZodError } from "zod";
-import { AuthValidity, DecodedToken, Tokens } from "@/lib/types";
+import { AuthValidity, Tokens } from "@/lib/types";
 
 import * as jose from "jose";
 

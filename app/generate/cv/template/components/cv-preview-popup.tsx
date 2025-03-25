@@ -1,10 +1,4 @@
 "use client";
-// import { useState } from "react";
-
-// import { pdfjs, Document, Page } from "react-pdf";
-// import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-// import "react-pdf/dist/esm/Page/TextLayer.css";
-// import { PDFDocumentProxy } from "pdfjs-dist/types/src/display/api";
 
 import {
   Dialog,
@@ -15,12 +9,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import { Viewer, Worker } from "@react-pdf-viewer/core";
 
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//   "pdfjs-dist/build/pdf.worker.min.mjs",
-//   import.meta.url
-// ).toString();
+import { PDFLoadingSkeleton } from "../../editor/components/preview/pdf-loading";
+
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
 
 export default function CVPreviewPopup({
   cvTemplate,
@@ -29,14 +22,6 @@ export default function CVPreviewPopup({
   cvTemplate: string;
   templateName: string;
 }) {
-  // const [numPages, setNumPages] = useState<number>(1);
-
-  // function onDocumentLoadSuccess({
-  //   numPages: nextNumPages,
-  // }: PDFDocumentProxy): void {
-  //   setNumPages(nextNumPages);
-  // }
-
   const pdfUrl = `/cvs/pdfs/${cvTemplate}.pdf`;
 
   return (
@@ -64,25 +49,11 @@ export default function CVPreviewPopup({
           >
             <Viewer
               fileUrl={pdfUrl}
-              // plugins={plugins}
-              // renderLoader={() => <PDFLoadingSkeleton />}
+              renderLoader={() => <PDFLoadingSkeleton />}
               theme="light"
-              // defaultScale={1}
+              defaultScale={1}
             />
           </Worker>
-          {/* <Document
-            file={pdfUrl}
-            onLoadSuccess={onDocumentLoadSuccess}
-            className="space-y-4"
-          >
-            {Array.from(new Array(numPages), (el, index) => (
-              <Page
-                key={`page_${index + 1}`}
-                pageNumber={index + 1}
-                width={820}
-              />
-            ))}
-          </Document> */}
         </div>
       </DialogContent>
     </Dialog>

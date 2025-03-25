@@ -2,43 +2,47 @@
 
 import { useEffect, useState } from "react";
 
+import { Plugin, Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
-import { Plugin, Viewer, Worker } from "@react-pdf-viewer/core";
 
 import { pdf } from "@react-pdf/renderer";
-import { ResumeDocument } from "./resume-two";
-import { ProfileData } from "@/lib/types";
+import { CVTemplate, ProfileData, TemplateId } from "@/lib/types";
 import { PDFLoadingSkeleton } from "./pdf-loading";
+import { getTemplatePDFById } from "@/components/templates/cv/cv-template-gate";
 
 export const PDF = ({
   data,
+  template,
   plugins,
 }: {
   data: Partial<ProfileData>;
+  template: CVTemplate;
   plugins?: Plugin[];
 }) => {
   const [url, setUrl] = useState<string>();
 
   useEffect(() => {
-    const getDocument = (data: Partial<ProfileData>) => (
-      <ResumeDocument data={data} />
-    );
-
-    const getBlob = async (data: Partial<ProfileData>) => {
-      const DocComponent = getDocument(data);
+    const getBlob = async (
+      data: Partial<ProfileData>,
+      templateId: TemplateId
+    ) => {
+      const DocComponent = await getTemplatePDFById(templateId, data);
       const blob = await pdf(DocComponent).toBlob();
       return blob;
     };
 
-    const generateUrl = async (data: Partial<ProfileData>) => {
-      const blob = await getBlob(data);
+    const generateUrl = async (
+      data: Partial<ProfileData>,
+      templateId: TemplateId
+    ) => {
+      const blob = await getBlob(data, templateId);
       const url = URL.createObjectURL(blob);
       setUrl(url);
     };
 
-    generateUrl(data);
-  }, [data]);
+    generateUrl(data, template.id);
+  }, [data, template.id]);
 
   if (!url || url === "") {
     return <PDFLoadingSkeleton />;
