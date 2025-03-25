@@ -1,12 +1,26 @@
 import { signInSchema } from "@/lib/auth-schema";
-import { NextAuthConfig } from "next-auth";
+import { AuthError, CredentialsSignin, NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { ZodError } from "zod";
 import { AuthValidity, Tokens } from "@/lib/types";
 
 import * as jose from "jose";
 
 const encodedSecret = new TextEncoder().encode(process.env.AUTH_SECRET);
+
+class AuthorizationError extends AuthError {
+  status?: number;
+
+  constructor(message: string, status?: number) {
+    super(message);
+    this.status = status;
+  }
+}
+
+class InvalidCredentialsError extends CredentialsSignin {
+  constructor() {
+    super("Invalid credentials");
+  }
+}
 
 export const authConfig: NextAuthConfig = {
   debug: process.env.NODE_ENV === "development",
@@ -41,59 +55,77 @@ export const authConfig: NextAuthConfig = {
           );
 
           if (!response.ok) {
-            return null;
+            // Only handle 401/404 as InvalidCredentialsError, the rest as generic errors
+            if (response.status === 401 || response.status === 404) {
+              throw new InvalidCredentialsError();
+            } else {
+              throw new AuthorizationError(
+                "Request failed with status: " + response.status
+              );
+            }
           }
 
           const tokens: Tokens = await response.json();
 
-          if (!tokens) {
-            return null;
+          if (!tokens || !tokens.access || !tokens.refresh) {
+            throw new AuthorizationError(
+              "Invalid response from authentication service"
+            );
           }
 
-          const { payload: decodedAccessToken } = await jose.jwtVerify(
-            tokens.access,
-            encodedSecret
-          );
-          const { payload: decodedRefreshToken } = await jose.jwtVerify(
-            tokens.refresh,
-            encodedSecret
-          );
+          try {
+            const { payload: decodedAccessToken } = await jose.jwtVerify(
+              tokens.access,
+              encodedSecret
+            );
+            const { payload: decodedRefreshToken } = await jose.jwtVerify(
+              tokens.refresh,
+              encodedSecret
+            );
 
-          if (
-            !(
-              decodedAccessToken.sub ||
-              decodedAccessToken.email ||
-              decodedAccessToken.username
-            ) ||
-            !(
-              decodedRefreshToken.sub ||
-              decodedRefreshToken.email ||
-              decodedRefreshToken.username
-            )
-          ) {
-            throw new Error("Invalid tokens: Expected DecodedToken type.");
+            if (
+              !(
+                decodedAccessToken.sub ||
+                decodedAccessToken.email ||
+                decodedAccessToken.username
+              ) ||
+              !(
+                decodedRefreshToken.sub ||
+                decodedRefreshToken.email ||
+                decodedRefreshToken.username
+              )
+            ) {
+              throw new AuthorizationError(
+                "Invalid token structure in token payload"
+              );
+            }
+
+            const validity: AuthValidity = {
+              access_until: decodedAccessToken.exp,
+              refresh_until: decodedRefreshToken.exp,
+            };
+
+            return {
+              tokens,
+              user: {
+                id: decodedAccessToken.sub as string,
+                email: decodedAccessToken.email as string,
+                username: decodedAccessToken.username as string,
+              },
+              validity,
+            };
+          } catch (tokenError) {
+            throw tokenError;
           }
-
-          const validity: AuthValidity = {
-            access_until: decodedAccessToken.exp,
-            refresh_until: decodedRefreshToken.exp,
-          };
-
-          return {
-            tokens,
-            user: {
-              id: decodedAccessToken.sub as string,
-              email: decodedAccessToken.email as string,
-              username: decodedAccessToken.username as string,
-            },
-            validity,
-          };
         } catch (error) {
-          if (error instanceof ZodError) {
-            console.error("Validation error:", error.errors);
-            return null;
+          console.error(error);
+
+          // Throw Invalid Credentials Error to user
+          if (error instanceof InvalidCredentialsError) {
+            throw error;
           }
-          console.error("Authentication error:", error);
+
+          // Fallback: don't show error to user
           return null;
         }
       },
@@ -157,6 +189,11 @@ export const authConfig: NextAuthConfig = {
         }
       }
 
+      // The current access token and refresh token have both expired
+      // This should not really happen unless you get really unlucky with
+      // the timing of the token expiration because the middleware should
+      // have caught this case before the callback is called
+      // console.debug("Both tokens have expired");
       return { ...token };
     },
     async session({ session, token }) {

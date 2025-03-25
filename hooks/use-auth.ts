@@ -2,8 +2,14 @@
 
 import { SignInFormValues, SignUpFormValues } from "@/lib/auth-schema";
 import { useMutation } from "@tanstack/react-query";
-import { signIn } from "next-auth/react";
+import { signIn, SignInOptions as DefaultSignInOptions } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+
+type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect">;
+
+type SignInVariables = SignInFormValues &
+  SignInOptions & { onSuccess?: () => void };
 
 /**
  * Type definition for the auth hook return value.
@@ -12,10 +18,7 @@ interface UseAuthReturn {
   /**
    * Signs in a user with the provided credentials
    */
-  signIn: (params: {
-    credentials: SignInFormValues;
-    redirectTo?: string;
-  }) => void;
+  signIn: (signInVariables: SignInVariables) => void;
 
   /**
    * Imitates the `signIn` function from next-auth, just for sign up.
@@ -56,24 +59,27 @@ export function useAuth(): UseAuthReturn {
   const searchParams = useSearchParams();
 
   const signInMutation = useMutation({
-    mutationFn: async ({
-      credentials,
-      redirectTo,
-    }: {
-      credentials: SignInFormValues;
-      redirectTo?: string;
-    }) => {
-      const result = await signIn("credentials", {
-        ...credentials,
-        redirectTo,
-      });
+    mutationFn: async ({ onSuccess, ...rest }: SignInVariables) => {
+      const response = await signIn("credentials", { ...rest, redirect: false }); // The fetch is handled in the authorize callback in @/auth
 
-      if (result?.error) {
-        throw new Error(result.error);
+      if (response?.error) {
+        throw new Error(response.error);
       }
 
-      return result;
+      console.log("ALSJHDALSDJAS", response)
+      return response;
     },
+    onSuccess: async (response, { onSuccess }) => {
+      if (onSuccess) {
+        onSuccess();
+      }
+    },
+    // onError: (error) => {
+    //   console.error("Sign in error:", error.message);
+    //   if (error.message === "CredentialsSignin") {
+    //     toast.error("Invalid credentials. Try another email or password.");
+    //   }
+    // },
   });
 
   const signUpMutation = useMutation({
@@ -110,6 +116,9 @@ export function useAuth(): UseAuthReturn {
         redirectTo,
       });
     },
+    onError: (error) => {
+      console.error("Sign up error:", error.message);
+    },
   });
 
   /**
@@ -123,14 +132,12 @@ export function useAuth(): UseAuthReturn {
    */
   const signUp = async (
     credentials?: SignUpFormValues,
-    options?: {
-      redirectTo?: string;
-      redirect?: boolean;
-    }
+    signUpOptions?: SignInOptions
   ) => {
-    const { redirect = true } = options ?? {};
+    // Get redirect url
+    const { redirect = true } = signUpOptions ?? {};
     const redirectTo =
-      options?.redirectTo ??
+      signUpOptions?.redirectTo ??
       searchParams.get("callbackUrl") ??
       window.location.href;
 

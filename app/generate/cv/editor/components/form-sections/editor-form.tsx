@@ -12,7 +12,6 @@ import { isEqual } from "lodash";
 
 import { useProfileStore } from "@/hooks/use-profile";
 import { useEditorTabStore } from "@/hooks/use-editor-tabs";
-import { usePdfPlugins } from "@/hooks/use-pdf-plugins";
 
 import { EditorTabName, editorTabName } from "@/config/editor-tab-names";
 
@@ -27,7 +26,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { ChevronLeft, FileCheck, FileDown, Save } from "lucide-react";
+import { ChevronLeft, FileCheck, Save } from "lucide-react";
+
+import DownloadCVButton from "@/components/download-cv-button";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -45,8 +46,6 @@ export function EditorForm<T extends z.ZodTypeAny>({
   const [profileData, setProfileData] = useProfileStore(
     useShallow((state) => [state.profile, state.setProfile])
   );
-
-  const { Download } = usePdfPlugins();
 
   const [activeTab, setActiveTab] = useEditorTabStore(
     useShallow((state) => [state.activeTab, state.setActiveTab])
@@ -207,24 +206,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
               </TooltipContent>
             </Tooltip>
             {isLastTab ? (
-              <Download>
-                {({ onClick }) => (
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      onClick();
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    <FileDown className="mr-1" />
-                    Download CV
-                  </Button>
-                )}
-              </Download>
+              <DownloadCVButton />
             ) : (
               <Button
                 onClick={handleSubmit((data) => {
