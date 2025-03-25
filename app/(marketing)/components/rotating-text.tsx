@@ -22,7 +22,7 @@ export function RotatingText() {
 
   return (
     <span
-      className={`transition-opacity duration-500 text-indigo-500 ${
+      className={`transition-opacity duration-500 text-primary ${
         fade ? "opacity-0" : "opacity-100"
       }`}
       aria-live="polite"
