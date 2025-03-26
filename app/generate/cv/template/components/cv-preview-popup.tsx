@@ -16,18 +16,18 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 
 export default function CVPreviewPopup({
-  cvTemplate,
+  templateId,
   templateName,
 }: {
-  cvTemplate: string;
+  templateId: string;
   templateName: string;
 }) {
-  const pdfUrl = `/cvs/pdfs/${cvTemplate}.pdf`;
+  const pdfUrl = `/cvs/pdfs/${templateId}.pdf`;
 
   return (
-    <Dialog key={cvTemplate}>
+    <Dialog key={templateId}>
       <DialogTrigger asChild>
-        <Button variant="secondary" className="bg-white/90 backdrop-blur-sm">
+        <Button variant="outline">
           <Eye className="mr-2 h-4 w-4" />
           Preview
         </Button>

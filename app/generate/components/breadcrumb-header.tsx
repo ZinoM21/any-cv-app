@@ -1,6 +1,6 @@
 import { GenericHeader } from "@/components/generic-header";
-import AuthOrDashboardButton from "@/components/auth-dashboard-button";
-import { HeaderDropdownMenu } from "@/components/profile-button";
+import AuthOrDashboardButton from "@/components/auth/auth-dashboard-button";
+import { HeaderDropdownMenu } from "@/components/auth/profile-button";
 import BreadCrumb from "./breadcrumb";
 
 export function BreadcrumpHeader() {

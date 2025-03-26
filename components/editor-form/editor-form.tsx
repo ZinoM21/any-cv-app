@@ -3,8 +3,9 @@
 import { useEffect, ReactNode } from "react";
 
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useMutation } from "@tanstack/react-query";
 
 import { useShallow } from "zustand/react/shallow";
@@ -28,7 +29,7 @@ import {
 import { toast } from "sonner";
 import { ChevronLeft, FileCheck, Save } from "lucide-react";
 
-import DownloadCVButton from "@/components/download-cv-button";
+import EditorFinalActionButton from "./editor-final-action-button";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -37,6 +38,14 @@ interface EditorFormProps<T extends z.ZodSchema> {
   tabName: EditorTabName;
 }
 
+/**
+ * Creates a generic react-hook-form which handles submission, validation and navigation between form tabs.
+ * Wrap it around form fields to create a form.
+ * @param schema - Zod schema for form validation
+ * @param initialValues - Initial values for form fields
+ * @param children - A ReactNode including form fields
+ * @param tabName - Name of the tab it belongs to
+ */
 export function EditorForm<T extends z.ZodTypeAny>({
   schema,
   initialValues,
@@ -173,7 +182,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
                 size="icon"
                 variant="outline"
                 onClick={() => setActiveTab(previousTab)}
-                className="pl-2 pr-3"
+                className="pl-1.5 pr-2"
               >
                 <ChevronLeft />
               </Button>
@@ -187,7 +196,6 @@ export function EditorForm<T extends z.ZodTypeAny>({
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
                 <Button
-                  // type="submit"
                   disabled={!canSave}
                   size="icon"
                   variant="outline"
@@ -208,7 +216,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
               </TooltipContent>
             </Tooltip>
             {isLastTab ? (
-              <DownloadCVButton />
+              <EditorFinalActionButton />
             ) : (
               <Button
                 onClick={handleSubmit((data) => {

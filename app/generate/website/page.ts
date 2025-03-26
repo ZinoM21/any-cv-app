@@ -2,7 +2,7 @@ import { PromiseSearchParams } from "@/lib/types";
 
 import { redirect } from "next/navigation";
 
-export default async function CVPage({
+export default async function WebsitePage({
   searchParams,
 }: {
   searchParams: PromiseSearchParams;
@@ -19,5 +19,5 @@ export default async function CVPage({
     params as Record<string, string>
   ).toString();
 
-  redirect(`/generate/cv/template?${searchParamsString}`);
+  redirect(`/generate/website/template?${searchParamsString}`);
 }

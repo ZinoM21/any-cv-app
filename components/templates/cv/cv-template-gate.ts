@@ -26,7 +26,7 @@ export const getTemplatePDFById = async (
     templateComponentMap[templateId] ||
     templateComponentMap[TemplateId.Classic];
 
-  return await TemplatePDFComponent({ profileData });
+  return TemplatePDFComponent({ profileData });
 };
 
 /**

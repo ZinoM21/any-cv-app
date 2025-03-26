@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Plus, Trash } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -10,13 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { FormField } from "@/components/ui/form";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Plus, Trash } from "lucide-react";
+import { FormField } from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
@@ -34,131 +36,111 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import Image from "next/image";
-import { EditorForm } from "./editor-form";
-import EducationFormFields from "./education-form-fields";
-import AddNewEducationForm from "./add-new-education-form";
+import { EditorForm } from "../editor-form";
+import VolunteeringFormFields from "./volunteering-form-fields";
+import AddNewVolunteeringForm from "./add-new-volunteering-form";
 import {
-  editEducationFormSchema,
-  EditEducationFormValues,
-} from "../editor-forms-schemas";
-import { useState } from "react";
+  editVolunteeringFormSchema,
+  EditVolunteeringFormValues,
+} from "@/lib/editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tab-names";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 
-export function EducationForm({ tabName }: { tabName: EditorTabName }) {
-  const { getEducationInitialValues } = useEditorFormInitialValues();
-  const initialValues = getEducationInitialValues();
+export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
+  const { getVolunteeringInitialValues } = useEditorFormInitialValues();
+  const initialValues = getVolunteeringInitialValues();
 
   return (
     <EditorForm
-      schema={editEducationFormSchema}
+      schema={editVolunteeringFormSchema}
       initialValues={initialValues}
       tabName={tabName}
     >
-      <EducationFieldArray />
+      <VolunteeringFieldArray />
     </EditorForm>
   );
 }
 
-const EducationFieldArray = () => {
+const VolunteeringFieldArray = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  const { control } = useFormContext<EditEducationFormValues>();
-  const { fields, prepend, remove } = useFieldArray({
+  const { control } = useFormContext<EditVolunteeringFormValues>();
+
+  const { fields, remove, prepend } = useFieldArray({
     control,
-    name: "education",
+    name: "volunteering",
   });
 
-  // const handleSchoolPictureUpload = (index?: number) => {
-  //   // In a real app, this would open a file picker and handle the upload
-  //   const url = prompt("Enter URL for school picture (for demo purposes):");
-  //   if (url) {
-  //     // Update the form field
-  //     if (typeof index === 'number') {
-  //       // Update existing education
-  //       control._fields.education[index].schoolPictureUrl = url;
-  //     } else {
-  //       // For new education entry
-  //       append({
-  //         school: "",
-  //         degree: "",
-  //         fieldOfStudy: "",
-  //         startDate: "",
-  //         endDate: "",
-  //         grade: "",
-  //         activities: "",
-  //         description: "",
-  //         schoolPictureUrl: url,
-  //       });
-  //     }
-  //   }
-  // };
-
   return (
-    <div className="space-y-6 mb-60">
+    <div className="space-y-6  mb-60">
       {fields.length > 0 && (
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-slate-500">
-            Added Education
+            Added Volunteering Experience
           </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
-            {fields.map((field, index) => (
+            {fields.map((volunteeringField, index) => (
               <AccordionItem
-                key={field.id}
-                value={`experience-${field.id}`}
+                key={volunteeringField.id}
+                value={`volunteering-${volunteeringField.id}`}
                 className="border-none"
               >
-                <Card key={field.id}>
+                <Card key={volunteeringField.id}>
                   <CardHeader className="p-4">
                     <AccordionTrigger className="py-0 min-w-0">
                       <div className="flex flex-1 items-start justify-between min-w-0">
                         <div className="flex items-center gap-3 min-w-0">
-                          {field.schoolPictureUrl ? (
-                            <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
-                              <Image
-                                src={
-                                  field?.schoolPictureUrl || "/placeholder.svg"
-                                }
-                                alt={field?.school}
-                                width={80}
-                                height={80}
-                              />
-                            </div>
-                          ) : (
-                            <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
-                              Logo
-                            </div>
-                          )}
+                          <FormField
+                            name={`volunteering.${index}.organizationLogoUrl`}
+                            render={({ field }) => (
+                              <>
+                                {field?.value ? (
+                                  <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
+                                    <Image
+                                      src={field?.value || "/placeholder.svg"}
+                                      alt={
+                                        volunteeringField?.organization || ""
+                                      }
+                                      width={80}
+                                      height={80}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
+                                    Logo
+                                  </div>
+                                )}
+                              </>
+                            )}
+                          />
                           <div className="min-w-0">
                             <CardTitle className="text-base">
                               <FormField
-                                name={`education.${index}.degree`}
+                                name={`volunteering.${index}.role`}
                                 render={({ field }) =>
                                   field.value ? (
                                     <span className="block truncate">
                                       {field.value}
                                     </span>
                                   ) : (
-                                    <span>Experience {index + 1}</span>
+                                    <span>Volunteering {index + 1}</span>
                                   )
                                 }
                               />
                             </CardTitle>
                             <CardDescription>
                               <FormField
-                                name={`education.${index}.school`}
+                                name={`volunteering.${index}.organization`}
                                 render={({ field }) =>
                                   field.value ? (
                                     <span className="block truncate">
                                       {field.value}
                                     </span>
                                   ) : (
-                                    <span>
-                                      School of experience {index + 1}
-                                    </span>
+                                    <span>Organization {index + 1}</span>
                                   )
                                 }
                               />
@@ -171,10 +153,10 @@ const EducationFieldArray = () => {
 
                   <AccordionContent>
                     <CardContent className="px-4 pb-4 pt-0">
-                      <div className="grid gap-4">
+                      <div className="space-y-4">
                         <div className="flex items-center justify-between border-b pb-1">
                           <h4 className="text-base font-medium text-slate-800">
-                            Education Details
+                            Volunteering Details
                           </h4>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -184,7 +166,7 @@ const EducationFieldArray = () => {
                                 size="sm"
                                 className="text-slate-400 hover:text-red-500"
                               >
-                                <Trash />
+                                <Trash className="size-4" />
                                 Remove
                               </Button>
                             </AlertDialogTrigger>
@@ -195,8 +177,8 @@ const EducationFieldArray = () => {
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
                                   This action cannot be undone. This will
-                                  permanently remove this education entry from
-                                  our servers.
+                                  permanently remove this volunteering entry
+                                  from our servers.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
@@ -215,8 +197,9 @@ const EducationFieldArray = () => {
                             </AlertDialogContent>
                           </AlertDialog>
                         </div>
-                        <EducationFormFields
-                          fieldNamePrefix={`education.${index}`}
+
+                        <VolunteeringFormFields
+                          fieldNamePrefix={`volunteering.${index}`}
                         />
                       </div>
                     </CardContent>
@@ -227,6 +210,7 @@ const EducationFieldArray = () => {
           </Accordion>
         </div>
       )}
+
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -235,12 +219,12 @@ const EducationFieldArray = () => {
             className="w-full h-20 rounded-md border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500"
           >
             <Plus className="size-4" />
-            Add Education
+            Add Volunteering
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[600px] p-4" side="right">
-          <AddNewEducationForm
-            addToEducations={(data) => {
+          <AddNewVolunteeringForm
+            addToVolunteering={(data) => {
               prepend(data);
               setPopoverOpen(false);
             }}

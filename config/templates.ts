@@ -18,3 +18,5 @@ export const cvTemplates: CVTemplate[] = [
       "Traditional layout ideal for corporate and formal applications",
   },
 ];
+
+export const websiteTemplates = cvTemplates;

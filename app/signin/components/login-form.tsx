@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { SignInFormValues, signInSchema } from "@/lib/auth-schema";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 export function SignInForm({
   className,
@@ -54,7 +55,7 @@ export function SignInForm({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email or Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="m@example.com"
@@ -75,12 +76,12 @@ export function SignInForm({
             <FormItem>
               <div className="flex items-center">
                 <FormLabel>Password</FormLabel>
-                <a
+                <Link
                   href="#"
                   className="ml-auto text-sm underline-offset-2 hover:underline"
                 >
                   Forgot your password?
-                </a>
+                </Link>
               </div>
               <FormControl>
                 <Input type="password" disabled={isLoading} {...field} />

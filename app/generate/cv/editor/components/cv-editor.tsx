@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useProfileStore } from "@/hooks/use-profile";
 import { CVTemplate, ProfileData } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { CVEditorTabs } from "./cv-editor-tabs";
+import { TabbedEditorForm } from "@/components/editor-form/tabbed-editor-form";
 import { CVEditorPreview } from "./cv-editor-preview";
 import { PdfPluginsProvider } from "@/hooks/use-pdf-plugins";
 
@@ -62,7 +62,7 @@ export default function CVEditor({
             )}
           >
             <div className="flex-1 overflow-y-auto bg-white">
-              <CVEditorTabs />
+              <TabbedEditorForm />
             </div>
           </div>
 

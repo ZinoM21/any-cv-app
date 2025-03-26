@@ -33,7 +33,7 @@ const editorTabFormComponentMap: {
   [VOLUNTEERING]: VolunteeringForm,
 };
 
-export function CVEditorTabs() {
+export function TabbedEditorForm() {
   const [activeTab, setActiveTab] = useEditorTabStore(
     useShallow((state) => [state.activeTab, state.setActiveTab])
   );

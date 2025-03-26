@@ -75,6 +75,8 @@ export type CVTemplate = {
   description: string;
 };
 
+export type WebsiteTemplate = CVTemplate;
+
 export type User = {
   id: string;
   username: string;

@@ -13,12 +13,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EditorForm } from "./editor-form";
+import { EditorForm } from "../editor-form";
 import { EditorTabName } from "@/config/editor-tab-names";
 import {
   editSkillsFormSchema,
   EditSkillsFormValues,
-} from "../editor-forms-schemas";
+} from "@/lib/editor-forms-schemas";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import {
   FormControl,

@@ -5,7 +5,7 @@ import {
   EditExperiencesFormValues,
   EditSkillsFormValues,
   EditVolunteeringFormValues,
-} from "@/app/generate/cv/editor/components/editor-forms-schemas";
+} from "@/lib/editor-forms-schemas";
 
 /**
  * Custom hook to generate initial values for CV editor forms

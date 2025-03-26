@@ -1,33 +1,35 @@
 import { Form } from "@/components/ui/form";
+import EducationFormFields from "./education-form-fields";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  AddNewPositionFormValues,
-  addNewPositionFormSchema,
-} from "../editor-forms-schemas";
-
-import PositionFormFields from "./position-form-fields";
+  addNewEducationFormSchema,
+  AddNewEducationFormValues,
+} from "@/lib/editor-forms-schemas";
 import { CardTitle } from "@/components/ui/card";
 import { ReactNode } from "react";
 
 const initialValues = {
-  title: "",
-  duration: null,
+  school: "",
+  schoolPictureUrl: "",
+  schoolProfileUrl: "",
+  degree: "",
+  fieldOfStudy: "",
+  grade: "",
   description: "",
-  location: "",
-  workSetting: "",
+  activities: "",
 };
 
-export default function AddNewPositionForm({
-  addToPositions,
+export default function AddNewEducationForm({
+  addToEducations,
   cancelButton,
 }: {
-  addToPositions: (data: AddNewPositionFormValues) => void;
+  addToEducations: (data: AddNewEducationFormValues) => void;
   cancelButton: ReactNode;
 }) {
-  const formMethods = useForm<AddNewPositionFormValues>({
-    resolver: zodResolver(addNewPositionFormSchema),
+  const formMethods = useForm<AddNewEducationFormValues>({
+    resolver: zodResolver(addNewEducationFormSchema),
     defaultValues: initialValues,
     mode: "all",
   });
@@ -38,23 +40,23 @@ export default function AddNewPositionForm({
     formState: { isValid },
   } = formMethods;
 
-  const onSubmitNewPosition = (data: AddNewPositionFormValues) => {
-    addToPositions(data);
+  const onSubmitNewEducation = (data: AddNewEducationFormValues) => {
+    addToEducations(data);
     reset();
   };
 
   return (
     <Form {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmitNewPosition)}>
+      <form onSubmit={handleSubmit(onSubmitNewEducation)}>
         <div className="grid gap-4">
-          <CardTitle>Add New Position</CardTitle>
+          <CardTitle>Add New Education</CardTitle>
 
-          <PositionFormFields />
+          <EducationFormFields />
 
           <div className="flex gap-2 justify-end">
             {cancelButton}
             <Button type="submit" disabled={!isValid}>
-              Add Position
+              Add Education
             </Button>
           </div>
         </div>

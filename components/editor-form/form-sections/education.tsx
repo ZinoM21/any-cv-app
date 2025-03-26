@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { useFieldArray, useFormContext } from "react-hook-form";
-
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Plus, Trash } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -12,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FormField } from "@/components/ui/form";
 import {
   Accordion,
   AccordionContent,
@@ -34,56 +33,64 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { FormField } from "@/components/ui/form";
 
-import { Plus, Trash } from "lucide-react";
-
-import AddNewExperienceForm from "./add-new-experience-form";
-import { EditorForm } from "./editor-form";
-import ExperienceFormFields from "./experience-form-fields";
+import Image from "next/image";
+import { EditorForm } from "../editor-form";
+import EducationFormFields from "./education-form-fields";
+import AddNewEducationForm from "./add-new-education-form";
 import {
-  editExperiencesFormSchema,
-  EditExperiencesFormValues,
-} from "../editor-forms-schemas";
+  editEducationFormSchema,
+  EditEducationFormValues,
+} from "@/lib/editor-forms-schemas";
+import { useState } from "react";
 import { EditorTabName } from "@/config/editor-tab-names";
 import { cn } from "@/lib/utils";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 
-export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
-  const { getExperienceInitialValues } = useEditorFormInitialValues();
-  const initialValues = getExperienceInitialValues();
+export function EducationForm({ tabName }: { tabName: EditorTabName }) {
+  const { getEducationInitialValues } = useEditorFormInitialValues();
+  const initialValues = getEducationInitialValues();
 
   return (
     <EditorForm
-      schema={editExperiencesFormSchema}
+      schema={editEducationFormSchema}
       initialValues={initialValues}
       tabName={tabName}
     >
-      <ExperiencesFieldArray />
+      <EducationFieldArray />
     </EditorForm>
   );
 }
 
-const ExperiencesFieldArray = () => {
+const EducationFieldArray = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  const { control } = useFormContext<EditExperiencesFormValues>();
-
-  const { fields, remove, prepend } = useFieldArray({
+  const { control } = useFormContext<EditEducationFormValues>();
+  const { fields, prepend, remove } = useFieldArray({
     control,
-    name: "experiences",
+    name: "education",
   });
 
-  // const handleCompanyLogoUpload = (index?: number) => {
+  // const handleSchoolPictureUpload = (index?: number) => {
   //   // In a real app, this would open a file picker and handle the upload
-  //   const url = prompt("Enter URL for company logo (for demo purposes):");
+  //   const url = prompt("Enter URL for school picture (for demo purposes):");
   //   if (url) {
-  //     if (index !== undefined) {
-  //       setValue(`experiences.${index}.companyLogoUrl`, url);
+  //     // Update the form field
+  //     if (typeof index === 'number') {
+  //       // Update existing education
+  //       control._fields.education[index].schoolPictureUrl = url;
   //     } else {
-  //       setNewExperience({
-  //         ...newExperience,
-  //         companyLogoUrl: url,
+  //       // For new education entry
+  //       append({
+  //         school: "",
+  //         degree: "",
+  //         fieldOfStudy: "",
+  //         startDate: "",
+  //         endDate: "",
+  //         grade: "",
+  //         activities: "",
+  //         description: "",
+  //         schoolPictureUrl: url,
   //       });
   //     }
   //   }
@@ -94,73 +101,63 @@ const ExperiencesFieldArray = () => {
       {fields.length > 0 && (
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-slate-500">
-            Added Experiences
+            Added Education
           </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
-            {fields.map((experienceField, expIndex) => (
+            {fields.map((field, index) => (
               <AccordionItem
-                key={experienceField.id}
-                value={`experience-${experienceField.id}`}
+                key={field.id}
+                value={`experience-${field.id}`}
                 className="border-none"
               >
-                <Card key={experienceField.id}>
+                <Card key={field.id}>
                   <CardHeader className="p-4">
                     <AccordionTrigger className="py-0 min-w-0">
                       <div className="flex flex-1 items-start justify-between min-w-0">
                         <div className="flex items-center gap-3 min-w-0">
-                          <FormField
-                            name={`experiences.${expIndex}.companyLogoUrl`}
-                            render={({ field }) => (
-                              <>
-                                {field?.value ? (
-                                  <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
-                                    <Image
-                                      src={field?.value || "/placeholder.svg"}
-                                      alt={experienceField?.company || ""}
-                                      width={80}
-                                      height={80}
-                                    />
-                                  </div>
-                                ) : (
-                                  <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
-                                    Logo
-                                  </div>
-                                )}
-                              </>
-                            )}
-                          />
-
+                          {field.schoolPictureUrl ? (
+                            <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
+                              <Image
+                                src={
+                                  field?.schoolPictureUrl || "/placeholder.svg"
+                                }
+                                alt={field?.school}
+                                width={80}
+                                height={80}
+                              />
+                            </div>
+                          ) : (
+                            <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
+                              Logo
+                            </div>
+                          )}
                           <div className="min-w-0">
                             <CardTitle className="text-base">
                               <FormField
-                                name={`experiences.${expIndex}.company`}
+                                name={`education.${index}.degree`}
                                 render={({ field }) =>
                                   field.value ? (
                                     <span className="block truncate">
                                       {field.value}
                                     </span>
                                   ) : (
-                                    <span>Company {expIndex + 1}</span>
+                                    <span>Experience {index + 1}</span>
                                   )
                                 }
                               />
                             </CardTitle>
-
                             <CardDescription>
                               <FormField
-                                name={`experiences.${expIndex}.positions`}
+                                name={`education.${index}.school`}
                                 render={({ field }) =>
                                   field.value ? (
                                     <span className="block truncate">
-                                      {field?.value?.length || 0}{" "}
-                                      {field?.value?.length === 1
-                                        ? "position"
-                                        : "positions"}
+                                      {field.value}
                                     </span>
                                   ) : (
                                     <span>
-                                      No positions added for this experience
+                                      School of experience {index + 1}
                                     </span>
                                   )
                                 }
@@ -174,10 +171,10 @@ const ExperiencesFieldArray = () => {
 
                   <AccordionContent>
                     <CardContent className="px-4 pb-4 pt-0">
-                      <div className="space-y-4">
+                      <div className="grid gap-4">
                         <div className="flex items-center justify-between border-b pb-1">
                           <h4 className="text-base font-medium text-slate-800">
-                            Experience Details
+                            Education Details
                           </h4>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -198,7 +195,7 @@ const ExperiencesFieldArray = () => {
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
                                   This action cannot be undone. This will
-                                  permanently remove this experience entry from
+                                  permanently remove this education entry from
                                   our servers.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
@@ -210,7 +207,7 @@ const ExperiencesFieldArray = () => {
                                       variant: "destructive",
                                     })
                                   )}
-                                  onClick={() => remove(expIndex)}
+                                  onClick={() => remove(index)}
                                 >
                                   Yes, remove
                                 </AlertDialogAction>
@@ -218,9 +215,8 @@ const ExperiencesFieldArray = () => {
                             </AlertDialogContent>
                           </AlertDialog>
                         </div>
-
-                        <ExperienceFormFields
-                          fieldNamePrefix={`experiences.${expIndex}`}
+                        <EducationFormFields
+                          fieldNamePrefix={`education.${index}`}
                         />
                       </div>
                     </CardContent>
@@ -231,7 +227,6 @@ const ExperiencesFieldArray = () => {
           </Accordion>
         </div>
       )}
-
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -240,12 +235,12 @@ const ExperiencesFieldArray = () => {
             className="w-full h-20 rounded-md border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500"
           >
             <Plus className="size-4" />
-            Add Experience
+            Add Education
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[600px] p-4" side="right">
-          <AddNewExperienceForm
-            addToExperiences={(data) => {
+          <AddNewEducationForm
+            addToEducations={(data) => {
               prepend(data);
               setPopoverOpen(false);
             }}

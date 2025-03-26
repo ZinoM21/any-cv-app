@@ -21,7 +21,7 @@ import {
 import BuiltAnyCVLogo from "@/components/logo";
 import { ChevronsUpDown } from "lucide-react";
 
-import { routeMappings } from "@/config/breadcrumb-routes";
+import { RouteMapping, routeMappings } from "@/config/breadcrumb-routes";
 
 export default function BreadCrumb({
   className,
@@ -47,6 +47,20 @@ export default function BreadCrumb({
   const currentSubmapping = currentMapping?.children?.find(
     (child) => child.path === currentSubsection
   );
+
+  // Helper function to determine the proper target path
+  const getTargetFormatPath = (targetFormat: RouteMapping) => {
+    // If we have a current subsection and the target format has it as a valid subsection
+    if (
+      currentSubsection &&
+      targetFormat.children?.some((child) => child.path === currentSubsection)
+    ) {
+      return `/generate/${targetFormat.path}/${currentSubsection}${searchParamsString}`;
+    }
+    // Otherwise just go to the format's main path
+    return `/generate/${targetFormat.path}${searchParamsString}`;
+  };
+
   return (
     <Breadcrumb className={className} {...props}>
       <BreadcrumbList>
@@ -69,10 +83,7 @@ export default function BreadCrumb({
                   <DropdownMenuLabel>Format</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {routeMappings.map((route) => (
-                    <Link
-                      key={route.path}
-                      href={`/generate/${route.path}${searchParamsString}`}
-                    >
+                    <Link key={route.path} href={getTargetFormatPath(route)}>
                       <DropdownMenuCheckboxItem
                         checked={route.path === currentSection}
                         className="cursor-pointer"

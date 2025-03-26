@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -17,8 +18,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Plus, Trash } from "lucide-react";
-import { FormField } from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
@@ -35,75 +34,90 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { FormField } from "@/components/ui/form";
 
-import { EditorForm } from "./editor-form";
-import VolunteeringFormFields from "./volunteering-form-fields";
-import AddNewVolunteeringForm from "./add-new-volunteering-form";
+import { Plus, Trash } from "lucide-react";
+
+import AddNewExperienceForm from "./add-new-experience-form";
+import { EditorForm } from "../editor-form";
+import ExperienceFormFields from "./experience-form-fields";
 import {
-  editVolunteeringFormSchema,
-  EditVolunteeringFormValues,
-} from "../editor-forms-schemas";
+  editExperiencesFormSchema,
+  EditExperiencesFormValues,
+} from "@/lib/editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tab-names";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 
-export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
-  const { getVolunteeringInitialValues } = useEditorFormInitialValues();
-  const initialValues = getVolunteeringInitialValues();
+export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
+  const { getExperienceInitialValues } = useEditorFormInitialValues();
+  const initialValues = getExperienceInitialValues();
 
   return (
     <EditorForm
-      schema={editVolunteeringFormSchema}
+      schema={editExperiencesFormSchema}
       initialValues={initialValues}
       tabName={tabName}
     >
-      <VolunteeringFieldArray />
+      <ExperiencesFieldArray />
     </EditorForm>
   );
 }
 
-const VolunteeringFieldArray = () => {
+const ExperiencesFieldArray = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
-  const { control } = useFormContext<EditVolunteeringFormValues>();
+  const { control } = useFormContext<EditExperiencesFormValues>();
 
   const { fields, remove, prepend } = useFieldArray({
     control,
-    name: "volunteering",
+    name: "experiences",
   });
 
+  // const handleCompanyLogoUpload = (index?: number) => {
+  //   // In a real app, this would open a file picker and handle the upload
+  //   const url = prompt("Enter URL for company logo (for demo purposes):");
+  //   if (url) {
+  //     if (index !== undefined) {
+  //       setValue(`experiences.${index}.companyLogoUrl`, url);
+  //     } else {
+  //       setNewExperience({
+  //         ...newExperience,
+  //         companyLogoUrl: url,
+  //       });
+  //     }
+  //   }
+  // };
+
   return (
-    <div className="space-y-6  mb-60">
+    <div className="space-y-6 mb-60">
       {fields.length > 0 && (
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-slate-500">
-            Added Volunteering Experience
+            Added Experiences
           </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
-            {fields.map((volunteeringField, index) => (
+            {fields.map((experienceField, expIndex) => (
               <AccordionItem
-                key={volunteeringField.id}
-                value={`volunteering-${volunteeringField.id}`}
+                key={experienceField.id}
+                value={`experience-${experienceField.id}`}
                 className="border-none"
               >
-                <Card key={volunteeringField.id}>
+                <Card key={experienceField.id}>
                   <CardHeader className="p-4">
                     <AccordionTrigger className="py-0 min-w-0">
                       <div className="flex flex-1 items-start justify-between min-w-0">
                         <div className="flex items-center gap-3 min-w-0">
                           <FormField
-                            name={`volunteering.${index}.organizationLogoUrl`}
+                            name={`experiences.${expIndex}.companyLogoUrl`}
                             render={({ field }) => (
                               <>
                                 {field?.value ? (
                                   <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
                                     <Image
                                       src={field?.value || "/placeholder.svg"}
-                                      alt={
-                                        volunteeringField?.organization || ""
-                                      }
+                                      alt={experienceField?.company || ""}
                                       width={80}
                                       height={80}
                                     />
@@ -116,31 +130,38 @@ const VolunteeringFieldArray = () => {
                               </>
                             )}
                           />
+
                           <div className="min-w-0">
                             <CardTitle className="text-base">
                               <FormField
-                                name={`volunteering.${index}.role`}
+                                name={`experiences.${expIndex}.company`}
                                 render={({ field }) =>
                                   field.value ? (
                                     <span className="block truncate">
                                       {field.value}
                                     </span>
                                   ) : (
-                                    <span>Volunteering {index + 1}</span>
+                                    <span>Company {expIndex + 1}</span>
                                   )
                                 }
                               />
                             </CardTitle>
+
                             <CardDescription>
                               <FormField
-                                name={`volunteering.${index}.organization`}
+                                name={`experiences.${expIndex}.positions`}
                                 render={({ field }) =>
                                   field.value ? (
                                     <span className="block truncate">
-                                      {field.value}
+                                      {field?.value?.length || 0}{" "}
+                                      {field?.value?.length === 1
+                                        ? "position"
+                                        : "positions"}
                                     </span>
                                   ) : (
-                                    <span>Organization {index + 1}</span>
+                                    <span>
+                                      No positions added for this experience
+                                    </span>
                                   )
                                 }
                               />
@@ -156,7 +177,7 @@ const VolunteeringFieldArray = () => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between border-b pb-1">
                           <h4 className="text-base font-medium text-slate-800">
-                            Volunteering Details
+                            Experience Details
                           </h4>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -166,7 +187,7 @@ const VolunteeringFieldArray = () => {
                                 size="sm"
                                 className="text-slate-400 hover:text-red-500"
                               >
-                                <Trash className="size-4" />
+                                <Trash />
                                 Remove
                               </Button>
                             </AlertDialogTrigger>
@@ -177,8 +198,8 @@ const VolunteeringFieldArray = () => {
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
                                   This action cannot be undone. This will
-                                  permanently remove this volunteering entry
-                                  from our servers.
+                                  permanently remove this experience entry from
+                                  our servers.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
@@ -189,7 +210,7 @@ const VolunteeringFieldArray = () => {
                                       variant: "destructive",
                                     })
                                   )}
-                                  onClick={() => remove(index)}
+                                  onClick={() => remove(expIndex)}
                                 >
                                   Yes, remove
                                 </AlertDialogAction>
@@ -198,8 +219,8 @@ const VolunteeringFieldArray = () => {
                           </AlertDialog>
                         </div>
 
-                        <VolunteeringFormFields
-                          fieldNamePrefix={`volunteering.${index}`}
+                        <ExperienceFormFields
+                          fieldNamePrefix={`experiences.${expIndex}`}
                         />
                       </div>
                     </CardContent>
@@ -219,12 +240,12 @@ const VolunteeringFieldArray = () => {
             className="w-full h-20 rounded-md border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500"
           >
             <Plus className="size-4" />
-            Add Volunteering
+            Add Experience
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[600px] p-4" side="right">
-          <AddNewVolunteeringForm
-            addToVolunteering={(data) => {
+          <AddNewExperienceForm
+            addToExperiences={(data) => {
               prepend(data);
               setPopoverOpen(false);
             }}

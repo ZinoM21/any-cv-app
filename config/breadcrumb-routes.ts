@@ -24,7 +24,7 @@ export const routeMappings: RouteMapping[] = [
     path: "website",
     label: "Website",
     children: [
-      { path: "template", label: "Template" },
+      { path: "template", label: "Select Template" },
       { path: "editor", label: "Editor" },
     ],
   },

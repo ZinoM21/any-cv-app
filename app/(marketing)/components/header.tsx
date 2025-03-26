@@ -3,8 +3,8 @@ import Link from "next/link";
 import { marketingNav } from "@/config/nav";
 import { GenericHeader } from "@/components/generic-header";
 import BuiltAnyCVLogo from "@/components/logo";
-import AuthOrDashboardButton from "@/components/auth-dashboard-button";
-import { HeaderDropdownMenu } from "@/components/profile-button";
+import AuthOrDashboardButton from "@/components/auth/auth-dashboard-button";
+import { HeaderDropdownMenu } from "@/components/auth/profile-button";
 
 export function Header() {
   return (

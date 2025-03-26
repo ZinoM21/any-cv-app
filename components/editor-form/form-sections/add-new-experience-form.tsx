@@ -1,14 +1,16 @@
+import { ReactNode } from "react";
+
+import { useForm } from "react-hook-form";
+
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CardTitle } from "@/components/ui/card";
+import ExperienceFormFields from "./experience-form-fields";
 import {
   addNewExperienceFormSchema,
   AddNewExperienceFormValues,
-} from "../editor-forms-schemas";
-import ExperienceFormFields from "./experience-form-fields";
-import { CardTitle } from "@/components/ui/card";
-import { ReactNode } from "react";
+} from "@/lib/editor-forms-schemas";
 
 const initialValues = {
   company: "",

@@ -2,11 +2,16 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { TemplateId } from "./types";
 
-import minimal from "@/public/cvs/images/minimal.jpg";
-import creative from "@/public/cvs/images/creative.jpg";
-import classic from "@/public/cvs/images/classic.jpg";
+import minimalCV from "@/public/cvs/images/minimal.jpg";
+import creativeCV from "@/public/cvs/images/creative.jpg";
+import classicCV from "@/public/cvs/images/classic.jpg";
+
+import minimalWebsite from "@/public/websites/images/minimal.jpg";
+import creativeWebsite from "@/public/websites/images/creative.jpg";
+import classicWebsite from "@/public/websites/images/classic.jpg";
 
 import { StaticImageData } from "next/image";
+import { format } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -46,12 +51,39 @@ export const capitalize = (str: string): string => {
 export const getCVImage = (templateId: TemplateId): StaticImageData => {
   switch (templateId) {
     case TemplateId.Creative:
-      return creative;
+      return creativeCV;
     case TemplateId.Classic:
-      return classic;
+      return classicCV;
     case TemplateId.Minimal:
-      return minimal;
+      return minimalCV;
     default:
-      return classic;
+      return classicCV;
   }
+};
+
+export const getWebsitePreviewImage = (
+  templateId: TemplateId
+): StaticImageData => {
+  switch (templateId) {
+    case TemplateId.Creative:
+      return creativeWebsite;
+    case TemplateId.Classic:
+      return classicWebsite;
+    case TemplateId.Minimal:
+      return minimalWebsite;
+    default:
+      return classicWebsite;
+  }
+};
+
+export const formatDateRange = (startDate: Date, endDate?: Date): string => {
+  const start = format(startDate, "MMM uu");
+
+  if (!endDate) {
+    return `${start} - Present`;
+  }
+
+  const end = format(endDate, "MMM uu");
+
+  return `${start} - ${end}`;
 };

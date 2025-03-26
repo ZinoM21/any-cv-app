@@ -11,11 +11,11 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 
-import { EditorForm } from "./editor-form";
+import { EditorForm } from "../editor-form";
 import { useFormContext } from "react-hook-form";
 import { EditorTabName } from "@/config/editor-tab-names";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
-import { editSummaryFormSchema } from "../editor-forms-schemas";
+import { editSummaryFormSchema } from "@/lib/editor-forms-schemas";
 
 export function SummaryForm({ tabName }: { tabName: EditorTabName }) {
   const { getSummaryInitialValues } = useEditorFormInitialValues();

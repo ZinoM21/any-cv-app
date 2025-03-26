@@ -1,9 +1,9 @@
+import { getTemplateById } from "@/components/templates/website/website-template-gate";
 import { ProfileData, PromiseSearchParams, TemplateId } from "@/lib/types";
 import { redirect } from "next/navigation";
-import CVEditor from "./components/cv-editor";
-import { getTemplateById } from "@/components/templates/cv/cv-template-gate";
+import WebsiteEditor from "./components/website-edior";
 
-export default async function CVEditorPage({
+export default async function WebsiteEditorPage({
   searchParams,
 }: {
   searchParams: PromiseSearchParams;
@@ -20,7 +20,7 @@ export default async function CVEditorPage({
     (templateId &&
       !Object.values(TemplateId).includes(templateId as TemplateId))
   ) {
-    redirect(`/generate/cv/template?username=${username}`);
+    redirect(`/generate/website/template?username=${username}`);
   }
 
   const response = await fetch(
@@ -36,7 +36,7 @@ export default async function CVEditorPage({
 
   return (
     <div className="flex h-full flex-col">
-      <CVEditor profileData={profileData} template={template} />
+      <WebsiteEditor profileData={profileData} template={template} />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import useSession from "@/hooks/use-session";
 import { useAuth } from "@/hooks/use-auth";
 
-import { Button, ButtonProps } from "./ui/button";
+import { Button, ButtonProps } from "../ui/button";
 import SignInDialog from "./sign-in-dialog";
 
 export default function AuthOrDashboardButton({ className }: ButtonProps) {

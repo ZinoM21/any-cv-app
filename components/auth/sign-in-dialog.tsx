@@ -11,7 +11,7 @@ import {
 import { FileUser } from "lucide-react";
 
 import { SignInForm } from "@/app/signin/components/login-form";
-import BuiltAnyCVLogo from "./logo";
+import BuiltAnyCVLogo from "../logo";
 import { ReactNode, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,9 +19,13 @@ import Link from "next/link";
 export default function SignInDialog({
   trigger,
   onSuccess,
+  customTitle,
+  customDescription,
 }: {
   trigger: ReactNode;
   onSuccess?: () => void;
+  customTitle?: string;
+  customDescription?: string;
 }) {
   const [isOpen, setOpen] = useState(false);
   return (
@@ -30,9 +34,12 @@ export default function SignInDialog({
       <DialogContent className="grid lg:grid-cols-2 max-w-fit p-0">
         <div className="flex flex-col items-stretch gap-4 p-6">
           <DialogHeader className="flex flex-col items-center text-center">
-            <DialogTitle className="text-2xl">Welcome back</DialogTitle>
+            <DialogTitle className="text-2xl">
+              {customTitle || "Log in to BuiltAnyCV"}
+            </DialogTitle>
             <DialogDescription className="text-balance text-muted-foreground text-center max-w-72">
-              Login to your builtanycv account to download your new CV.
+              {customDescription ||
+                "Generate beautiful resumes and websites in seconds."}
             </DialogDescription>
           </DialogHeader>
           <SignInForm
