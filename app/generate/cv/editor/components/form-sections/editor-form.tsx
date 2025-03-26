@@ -152,6 +152,8 @@ export function EditorForm<T extends z.ZodTypeAny>({
   };
 
   useEffect(() => {
+    // Cannot use default "values" prop in useForm because of undefined values in profileData
+    // Therefore, use reset() to update values when profileData changes
     if (profileData) {
       reset(initialValues);
     }

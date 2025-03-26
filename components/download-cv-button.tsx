@@ -40,7 +40,7 @@ export default function DownloadCVButton() {
 
   const { isSignedIn } = useSession();
 
-  const onSuccessDownload = () => {
+  const onDownloadSuccess = () => {
     toast.success("Done! Check your downloads folder.");
   };
 
@@ -51,7 +51,7 @@ export default function DownloadCVButton() {
           <DownloadButton
             onClick={() => {
               downloadCV();
-              onSuccessDownload();
+              onDownloadSuccess();
             }}
           />
         ) : (
@@ -72,7 +72,7 @@ export default function DownloadCVButton() {
                 onSuccess={() => {
                   setOpen(false);
                   downloadCV();
-                  onSuccessDownload();
+                  onDownloadSuccess();
                 }}
               />
               <div className="absolute -top-12 flex items-center gap-2 self-center font-medium text-white">

@@ -1,15 +1,16 @@
 "use client";
 
-import { SignInFormValues, SignUpFormValues } from "@/lib/auth-schema";
 import { useMutation } from "@tanstack/react-query";
-import { signIn, SignInOptions as DefaultSignInOptions } from "next-auth/react";
+import {
+  signIn as authorize,
+  SignInOptions as DefaultSignInOptions,
+} from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect">;
+import { SignInFormValues, SignUpFormValues } from "@/lib/auth-schema";
 
-type SignInVariables = SignInFormValues &
-  SignInOptions & { onSuccess?: () => void };
+type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect">;
 
 /**
  * Type definition for the auth hook return value.
@@ -18,7 +19,12 @@ interface UseAuthReturn {
   /**
    * Signs in a user with the provided credentials
    */
-  signIn: (signInVariables: SignInVariables) => void;
+  signIn: (
+    credentials?: SignInFormValues,
+    options?: SignInOptions & {
+      onSuccess?: () => void;
+    }
+  ) => Promise<void>;
 
   /**
    * Imitates the `signIn` function from next-auth, just for sign up.
@@ -30,10 +36,7 @@ interface UseAuthReturn {
    */
   signUp: (
     credentials?: SignUpFormValues,
-    options?: {
-      redirectTo?: string;
-      redirect?: boolean;
-    }
+    options?: SignInOptions
   ) => Promise<void>;
 
   /**
@@ -59,36 +62,98 @@ export function useAuth(): UseAuthReturn {
   const searchParams = useSearchParams();
 
   const signInMutation = useMutation({
-    mutationFn: async ({ onSuccess, ...rest }: SignInVariables) => {
-      const response = await signIn("credentials", { ...rest, redirect: false }); // The fetch is handled in the authorize callback in @/auth
+    mutationFn: async ({
+      credentials,
+    }: {
+      credentials: SignInFormValues;
+      options?: SignInOptions & {
+        onSuccess?: () => void;
+      };
+    }) => {
+      // The fetch is handled by the authorize function from AuthJS
+      const response = await authorize("credentials", {
+        ...credentials,
+        redirect: false,
+        // AuthJS does not allow for different redirect values on success vs on error
+        // Therefore, always set redirect to false in the authorize call and
+        // handle it manually in own onSuccess callback
+      });
 
       if (response?.error) {
         throw new Error(response.error);
       }
 
-      console.log("ALSJHDALSDJAS", response)
       return response;
     },
-    onSuccess: async (response, { onSuccess }) => {
+    onSuccess: async (response, { options }) => {
+      const { onSuccess, redirect, redirectTo } = options || {};
       if (onSuccess) {
         onSuccess();
       }
+      if (redirect) {
+        replace(response?.url || redirectTo || "/");
+      }
     },
-    // onError: (error) => {
-    //   console.error("Sign in error:", error.message);
-    //   if (error.message === "CredentialsSignin") {
-    //     toast.error("Invalid credentials. Try another email or password.");
-    //   }
-    // },
+    onError: (error) => {
+      console.error("Sign in error:", error.message);
+      if (error.message === "CredentialsSignin") {
+        toast.error("Invalid credentials. Try another email or password.");
+      }
+    },
   });
+
+  /**
+   * Immitates the `signIn` function from next-auth, to handle callbackUrl query param manually.
+   * Call it from anywhere without params to redirect to signin page.
+   * Call it with credentials and it will attempt to sign in the user.
+   *
+   * @param credentials
+   * @param options
+   * @returns
+   */
+  const signIn = async (
+    credentials?: SignInFormValues,
+    options?: SignInOptions & {
+      onSuccess?: () => void;
+    }
+  ) => {
+    // Get redirect url
+    const { redirect = true, redirectTo: initialRedirectTo } = options ?? {};
+
+    const redirectTo =
+      initialRedirectTo ??
+      searchParams.get("callbackUrl") ??
+      window.location.href;
+
+    // If no creds are provided, redirect to signin page
+    if (!credentials) {
+      const baseUrl = `${window.location.protocol}//${window.location.host}`;
+      replace(
+        `${baseUrl}/signin?${
+          //  attach callbackUrl to if provided
+          redirect && redirectTo
+            ? new URLSearchParams({
+                callbackUrl: redirectTo,
+              })
+            : ""
+        }`
+      );
+      return;
+    }
+
+    // Otherwise sign in user & pass redirect
+    await signInMutation.mutateAsync({
+      credentials,
+      options: { redirect, redirectTo },
+    });
+  };
 
   const signUpMutation = useMutation({
     mutationFn: async ({
       credentials,
-      redirectTo,
     }: {
       credentials: SignUpFormValues;
-      redirectTo?: string;
+      options?: SignInOptions;
     }) => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/register`,
@@ -107,13 +172,12 @@ export function useAuth(): UseAuthReturn {
       }
 
       const user = await response.json();
-      return { user, credentials, redirectTo };
+      return user;
     },
-    onSuccess: async ({ user, credentials, redirectTo }) => {
-      await signIn("credentials", {
-        email: user.email,
-        password: credentials.password,
-        redirectTo,
+    onSuccess: async (user, { credentials, options }) => {
+      await signInMutation.mutateAsync({
+        credentials: { email: user.email, password: credentials.password },
+        options,
       });
     },
     onError: (error) => {
@@ -132,12 +196,12 @@ export function useAuth(): UseAuthReturn {
    */
   const signUp = async (
     credentials?: SignUpFormValues,
-    signUpOptions?: SignInOptions
+    options?: SignInOptions
   ) => {
     // Get redirect url
-    const { redirect = true } = signUpOptions ?? {};
+    const { redirect = true, redirectTo: initialRedirectTo } = options ?? {};
     const redirectTo =
-      signUpOptions?.redirectTo ??
+      initialRedirectTo ??
       searchParams.get("callbackUrl") ??
       window.location.href;
 
@@ -160,12 +224,12 @@ export function useAuth(): UseAuthReturn {
     // Otherwise sign up user & pass redirect
     await signUpMutation.mutateAsync({
       credentials,
-      redirectTo: redirect ? redirectTo : undefined,
+      options: { redirect, redirectTo },
     });
   };
 
   return {
-    signIn: signInMutation.mutate,
+    signIn,
     signUp,
     isLoading: signInMutation.isPending || signUpMutation.isPending,
     error: signInMutation.error?.message || signUpMutation.error?.message,

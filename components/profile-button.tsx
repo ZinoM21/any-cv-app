@@ -15,9 +15,10 @@ import { useAuth } from "@/hooks/use-auth";
 import useSession from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
 import { LogOut, Menu, UserRound } from "lucide-react";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SignInDialog from "./sign-in-dialog";
 
 export function HeaderDropdownMenu({
   className,
@@ -119,14 +120,13 @@ export function HeaderDropdownMenu({
             >
               Sign Up
             </Button>
-            <Button
-              onClick={() => signIn()}
-              className="w-full text-sm"
-              size="sm"
-              variant="outline"
-            >
-              Login
-            </Button>
+            <SignInDialog
+              trigger={
+                <Button className="w-full text-sm" size="sm" variant="outline">
+                  Sign In
+                </Button>
+              }
+            />
           </DropdownMenuGroup>
         )}
       </DropdownMenuContent>

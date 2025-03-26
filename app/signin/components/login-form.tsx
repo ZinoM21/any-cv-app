@@ -18,8 +18,6 @@ import {
 } from "@/components/ui/form";
 import { SignInFormValues, signInSchema } from "@/lib/auth-schema";
 import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
-import { toast } from "sonner";
 
 export function SignInForm({
   className,
@@ -30,7 +28,7 @@ export function SignInForm({
   onSuccess?: () => void;
   redirect?: boolean;
 }) {
-  const { signIn, signUp, isLoading, error } = useAuth();
+  const { signIn, signUp, isLoading } = useAuth();
 
   const signInForm = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -40,15 +38,9 @@ export function SignInForm({
     },
   });
 
-  const submit = signInForm.handleSubmit(async (values) => {
-    signIn({ ...values, redirect, onSuccess });
+  const submit = signInForm.handleSubmit(async (credentials) => {
+    signIn(credentials, { redirect, onSuccess });
   });
-
-  useEffect(() => {
-    if (error === "CredentialsSignin") {
-      toast.error("Invalid credentials. Try another email or password.");
-    }
-  }, [error]);
 
   return (
     <Form {...signInForm}>

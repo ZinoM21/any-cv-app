@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function LoginPage() {
   const session = await auth();
@@ -15,7 +16,7 @@ export default async function LoginPage() {
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
-      <div className="flex flex-col gap-6 w-full max-w-sm md:max-w-3xl">
+      <div className="flex flex-col gap-6 w-full max-w-sm md:max-w-3xl z-10">
         <div className="flex items-center gap-2 self-center font-medium">
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <FileUser className="size-4" />
@@ -48,7 +49,8 @@ export default async function LoginPage() {
           </Card>
           <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
             By clicking continue, you agree to our{" "}
-            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            <Link href="/terms">Terms of Service</Link> and{" "}
+            <Link href="/privacy">Privacy Policy</Link>.
           </div>
         </div>
       </div>

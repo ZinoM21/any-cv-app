@@ -16,10 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { SignUpFormValues, signUpSchema } from "@/lib/auth-schema";
-import { signIn } from "next-auth/react";
 
 export function SignUpForm() {
-  const { signUp, isLoading, error } = useAuth();
+  const { signIn, signUp, isLoading, error } = useAuth();
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -143,11 +142,12 @@ export function SignUpForm() {
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Button
+              type="button"
               variant="link"
               className="font-normal p-0"
-              onClick={() => signIn()}
+              onClick={() => signIn()} // redirect to /signin
             >
-              Sign in
+              Sign In
             </Button>
           </p>
         </form>

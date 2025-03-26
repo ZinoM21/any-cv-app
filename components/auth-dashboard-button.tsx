@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 
 import useSession from "@/hooks/use-session";
 import { useAuth } from "@/hooks/use-auth";
 
 import { Button, ButtonProps } from "./ui/button";
+import SignInDialog from "./sign-in-dialog";
 
 export default function AuthOrDashboardButton({ className }: ButtonProps) {
   const { signUp } = useAuth();
@@ -20,13 +20,13 @@ export default function AuthOrDashboardButton({ className }: ButtonProps) {
         </Button>
       ) : (
         <div className="inline-flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => signIn()}
-            className={className}
-          >
-            Sign In
-          </Button>
+          <SignInDialog
+            trigger={
+              <Button variant="outline" className={className}>
+                Sign In
+              </Button>
+            }
+          />
           <Button onClick={() => signUp()} className={className}>
             Sign Up
           </Button>
