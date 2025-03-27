@@ -86,7 +86,7 @@ const ProjectsFieldArray = () => {
                 value={`project-${projectField.id}`}
                 className="border-none"
               >
-                <Card key={projectField.id}>
+                <Card key={projectField.id} className="mx-0.5">
                   <CardHeader className="p-4">
                     <AccordionTrigger className="py-0 min-w-0">
                       <div className="flex flex-1 items-start justify-between min-w-0">

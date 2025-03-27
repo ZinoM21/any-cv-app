@@ -79,16 +79,11 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginBottom: 5,
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
     flexDirection: "row",
-    width: "60%",
+    width: "100%",
     textAlign: "center",
-  },
-  projectSection: {
-    marginBottom: 6,
-  },
-  projectTitle: {
-    fontWeight: "bold",
+    gap: 10,
   },
 });
 
@@ -186,7 +181,7 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
                 project.title && (
                   <View key={project.title} style={styles.subSection}>
                     <View style={styles.subSectionHeader}>
-                      <Text style={styles.projectTitle}>{project.title}</Text>
+                      <Text>{project.title}</Text>
                       <Text style={styles.text}>
                         {formatDate(project.startDate)} -{" "}
                         {project?.endDate

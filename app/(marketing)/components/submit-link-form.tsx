@@ -123,18 +123,21 @@ export function SubmitLinkForm() {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="w-full sm:w-auto"
-          disabled={mutation.isPending || isNavigating}
-        >
-          {mutation.isPending || isNavigating ? "Generating..." : "Generate CV"}
-          {mutation.isPending || isNavigating ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            <FileUser />
-          )}
-        </Button>
+        <div>
+          <Button
+            type="submit"
+            className="w-full sm:w-auto"
+            disabled={mutation.isPending || isNavigating}
+          >
+            {mutation.isPending || isNavigating ? "Generating..." : "Generate"}
+            {mutation.isPending || isNavigating ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <FileUser />
+            )}
+          </Button>
+          <div className="mt-2 text-sm text-gray-500">It&apos;s free!</div>
+        </div>
       </form>
     </Form>
   );

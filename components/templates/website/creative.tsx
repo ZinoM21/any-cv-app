@@ -55,11 +55,11 @@ export default function TheCreativeWebsite({
               <h2 className="text-sm font-semibold text-gray-500 mb-6 uppercase">
                 Projects
               </h2>
-              <div className="grid gap-8 sm:grid-cols-2">
+              <div className="flex gap-8 flex-wrap">
                 {projects.map((project, index) => (
                   <div
                     key={index}
-                    className="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow"
+                    className="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow flex-1"
                   >
                     <div className="flex flex-col justify-between items-start mb-2">
                       <h3 className="text-xl font-semibold">{project.title}</h3>

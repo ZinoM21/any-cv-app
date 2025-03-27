@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const texts = ["Professional CV", "Standout Online Appearance"];
+const texts = ["Professional CV", "Standout Site"];
 
 export function RotatingText() {
   const [index, setIndex] = useState(0);
