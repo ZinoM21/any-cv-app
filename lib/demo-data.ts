@@ -85,6 +85,34 @@ export const demoData: ProfileData = {
         "Coursework included Data Structures, Algorithms, Computer Architecture, and Software Engineering",
     },
   ],
+  projects: [
+    {
+      title: "AI-Powered Chatbot",
+      startDate: new Date("2022-01-01T00:00:00"),
+      endDate: new Date("2022-12-31T00:00:00"),
+      description:
+        "Developed a chatbot using Python and TensorFlow that provides customer support for e-commerce platforms. Integrated with various APIs to fetch product information and order status.",
+      url: "https://example.com/chatbot",
+      associatedWith: "Tech Innovations Inc.",
+    },
+    {
+      title: "Personal Portfolio Website",
+      startDate: new Date("2021-01-01T00:00:00"),
+      endDate: new Date("2021-06-30T00:00:00"),
+      description:
+        "Created a personal portfolio website using React and Next.js to showcase projects and skills. Implemented responsive design principles to ensure compatibility across devices.",
+      url: "https://example.com/portfolio",
+    },
+    {
+      title: "Open Source Contribution",
+      startDate: new Date("2020-01-01T00:00:00"),
+      endDate: new Date("2020-12-31T00:00:00"),
+      description:
+        "Contributed to an open-source project on GitHub focused on improving accessibility features in web applications. Implemented keyboard navigation and screen reader support for various components.",
+      url: "https://www.example.com/open-source-contribution",
+      associatedWith: "Open Source Community",
+    },
+  ],
   skills: [
     "JavaScript",
     "React",
@@ -106,4 +134,5 @@ export const demoData: ProfileData = {
         "Mentored underrepresented youth in software development skills. Organized monthly workshops teaching web development basics. Helped develop curriculum for after-school coding programs reaching over 200 students annually.",
     },
   ],
+  languages: ["English", "Spanish"],
 };
