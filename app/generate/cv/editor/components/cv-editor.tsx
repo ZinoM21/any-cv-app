@@ -32,7 +32,7 @@ export default function CVEditor({
     <>
       <div className="flex lg:hidden w-full border-b bg-white">
         <button
-          className={`flex-1 border-b-2 py-4 text-center font-medium ${
+          className={`flex-1 border-b-2 py-2 sm:py-4 text-center font-medium ${
             activeView === "form"
               ? "border-blue-600 text-blue-600"
               : "border-transparent text-slate-600"
@@ -42,7 +42,7 @@ export default function CVEditor({
           Edit Information
         </button>
         <button
-          className={`flex-1 border-b-2 py-4 text-center font-medium ${
+          className={`flex-1 border-b-2 py-2 sm:py-4 text-center font-medium ${
             activeView === "preview"
               ? "border-blue-600 text-blue-600"
               : "border-transparent text-slate-600"

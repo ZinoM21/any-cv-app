@@ -172,10 +172,10 @@ export function EditorForm<T extends z.ZodTypeAny>({
     <Form {...formMethods}>
       <form
         onSubmit={handleSubmit((data) => submit(data))}
-        className="flex flex-col h-full"
+        className="flex flex-col h-full gap-4 sm:gap-6"
       >
         {/* Form Header */}
-        <div className="flex gap-2 w-full items-center justify-between mb-6">
+        <div className="flex gap-2 w-full items-center justify-between">
           <div className="flex items-center gap-2">
             {!isFirstTab && (
               <Button

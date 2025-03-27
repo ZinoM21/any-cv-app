@@ -70,13 +70,13 @@ const SkillsFormFields = () => {
 
   return (
     <Card className="mb-60">
-      <CardHeader>
+      <CardHeader className="p-4">
         <CardTitle className="text-base">Add Skills</CardTitle>
         <CardDescription>
           Add relevant skills that showcase your expertise
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 p-4 pt-0">
         <FormField
           control={control}
           name="skills"

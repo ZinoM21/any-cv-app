@@ -23,7 +23,7 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="z-10 flex items-center justify-between border-b bg-white p-4">
+      <div className="z-10 flex items-center justify-between border-b bg-white p-3 sm:p-4">
         <h2 className="text-lg font-medium text-slate-900">
           Preview for{" "}
           {profileData?.firstName ? `${profileData.firstName}'s` : ""}{" "}
