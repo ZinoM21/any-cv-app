@@ -15,7 +15,6 @@ import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardHeader,
@@ -124,13 +123,12 @@ export const SummaryFormFields = () => {
         )}
       />
 
-      {/* Languages Section */}
-      <Card className="">
+      <Card className="mx-0.5">
         <CardHeader className="p-4">
           <CardTitle className="text-base">Languages</CardTitle>
           <CardDescription>
-            Add languages you speak (e.g., "English - Fluent", "Spanish -
-            Intermediate")
+            Add languages you speak (e.g., &quot;English - Fluent&quot;,
+            &quot;Spanish - Intermediate&quot;)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 p-4 pt-0">
@@ -178,10 +176,8 @@ export const SummaryFormFields = () => {
           />
 
           {fields.length > 0 && (
-            <div>
-              <FormLabel className="mb-2 block text-sm font-medium">
-                Your Languages
-              </FormLabel>
+            <div className="space-y-2">
+              <FormLabel>Your Languages</FormLabel>
               <div className="flex flex-wrap gap-2">
                 {fields.map((field, index) => (
                   <FormField
@@ -189,14 +185,14 @@ export const SummaryFormFields = () => {
                     control={control}
                     name={`languages.${index}`}
                     render={({ field }) => (
-                      <FormItem className="">
+                      <FormItem>
                         <Badge variant="outline">
                           {field.value}
                           <Button
-                            onClick={() => remove(index)}
-                            className="ml-2 size-5 p-1 text-muted-foreground"
                             type="button"
                             variant="ghost"
+                            className="ml-1 size-5 p-1"
+                            onClick={() => remove(index)}
                           >
                             <X className="size-3" />
                           </Button>

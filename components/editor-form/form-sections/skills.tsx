@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
 import {
@@ -29,6 +28,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 export function SkillsForm({ tabName }: { tabName: EditorTabName }) {
   const { getSkillsInitialValues } = useEditorFormInitialValues();
@@ -69,7 +69,7 @@ const SkillsFormFields = () => {
   };
 
   return (
-    <Card className="mb-60">
+    <Card className="mb-60 mx-0.5">
       <CardHeader className="p-4">
         <CardTitle className="text-base">Add Skills</CardTitle>
         <CardDescription>
@@ -117,10 +117,8 @@ const SkillsFormFields = () => {
         />
 
         {fields.length > 0 && (
-          <div>
-            <Label className="mb-2 block text-sm font-medium">
-              Your Skills
-            </Label>
+          <div className="space-y-2">
+            <FormLabel>Your Skills</FormLabel>
             <div className="flex flex-wrap gap-2">
               {fields.map((field, index) => (
                 <FormField
@@ -128,17 +126,18 @@ const SkillsFormFields = () => {
                   control={control}
                   name={`skills.${index}`}
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <div className="flex items-center rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-800">
+                    <FormItem>
+                      <Badge variant="outline">
                         {field.value}
-                        <button
-                          onClick={() => remove(index)}
-                          className="ml-2 rounded-full p-1 text-slate-400 hover:bg-slate-200 hover:text-slate-700"
+                        <Button
                           type="button"
+                          variant="ghost"
+                          className="ml-1 size-5 p-1"
+                          onClick={() => remove(index)}
                         >
                           <X className="size-3" />
-                        </button>
-                      </div>
+                        </Button>
+                      </Badge>
                     </FormItem>
                   )}
                 />
