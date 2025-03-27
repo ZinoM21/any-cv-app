@@ -163,6 +163,16 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginBottom: 3,
   },
+  languageSection: {
+    marginBottom: 15,
+  },
+  languageItem: {
+    fontSize: 12,
+    backgroundColor: "#e0e0e0",
+    padding: "3 8",
+    borderRadius: 4,
+    margin: 3,
+  },
 });
 
 // Resume component
@@ -180,6 +190,7 @@ export const ResumeDocument = ({
     email,
     phone,
     location,
+    languages,
     experiences,
     education,
     skills,
@@ -331,6 +342,20 @@ export const ResumeDocument = ({
               {skills.map((skill) => (
                 <Text key={skill} style={styles.skill}>
                   {skill}
+                </Text>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Languages Section */}
+        {languages && languages.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Languages</Text>
+            <View style={styles.skills}>
+              {languages.map((language) => (
+                <Text key={language} style={styles.skill}>
+                  {language}
                 </Text>
               ))}
             </View>

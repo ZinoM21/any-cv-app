@@ -9,6 +9,7 @@ export const editSummaryFormSchema = z.object({
   email: z.string().email("Enter a valid email").optional().or(z.literal("")),
   phone: z.string().optional(),
   location: z.string().optional(),
+  languages: z.array(z.string()),
 });
 
 export type EditSummaryFormValues = z.infer<typeof editSummaryFormSchema>;

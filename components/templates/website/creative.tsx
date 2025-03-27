@@ -21,6 +21,7 @@ export default function TheCreativeWebsite({
     experiences,
     education,
     skills,
+    languages,
     volunteering,
     projects,
   } = profileData;
@@ -215,6 +216,23 @@ export default function TheCreativeWebsite({
                 ))}
             </ul>
           </section>
+
+          {/* Languages Section */}
+          {languages && languages.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-sm font-semibold text-blue-600 mb-4 uppercase">
+                Languages
+              </h2>
+              <ul className="space-y-2">
+                {languages.map((language, index) => (
+                  <li key={index} className="flex items-center">
+                    <ArrowRight className="h-4 w-4 mr-2 text-blue-600" />
+                    <span>{language}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <section className="mb-12">
             <h2 className="text-sm font-semibold text-blue-600 mb-4 uppercase">

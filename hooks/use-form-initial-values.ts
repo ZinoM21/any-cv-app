@@ -26,6 +26,7 @@ export const useEditorFormInitialValues = () => {
     email: profileData?.email || "",
     phone: profileData?.phone || "",
     location: profileData?.location || "",
+    languages: profileData?.languages || [],
   });
 
   /**

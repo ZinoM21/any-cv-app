@@ -105,6 +105,7 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
     experiences,
     education,
     skills,
+    languages,
     volunteering,
     projects,
   } = profileData;
@@ -249,6 +250,25 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
                     skill && (
                       <Text key={skill} style={styles.skill}>
                         {skill}
+                      </Text>
+                    )
+                )}
+              </View>
+            </View>
+          </View>
+        )}
+
+        {/* Languages Section */}
+        {languages && languages.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Languages</Text>
+            <View style={styles.subSection}>
+              <View style={styles.skills}>
+                {languages.map(
+                  (language) =>
+                    language && (
+                      <Text key={language} style={styles.skill}>
+                        {language}
                       </Text>
                     )
                 )}
