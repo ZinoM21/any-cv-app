@@ -34,7 +34,7 @@ export default function SignInDialog({
       <DialogContent className="grid lg:grid-cols-2 max-w-fit p-0">
         <div className="flex flex-col items-stretch gap-4 p-6">
           <DialogHeader className="flex flex-col items-center text-center">
-            <DialogTitle className="text-2xl">
+            <DialogTitle className="text-2xl text-center">
               {customTitle || "Log in to BuiltAnyCV"}
             </DialogTitle>
             <DialogDescription className="text-balance text-muted-foreground text-center max-w-72">

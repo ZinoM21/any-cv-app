@@ -23,8 +23,8 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="z-10 flex items-center justify-between border-b bg-white p-3 sm:p-4">
-        <h2 className="text-lg font-medium text-slate-900">
+      <div className="z-10 flex items-center justify-between border-b border-l border-grid bg-background p-3 sm:p-4">
+        <h2 className="font-medium">
           Preview for{" "}
           {profileData?.firstName ? `${profileData.firstName}'s` : ""}{" "}
           {template?.name} CV{" "}
@@ -32,14 +32,14 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
         <div className="flex items-center gap-2">
           <ZoomIn>
             {(props: RenderZoomInProps) => (
-              <Button variant="outline" size="icon" onClick={props.onClick}>
+              <Button variant="ghost" size="icon" onClick={props.onClick}>
                 <ZoomInIcon className="size-4" />
               </Button>
             )}
           </ZoomIn>
           <Zoom>
             {(props: RenderZoomProps) => (
-              <span className="text-sm text-slate-600">
+              <span className="text-sm text-muted-foreground">
                 {Math.round(props.scale * 100)}%
               </span>
             )}
@@ -47,14 +47,14 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
 
           <ZoomOut>
             {(props: RenderZoomOutProps) => (
-              <Button variant="outline" size="icon" onClick={props.onClick}>
+              <Button variant="ghost" size="icon" onClick={props.onClick}>
                 <ZoomOutIcon className="size-4" />
               </Button>
             )}
           </ZoomOut>
         </div>
       </div>
-      <div className="flex overflow-y-auto flex-1 justify-center bg-white">
+      <div className="flex overflow-y-auto flex-1 justify-center bg-muted">
         {profileData ? (
           <PDF
             data={profileData}
@@ -62,7 +62,9 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
             template={template}
           />
         ) : (
-          <PDFLoadingSkeleton />
+          <div className="pt-5">
+            <PDFLoadingSkeleton />
+          </div>
         )}
       </div>
     </div>

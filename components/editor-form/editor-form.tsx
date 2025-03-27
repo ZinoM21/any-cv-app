@@ -187,9 +187,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
                 <ChevronLeft />
               </Button>
             )}
-            <h2 className="text-xl font-semibold text-slate-900">
-              {capitalize(tabName)}
-            </h2>
+            <h2 className="text-xl font-semibold  ">{capitalize(tabName)}</h2>
           </div>
 
           <div className="flex gap-2">

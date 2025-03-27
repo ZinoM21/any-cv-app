@@ -142,9 +142,7 @@ export default function ExperienceFormFields({
       <div className="space-y-4">
         <div className="border-b pb-2">
           <div className="flex items-center justify-between">
-            <Label className="text-base font-medium text-slate-800">
-              Positions
-            </Label>
+            <Label className="text-base font-medium">Positions</Label>
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="sm">
@@ -213,7 +211,7 @@ export default function ExperienceFormFields({
                   <AccordionContent className="pb-0">
                     <div className="pt-3 space-y-4">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-medium text-slate-700">
+                        <h4 className="text-sm font-medium">
                           Position Details
                         </h4>
                         <AlertDialog>

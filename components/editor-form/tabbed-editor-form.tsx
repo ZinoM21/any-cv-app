@@ -50,7 +50,7 @@ export function TabbedEditorForm() {
     <Tabs
       value={activeTab}
       onValueChange={(string) => setActiveTab(string as EditorTabName)}
-      className="flex flex-col h-full border-r overflow-hidden p-3 sm:p-6 pb-0 gap-4 sm:gap-6"
+      className="flex flex-col h-full overflow-hidden p-3 sm:p-6 pb-0 gap-4 sm:gap-6"
     >
       <TabsList className="w-full flex-shrink-0">
         {Object.values(editorTabName).map((tabName) => (

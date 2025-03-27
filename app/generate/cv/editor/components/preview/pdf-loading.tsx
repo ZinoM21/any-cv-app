@@ -10,7 +10,7 @@ export const PDFLoadingSkeleton = ({
   return (
     <div className={cn("overflow-hidden w-[590px]", className)}>
       {/* A4 Paper with content */}
-      <div className="mx-auto bg-white shadow-md rounded-sm p-8 flex flex-col gap-4 border border-gray-200 mt-1">
+      <div className="mx-auto bg-background shadow-md rounded-sm p-8 flex flex-col gap-4 border border-gray-200 mt-1">
         {/* Header section */}
         <div className="flex items-start gap-4 mb-6">
           <Skeleton className="h-16 w-16 rounded-full flex-shrink-0" />

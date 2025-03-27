@@ -39,7 +39,7 @@ export default async function GeneratingPage({
       <div className="flex h-full flex-col items-center justify-center">
         <Card className="w-full max-w-md shadow-lg mx-auto">
           <CardHeader>
-            <CardTitle className="text-xl text-slate-900">
+            <CardTitle className="text-xl">
               Hey {profileData.firstName}, what do you want start with?
             </CardTitle>
             <CardDescription>
@@ -51,13 +51,13 @@ export default async function GeneratingPage({
           <CardContent className="grid gap-4 sm:grid-cols-2">
             <Link
               href={`/generate/cv/template?username=${username}`}
-              className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow"
+              className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-muted hover:shadow"
             >
               <div className="mb-3 rounded-full bg-blue-100 p-3">
                 <FileText className="h-6 w-6 text-blue-600" />
               </div>
-              <h3 className="mb-1 font-medium text-slate-900">CV</h3>
-              <p className="mb-3 text-sm text-slate-500">
+              <h3 className="mb-1 font-medium  ">CV</h3>
+              <p className="mb-3 text-sm text-muted0">
                 Create a professional resume
               </p>
               <span className="inline-flex items-center text-sm font-medium text-blue-600">
@@ -68,12 +68,12 @@ export default async function GeneratingPage({
 
             <Link
               href={`/generate/website/template?username=${username}`}
-              className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow"
+              className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-muted hover:shadow"
             >
               <div className="mb-3 rounded-full bg-purple-100 p-3">
                 <Globe className="h-6 w-6 text-purple-600" />
               </div>
-              <h3 className="mb-1 font-medium text-slate-900">Website</h3>
+              <h3 className="mb-1 font-medium  ">Website</h3>
               <p className="mb-3 text-sm text-slate-500">
                 Build your personal website
               </p>

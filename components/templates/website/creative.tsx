@@ -27,7 +27,7 @@ export default function TheCreativeWebsite({
   } = profileData;
 
   return (
-    <main className="min-h-screen bg-white p-8 md:p-12 lg:p-16">
+    <main className="min-h-screen bg-background p-8 md:p-12 lg:p-16">
       <div className="max-w-7xl mx-auto grid md:grid-cols-[1fr_400px] gap-12">
         {/* Left Column */}
         <div>

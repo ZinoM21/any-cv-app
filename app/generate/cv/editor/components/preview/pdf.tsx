@@ -45,7 +45,11 @@ export const PDF = ({
   }, [data, template.id]);
 
   if (!url || url === "") {
-    return <PDFLoadingSkeleton />;
+    return (
+      <div className="pt-5">
+        <PDFLoadingSkeleton />
+      </div>
+    );
   }
 
   return (
@@ -55,9 +59,21 @@ export const PDF = ({
       <Viewer
         fileUrl={url}
         plugins={plugins}
-        renderLoader={() => <PDFLoadingSkeleton />}
+        renderLoader={() => (
+          <div className="pt-5">
+            <PDFLoadingSkeleton />
+          </div>
+        )}
         theme="light"
         defaultScale={1}
+        pageLayout={{
+          buildPageStyles: ({ pageIndex }) => {
+            return {
+              paddingTop: pageIndex === 0 ? 20 : 0,
+              backgroundColor: "hsl(var(--muted))",
+            };
+          },
+        }}
       />
     </Worker>
   );

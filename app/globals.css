@@ -95,3 +95,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .border-grid {
+    @apply border-border/70 dark:border-border border-dashed;
+  }
+}

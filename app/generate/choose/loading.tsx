@@ -27,7 +27,7 @@ export default function LoadingGenerate() {
       <div className="flex h-full flex-col items-center justify-center">
         <Card className="w-full max-w-md shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl text-slate-900">
+            <CardTitle className="text-xl">
               <Skeleton className="w-24 h-6 mt-0.5" />
             </CardTitle>
             <CardDescription>
@@ -37,7 +37,7 @@ export default function LoadingGenerate() {
 
           <CardContent>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow">
+              <div className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow">
                 <Skeleton className="mb-3 rounded-full size-12" />
                 <Skeleton className="mb-3 h-5 w-7" />
                 <Skeleton className="mb-1 h-4 w-24" />
@@ -45,7 +45,7 @@ export default function LoadingGenerate() {
                 <Skeleton className="h-5 w-20" />
               </div>
 
-              <div className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow">
+              <div className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow">
                 <Skeleton className="mb-3 rounded-full size-12" />
                 <Skeleton className="mb-3 h-5 w-16" />
                 <Skeleton className="mb-1 h-4 w-24" />

@@ -36,7 +36,7 @@ export default function CVTemplateCard({
       </CardContent>
 
       <CardFooter className="flex flex-1 flex-col p-4 items-stretch border-t">
-        <h3 className="mb-1 font-medium text-slate-900">{template.name}</h3>
+        <h3 className="mb-1 font-medium  ">{template.name}</h3>
         <p className="mb-4 flex-1 text-sm text-muted-foreground">
           {template.description}
         </p>

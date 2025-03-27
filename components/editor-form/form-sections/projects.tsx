@@ -133,7 +133,7 @@ const ProjectsFieldArray = () => {
                     <CardContent className="px-4 pb-4 pt-0">
                       <div className="space-y-4">
                         <div className="flex items-center justify-between border-b pb-1">
-                          <h4 className="text-base font-medium text-slate-800">
+                          <h4 className="text-base font-medium">
                             Project Details
                           </h4>
                           <AlertDialog>
@@ -194,7 +194,7 @@ const ProjectsFieldArray = () => {
           <Button
             type="button"
             variant="outline"
-            className="w-full h-20 rounded-md border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-slate-500"
+            className="w-full h-20 rounded-md border-2 border-grid bg-muted p-6 text-center text-muted-foreground"
           >
             <Plus className="size-4" />
             Add Project

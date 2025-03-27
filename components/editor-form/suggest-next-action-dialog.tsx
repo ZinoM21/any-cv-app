@@ -44,7 +44,7 @@ export default function SuggestNextActionDialog({
 
         <Link
           href={`/generate/${nextAction}/template${searchParamsString}`}
-          className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow"
+          className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow"
         >
           <div
             className={`mb-3 rounded-full bg-${
@@ -57,9 +57,7 @@ export default function SuggestNextActionDialog({
               <Globe className="h-6 w-6 text-purple-600" />
             )}
           </div>
-          <h3 className="mb-1 font-medium text-slate-900">
-            {suggestCV ? "CV" : "Website"}
-          </h3>
+          <h3 className="mb-1 font-medium  ">{suggestCV ? "CV" : "Website"}</h3>
           <p className="mb-3 text-sm text-slate-500">
             {suggestCV
               ? "Create a professional resume"

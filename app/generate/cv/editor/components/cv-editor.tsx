@@ -30,12 +30,12 @@ export default function CVEditor({
 
   return (
     <>
-      <div className="flex lg:hidden w-full border-b bg-white">
+      <div className="flex lg:hidden w-full border-b bg-background">
         <button
           className={`flex-1 border-b-2 py-2 sm:py-4 text-center font-medium ${
             activeView === "form"
               ? "border-blue-600 text-blue-600"
-              : "border-transparent text-slate-600"
+              : "border-transparent text-muted-foreground"
           }`}
           onClick={() => setActiveView("form")}
         >
@@ -45,7 +45,7 @@ export default function CVEditor({
           className={`flex-1 border-b-2 py-2 sm:py-4 text-center font-medium ${
             activeView === "preview"
               ? "border-blue-600 text-blue-600"
-              : "border-transparent text-slate-600"
+              : "border-transparent text-muted-foreground"
           }`}
           onClick={() => setActiveView("preview")}
         >
@@ -61,7 +61,7 @@ export default function CVEditor({
               "lg:flex w-full flex-col lg:w-[40%] lg:max-w-xl"
             )}
           >
-            <div className="flex-1 overflow-y-auto bg-white">
+            <div className="flex-1 overflow-y-auto bg-background">
               <TabbedEditorForm />
             </div>
           </div>

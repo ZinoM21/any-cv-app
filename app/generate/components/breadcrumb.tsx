@@ -75,7 +75,7 @@ export default function BreadCrumb({
             <BreadcrumbSeparator className="hidden sm:block [&>svg]:w-5 [&>svg]:h-5" />
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-1 rounded hover:bg-slate-100 text-base">
+                <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-1 rounded hover:bg-accent text-base">
                   {currentMapping.label}
                   <ChevronsUpDown className="size-4" />
                 </DropdownMenuTrigger>
@@ -103,7 +103,7 @@ export default function BreadCrumb({
             <BreadcrumbSeparator className="[&>svg]:w-5 [&>svg]:h-5" />
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-1 rounded hover:bg-slate-100 text-base">
+                <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-1 rounded hover:bg-accent text-base">
                   {currentSubmapping.label}
                   <ChevronsUpDown className="size-4" />
                 </DropdownMenuTrigger>

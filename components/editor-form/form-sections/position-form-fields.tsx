@@ -40,7 +40,7 @@ export default function PositionFormFields({
               <Input
                 {...field}
                 placeholder="Senior Developer"
-                className="bg-white"
+                className="bg-background"
               />
             </FormControl>
             <FormMessage />
@@ -112,7 +112,7 @@ export default function PositionFormFields({
                 <Input
                   {...field}
                   placeholder="New York, NY"
-                  className="bg-white"
+                  className="bg-background"
                 />
               </FormControl>
               <FormMessage />
@@ -134,7 +134,7 @@ export default function PositionFormFields({
                   defaultValue={field.value || "not-specified"}
                   onValueChange={field.onChange}
                 >
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Click to select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -164,7 +164,7 @@ export default function PositionFormFields({
                 {...field}
                 rows={4}
                 placeholder="Describe your responsibilities and achievements..."
-                className="bg-white"
+                className="bg-background"
               />
             </FormControl>
             <FormMessage />

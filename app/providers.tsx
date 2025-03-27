@@ -1,6 +1,9 @@
 "use client";
 
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+
 import { TooltipProvider } from "@/components/ui/tooltip";
+
 import {
   isServer,
   QueryClient,
@@ -54,7 +57,13 @@ export function Providers({
       refetchOnWindowFocus
     >
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>{children}</TooltipProvider>
+        <NextThemesProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
+          <TooltipProvider>{children}</TooltipProvider>
+        </NextThemesProvider>
       </QueryClientProvider>
     </SessionProvider>
   );

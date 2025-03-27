@@ -11,7 +11,10 @@ export default function BuiltAnyCVLogo({
   return (
     <Link
       href={props.href || "/"}
-      className={cn("-m-1.5 p-1.5 font-semibold text-xl text-slate-900", className)}
+      className={cn(
+        "-m-1.5 p-1.5 font-semibold text-xl text-foreground",
+        className
+      )}
       {...props}
     >
       built<span className="text-primary">any</span>cv
