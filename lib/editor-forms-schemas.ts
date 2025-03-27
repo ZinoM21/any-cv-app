@@ -6,6 +6,9 @@ export const editSummaryFormSchema = z.object({
   lastName: z.string().min(1, "Last name is required"),
   headline: z.string().optional(),
   about: z.string().optional(),
+  email: z.string().email("Enter a valid email").optional().or(z.literal("")),
+  phone: z.string().optional(),
+  location: z.string().optional(),
 });
 
 export type EditSummaryFormValues = z.infer<typeof editSummaryFormSchema>;
@@ -106,3 +109,22 @@ export const addNewVolunteeringFormSchema = volunteeringSchema;
 export type AddNewVolunteeringFormValues = z.infer<
   typeof addNewVolunteeringFormSchema
 >;
+
+// Projects
+const projectSchema = z.object({
+  title: z.string().min(1, "Enter a project title"),
+  startDate: z.coerce.date({ required_error: "Enter a start date" }),
+  endDate: z.coerce.date().optional(),
+  description: z.string().optional(),
+  url: z.string().optional(),
+  associatedWith: z.string().optional(),
+});
+
+export const editProjectsFormSchema = z.object({
+  projects: z.array(projectSchema),
+});
+
+export type EditProjectsFormValues = z.infer<typeof editProjectsFormSchema>;
+
+export const addNewProjectFormSchema = projectSchema;
+export type AddNewProjectFormValues = z.infer<typeof addNewProjectFormSchema>;

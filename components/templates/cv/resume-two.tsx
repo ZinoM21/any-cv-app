@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   Image,
+  Link,
 } from "@react-pdf/renderer";
 import { ProfileData } from "@/lib/types";
 import { format } from "date-fns";
@@ -124,6 +125,44 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
+  contactInfo: {
+    fontSize: 12,
+    color: "#666",
+    marginBottom: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  contactItem: {
+    marginRight: 10,
+  },
+  projectItem: {
+    marginBottom: 15,
+  },
+  projectHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 5,
+  },
+  projectTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  projectUrl: {
+    fontSize: 12,
+    color: "#0066cc",
+    textDecoration: "underline",
+  },
+
+  technology: {
+    fontSize: 11,
+    color: "#555",
+    backgroundColor: "#f0f0f0",
+    padding: "2 5",
+    borderRadius: 3,
+    marginRight: 5,
+    marginBottom: 3,
+  },
 });
 
 // Resume component
@@ -138,10 +177,14 @@ export const ResumeDocument = ({
     profilePictureUrl,
     headline,
     about,
+    email,
+    phone,
+    location,
     experiences,
     education,
     skills,
     volunteering,
+    projects,
   } = profileData;
 
   return (
@@ -159,6 +202,16 @@ export const ResumeDocument = ({
               {firstName} {lastName}
             </Text>
             {headline && <Text style={styles.headline}>{headline}</Text>}
+
+            {/* Contact Information */}
+            {(email || phone || location) && (
+              <View style={styles.contactInfo}>
+                {email && <Text style={styles.contactItem}>{email}</Text>}
+                {phone && <Text style={styles.contactItem}>{phone}</Text>}
+                {location && <Text style={styles.contactItem}>{location}</Text>}
+              </View>
+            )}
+
             {about && <Text style={styles.about}>{about}</Text>}
           </View>
         </View>
@@ -203,6 +256,40 @@ export const ResumeDocument = ({
                     )}
                   </View>
                 ))}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Projects Section */}
+        {projects && projects.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Projects</Text>
+            {projects.map((project) => (
+              <View key={project.title} style={styles.projectItem}>
+                <View style={styles.projectHeader}>
+                  <Text style={styles.projectTitle}>{project.title}</Text>
+                  <Text style={styles.dates}>
+                    {format(project.startDate, "MMM uu")} -{" "}
+                    {project.endDate
+                      ? format(project.endDate, "MMM uu")
+                      : "Present"}
+                  </Text>
+                </View>
+
+                {project.associatedWith && (
+                  <Text style={styles.position}>{project.associatedWith}</Text>
+                )}
+
+                {project.url && (
+                  <Link src={project.url}>
+                    <Text style={styles.projectUrl}>{project.url}</Text>
+                  </Link>
+                )}
+
+                {project.description && (
+                  <Text style={styles.description}>{project.description}</Text>
+                )}
               </View>
             ))}
           </View>

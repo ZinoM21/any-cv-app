@@ -9,10 +9,14 @@ export type ProfileData = {
   profilePictureUrl?: string;
   headline?: string;
   about?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
   experiences: Experience[] | [];
   education: Education[] | [];
   skills: string[] | [];
   volunteering: VolunteeringExperience[] | [];
+  projects: Project[] | [];
 };
 
 export type Experience = {
@@ -54,6 +58,15 @@ export type VolunteeringExperience = {
   startDate: Date;
   endDate?: Date;
   description?: string;
+};
+
+export type Project = {
+  title: string;
+  startDate: Date;
+  endDate?: Date;
+  description?: string;
+  url?: string;
+  associatedWith?: string;
 };
 
 export type NavItem = {

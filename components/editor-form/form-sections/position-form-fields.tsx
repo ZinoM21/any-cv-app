@@ -131,7 +131,7 @@ export default function PositionFormFields({
               <FormControl>
                 <Select
                   {...field}
-                  defaultValue={field.value || undefined}
+                  defaultValue={field.value || "not-specified"}
                   onValueChange={field.onChange}
                 >
                   <SelectTrigger className="bg-white">
@@ -139,9 +139,9 @@ export default function PositionFormFields({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="not-specified">Not specified</SelectItem>
-                    <SelectItem value="on-site">On-site</SelectItem>
-                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                    <SelectItem value="remote">Remote</SelectItem>
+                    <SelectItem value="On-site">On-site</SelectItem>
+                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                    <SelectItem value="Remote">Remote</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>

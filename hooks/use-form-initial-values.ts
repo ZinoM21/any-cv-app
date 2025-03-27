@@ -5,6 +5,7 @@ import {
   EditExperiencesFormValues,
   EditSkillsFormValues,
   EditVolunteeringFormValues,
+  EditProjectsFormValues,
 } from "@/lib/editor-forms-schemas";
 
 /**
@@ -22,6 +23,9 @@ export const useEditorFormInitialValues = () => {
     lastName: profileData?.lastName || "",
     headline: profileData?.headline || "",
     about: profileData?.about || "",
+    email: profileData?.email || "",
+    phone: profileData?.phone || "",
+    location: profileData?.location || "",
   });
 
   /**
@@ -106,11 +110,30 @@ export const useEditorFormInitialValues = () => {
       [],
   });
 
+  /**
+   * Get initial values for Projects form
+   */
+  const getProjectsInitialValues = (): EditProjectsFormValues => {
+    return {
+      projects: profileData?.projects
+        ? profileData.projects.map((project) => ({
+            title: project.title,
+            startDate: new Date(project.startDate),
+            endDate: project.endDate ? new Date(project.endDate) : undefined,
+            description: project.description || "",
+            url: project.url || "",
+            associatedWith: project.associatedWith || "",
+          }))
+        : [],
+    };
+  };
+
   return {
     getSummaryInitialValues,
     getEducationInitialValues,
     getExperienceInitialValues,
     getSkillsInitialValues,
     getVolunteeringInitialValues,
+    getProjectsInitialValues,
   };
 };

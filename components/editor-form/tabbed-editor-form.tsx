@@ -13,6 +13,7 @@ import {
   EDUCATION,
   SKILLS,
   VOLUNTEERING,
+  PROJECTS,
   EditorTabName,
   editorTabName,
 } from "@/config/editor-tab-names";
@@ -22,6 +23,7 @@ import { ExperiencesForm } from "./form-sections/experience";
 import { SkillsForm } from "./form-sections/skills";
 import { SummaryForm } from "./form-sections/summary";
 import { VolunteeringForm } from "./form-sections/volunteering";
+import { ProjectsForm } from "./form-sections/projects";
 
 const editorTabFormComponentMap: {
   [P in EditorTabName]: React.FC<{ tabName: EditorTabName }>;
@@ -31,6 +33,7 @@ const editorTabFormComponentMap: {
   [EDUCATION]: EducationForm,
   [SKILLS]: SkillsForm,
   [VOLUNTEERING]: VolunteeringForm,
+  [PROJECTS]: ProjectsForm,
 };
 
 export function TabbedEditorForm() {
@@ -47,7 +50,7 @@ export function TabbedEditorForm() {
     <Tabs
       value={activeTab}
       onValueChange={(string) => setActiveTab(string as EditorTabName)}
-      className="flex flex-col h-full border-r overflow-hidden px-6 pt-6 gap-6"
+      className="flex flex-col h-full border-r overflow-hidden p-3 sm:p-6 pb-0 gap-4 sm:gap-6"
     >
       <TabsList className="w-full flex-shrink-0">
         {Object.values(editorTabName).map((tabName) => (
@@ -64,7 +67,11 @@ export function TabbedEditorForm() {
       </TabsList>
 
       {Object.values(editorTabName).map((tabName) => (
-        <TabsContent key={tabName} value={tabName} className="overflow-hidden">
+        <TabsContent
+          key={tabName}
+          value={tabName}
+          className="overflow-hidden mt-0"
+        >
           {getFormComponent(tabName)}
         </TabsContent>
       ))}

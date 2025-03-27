@@ -4,6 +4,7 @@ export const EXPERIENCE = "experience" as const;
 export const EDUCATION = "education" as const;
 export const SKILLS = "skills" as const;
 export const VOLUNTEERING = "volunteering" as const;
+export const PROJECTS = "projects" as const;
 
 export const editorTabName = {
   Summary: SUMMARY,
@@ -11,6 +12,7 @@ export const editorTabName = {
   Education: EDUCATION,
   Skills: SKILLS,
   Volunteering: VOLUNTEERING,
+  Projects: PROJECTS,
 } as const;
 
-export type EditorTabName = typeof editorTabName[keyof typeof editorTabName]; 
+export type EditorTabName = (typeof editorTabName)[keyof typeof editorTabName];

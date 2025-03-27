@@ -20,9 +20,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 8,
   },
-  contact: {
-    marginTop: 2,
-  },
   aboutSection: {
     marginBottom: 10,
     borderTop: "2px solid #000",
@@ -78,6 +75,21 @@ const styles = StyleSheet.create({
   skillItem: {
     marginRight: 10,
   },
+  contactInfo: {
+    marginTop: 2,
+    marginBottom: 5,
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    width: "60%",
+    textAlign: "center",
+  },
+  projectSection: {
+    marginBottom: 6,
+  },
+  projectTitle: {
+    fontWeight: "bold",
+  },
 });
 
 // Create Document Component
@@ -85,13 +97,16 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
   const {
     firstName,
     lastName,
-    username,
     headline,
     about,
+    email,
+    phone,
+    location,
     experiences,
     education,
     skills,
     volunteering,
+    projects,
   } = profileData;
 
   // Helper function to format dates
@@ -107,7 +122,13 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
             {firstName} {lastName}
           </Text>
           {headline && <Text>{headline}</Text>}
-          {username && <Text style={styles.contact}>{username}</Text>}
+
+          {/* Contact Information */}
+          <View style={styles.contactInfo}>
+            {email && <Text>{email}</Text>}
+            {phone && <Text>{phone}</Text>}
+            {location && <Text>{location}</Text>}
+          </View>
         </View>
 
         {/* About Section */}
@@ -149,6 +170,41 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
                           )}
                         </View>
                       ))}
+                  </View>
+                )
+            )}
+          </View>
+        )}
+
+        {/* Projects Section */}
+        {projects && projects.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Projects</Text>
+            {projects.map(
+              (project) =>
+                project.title && (
+                  <View key={project.title} style={styles.subSection}>
+                    <View style={styles.subSectionHeader}>
+                      <Text style={styles.projectTitle}>{project.title}</Text>
+                      <Text style={styles.text}>
+                        {formatDate(project.startDate)} -{" "}
+                        {project?.endDate
+                          ? formatDate(project.endDate)
+                          : "Present"}
+                      </Text>
+                    </View>
+
+                    {project.associatedWith && (
+                      <Text style={styles.text}>
+                        Associated with: {project.associatedWith}
+                      </Text>
+                    )}
+
+                    {project.description && (
+                      <View style={styles.description}>
+                        <Text>{project.description}</Text>
+                      </View>
+                    )}
                   </View>
                 )
             )}
