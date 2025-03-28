@@ -15,15 +15,10 @@ import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+
 import { EditSummaryFormValues } from "@/lib/editor-forms-schemas";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 export const SummaryFormFields = () => {
   const { control } = useFormContext<EditSummaryFormValues>();
@@ -123,89 +118,86 @@ export const SummaryFormFields = () => {
         )}
       />
 
-      <Card className="mx-0.5">
-        <CardHeader className="p-4">
-          <CardTitle className="text-base">Languages</CardTitle>
-          <CardDescription>
-            Add languages you speak (e.g., &quot;English - Fluent&quot;,
-            &quot;Spanish - Intermediate&quot;)
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4 p-4 pt-0">
-          <FormField
-            control={control}
-            name="languages"
-            render={({ field }) => (
-              <FormItem className="flex gap-2 space-y-0">
-                <FormLabel htmlFor="newLanguage" className="sr-only">
-                  New Language
-                </FormLabel>
-                <div className="flex-1 space-y-2">
-                  <FormControl>
-                    <Input
-                      id="newLanguage"
-                      value={newLanguage}
-                      onChange={(e) => setNewLanguage(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          addNewLanguage(field.value);
-                        }
-                      }}
-                      placeholder="e.g., JavaScript, Project Management, UX Design"
-                      className="h-8"
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Pro tip: Press Enter to quickly add a language{" "}
-                  </FormDescription>
-                  <FormMessage />
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => addNewLanguage(field.value)}
-                  disabled={!isNewUniqueLanguage(field.value, newLanguage)}
-                >
-                  <Plus className="mr-2 size-4" />
-                  Add
-                </Button>
-              </FormItem>
-            )}
-          />
+      <Separator className="mt-4" />
 
-          {fields.length > 0 && (
-            <div className="space-y-2">
-              <FormLabel>Your Languages</FormLabel>
-              <div className="flex flex-wrap gap-2">
-                {fields.map((field, index) => (
-                  <FormField
-                    key={field.id}
-                    control={control}
-                    name={`languages.${index}`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <Badge variant="outline">
-                          {field.value}
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            className="ml-1 size-5 p-1"
-                            onClick={() => remove(index)}
-                          >
-                            <X className="size-3" />
-                          </Button>
-                        </Badge>
-                      </FormItem>
-                    )}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <h3 className="font-medium">Languages</h3>
+
+      <FormField
+        control={control}
+        name="languages"
+        render={({ field }) => (
+          <div className="flex gap-2">
+            <FormItem className="flex-1 flex flex-col gap-2 space-y-0">
+              <FormLabel htmlFor="newLanguage" className="sr-only">
+                New Language
+              </FormLabel>
+              <FormControl>
+                <Input
+                  id="newLanguage"
+                  value={newLanguage}
+                  onChange={(e) => setNewLanguage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addNewLanguage(field.value);
+                    }
+                  }}
+                  placeholder="e.g., JavaScript, Project Management, UX Design"
+                  className="h-8"
+                />
+              </FormControl>
+              <FormDescription>
+                Add languages you speak (e.g., &quot;English - Fluent&quot;,
+                &quot;Spanish - Native&quot;).
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => addNewLanguage(field.value)}
+              disabled={!isNewUniqueLanguage(field.value, newLanguage)}
+            >
+              <Plus className="mr-2 size-4" />
+              Add
+            </Button>
+          </div>
+        )}
+      />
+
+      {fields.length > 0 && (
+        <div className="space-y-2">
+          <FormLabel>Your Languages</FormLabel>
+          <div className="flex flex-wrap gap-2">
+            {fields.map((field, index) => (
+              <FormField
+                key={field.id}
+                control={control}
+                name={`languages.${index}`}
+                render={({ field }) => (
+                  <FormItem>
+                    <Badge variant="secondary">
+                      {field.value}
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="ml-1 size-5 p-1"
+                        onClick={() => remove(index)}
+                      >
+                        <X className="size-3" />
+                      </Button>
+                    </Badge>
+                  </FormItem>
+                )}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+      {/* </CardContent>
+      </Card> */}
     </>
   );
 };

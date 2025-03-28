@@ -61,13 +61,13 @@ export default function SignInDialog({
           />
         </div>
         <div className="absolute w-full h-full flex flex-col items-center rounded-lg -z-10">
-          <div className="absolute -top-12 flex items-center gap-2 self-center font-medium text-white">
+          <div className="absolute -top-12 flex items-center gap-2 self-center font-medium text-foreground">
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <FileUser className="size-4" />
             </div>
-            <BuiltAnyCVLogo className="text-white" />
+            <BuiltAnyCVLogo className="text-foreground" />
           </div>
-          <div className="absolute -bottom-12 text-balance text-center text-xs text-white [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
+          <div className="absolute -bottom-12 text-balance text-center text-xs text-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
             By clicking continue, you agree to our{" "}
             <Link href="/terms">Terms of Service</Link> and{" "}
             <Link href="/privacy">Privacy Policy</Link>.

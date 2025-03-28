@@ -36,7 +36,7 @@ export default function WebsitePreviewPopup({
         className="h-[90vh] w-[90vw] max-w-[1400px] p-0"
         showClose={false}
       >
-        <DialogHeader className="absolute flex-row space-y-0 w-full justify-between items-center -top-10 text-white">
+        <DialogHeader className="absolute flex-row space-y-0 w-full justify-between items-center -top-10 text-foreground">
           <DialogTitle>{templateName} Template - Preview</DialogTitle>
           <DialogClose asChild>
             <Button type="button" variant="outline" size="sm" className="p-2">

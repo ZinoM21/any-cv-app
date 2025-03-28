@@ -1,8 +1,7 @@
 "use client";
 
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Plus, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,22 +16,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import Image from "next/image";
 import { EditorForm } from "../editor-form";
@@ -42,10 +25,10 @@ import {
   editEducationFormSchema,
   EditEducationFormValues,
 } from "@/lib/editor-forms-schemas";
-import { useState } from "react";
 import { EditorTabName } from "@/config/editor-tab-names";
-import { cn } from "@/lib/utils";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
+import AddNewPopover from "../add-new-popover";
+import RemoveAlertDialog from "../remove-alert-dialog";
 
 export function EducationForm({ tabName }: { tabName: EditorTabName }) {
   const { getEducationInitialValues } = useEditorFormInitialValues();
@@ -63,8 +46,6 @@ export function EducationForm({ tabName }: { tabName: EditorTabName }) {
 }
 
 const EducationFieldArray = () => {
-  const [popoverOpen, setPopoverOpen] = useState(false);
-
   const { control } = useFormContext<EditEducationFormValues>();
   const { fields, prepend, remove } = useFieldArray({
     control,
@@ -97,41 +78,46 @@ const EducationFieldArray = () => {
   // };
 
   return (
-    <div className="space-y-6 mb-60">
+    <div className="flex flex-col gap-6 mb-60">
       {fields.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-sm font-medium text-slate-500">
+          <h3 className="text-sm font-medium text-muted-foreground">
             Added Education
           </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
-            {fields.map((field, index) => (
+            {fields.map((eduField, index) => (
               <AccordionItem
-                key={field.id}
-                value={`experience-${field.id}`}
+                key={eduField.id}
+                value={`education-${eduField.id}`}
                 className="border-none"
               >
-                <Card key={field.id} className="mx-0.5">
-                  <CardHeader className="p-4">
-                    <AccordionTrigger className="py-0 min-w-0">
+                <Card key={eduField.id} className="mx-0.5 shadow-sm rounded-lg">
+                  <CardHeader className="p-0">
+                    <AccordionTrigger className="p-4 min-w-0 rounded-lg hover:no-underline hover:bg-accent data-[state=open]:hover:bg-background">
                       <div className="flex flex-1 items-start justify-between min-w-0">
                         <div className="flex items-center gap-3 min-w-0">
-                          {field.schoolPictureUrl ? (
-                            <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
-                              <Image
-                                src={
-                                  field?.schoolPictureUrl || "/placeholder.svg"
-                                }
-                                alt={field?.school}
-                                width={80}
-                                height={80}
-                              />
-                            </div>
-                          ) : (
-                            <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
-                              Logo
-                            </div>
-                          )}
+                          <FormField
+                            name={`education.${index}.schoolPictureUrl`}
+                            render={({ field }) => (
+                              <>
+                                {field?.value ? (
+                                  <div className="size-10 min-w-10 overflow-hidden rounded-md bg-muted">
+                                    <Image
+                                      src={field?.value}
+                                      alt={eduField?.school || ""}
+                                      width={80}
+                                      height={80}
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="flex size-10 min-w-10 items-center justify-center rounded-md border-2 border-grid bg-muted text-muted-foreground text-center text-xs">
+                                    Logo
+                                  </div>
+                                )}
+                              </>
+                            )}
+                          />
                           <div className="min-w-0">
                             <CardTitle className="text-base">
                               <FormField
@@ -142,7 +128,7 @@ const EducationFieldArray = () => {
                                       {field.value}
                                     </span>
                                   ) : (
-                                    <span>Experience {index + 1}</span>
+                                    <span>Education {index + 1}</span>
                                   )
                                 }
                               />
@@ -156,9 +142,7 @@ const EducationFieldArray = () => {
                                       {field.value}
                                     </span>
                                   ) : (
-                                    <span>
-                                      School of experience {index + 1}
-                                    </span>
+                                    <span>School of education {index + 1}</span>
                                   )
                                 }
                               />
@@ -176,44 +160,10 @@ const EducationFieldArray = () => {
                           <h4 className="text-base font-medium">
                             Education Details
                           </h4>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="text-slate-400 hover:text-red-500"
-                              >
-                                <Trash />
-                                Remove
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Are you absolutely sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  This action cannot be undone. This will
-                                  permanently remove this education entry from
-                                  our servers.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  className={cn(
-                                    buttonVariants({
-                                      variant: "destructive",
-                                    })
-                                  )}
-                                  onClick={() => remove(index)}
-                                >
-                                  Yes, remove
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                          <RemoveAlertDialog
+                            type="education"
+                            onRemove={() => remove(index)}
+                          />
                         </div>
                         <EducationFormFields
                           fieldNamePrefix={`education.${index}`}
@@ -227,35 +177,22 @@ const EducationFieldArray = () => {
           </Accordion>
         </div>
       )}
-      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full h-20 rounded-md border-2 border-grid bg-muted p-6 text-center text-muted-foreground"
-          >
-            <Plus className="size-4" />
-            Add Education
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[600px] p-4" side="right">
+
+      <AddNewPopover title="Add Education">
+        {(onClose) => (
           <AddNewEducationForm
             addToEducations={(data) => {
               prepend(data);
-              setPopoverOpen(false);
+              onClose();
             }}
             cancelButton={
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setPopoverOpen(false)}
-              >
+              <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
             }
           />
-        </PopoverContent>
-      </Popover>
+        )}
+      </AddNewPopover>
     </div>
   );
 };

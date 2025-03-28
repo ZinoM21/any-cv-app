@@ -68,7 +68,7 @@ export default function VolunteeringFormFields({
             <FormControl>
               <div className="flex items-center gap-4">
                 {field.value ? (
-                  <div className="h-16 w-16 overflow-hidden rounded-md bg-slate-100">
+                  <div className="h-16 w-16 overflow-hidden rounded-md bg-muted">
                     <Image
                       src={field.value || "/placeholder.svg"}
                       alt={organizationName + "Logo" || ""}
@@ -78,7 +78,7 @@ export default function VolunteeringFormFields({
                     />
                   </div>
                 ) : (
-                  <span className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400">
+                  <span className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-dashed border-muted bg-muted text-muted-foreground">
                     Logo
                   </span>
                 )}

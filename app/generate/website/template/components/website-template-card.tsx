@@ -17,7 +17,7 @@ export default function WebsiteTemplateCard({
 }) {
   return (
     <Card className="group/card flex flex-col overflow-hidden transition-all hover:shadow-md">
-      <CardContent className="relative aspect-[5/3] w-full overflow-hidden bg-slate-100">
+      <CardContent className="relative aspect-[5/3] w-full overflow-hidden bg-muted">
         <Image
           src={getWebsitePreviewImage(template.id)}
           alt={`${template.name} CV Template Preview`}

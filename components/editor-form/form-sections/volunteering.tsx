@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,24 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Plus, Trash } from "lucide-react";
 import { FormField } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import { EditorForm } from "../editor-form";
 import VolunteeringFormFields from "./volunteering-form-fields";
@@ -45,8 +27,9 @@ import {
 } from "@/lib/editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tab-names";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
+import AddNewPopover from "../add-new-popover";
+import RemoveAlertDialog from "../remove-alert-dialog";
 
 export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
   const { getVolunteeringInitialValues } = useEditorFormInitialValues();
@@ -64,8 +47,6 @@ export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
 }
 
 const VolunteeringFieldArray = () => {
-  const [popoverOpen, setPopoverOpen] = useState(false);
-
   const { control } = useFormContext<EditVolunteeringFormValues>();
 
   const { fields, remove, prepend } = useFieldArray({
@@ -74,23 +55,23 @@ const VolunteeringFieldArray = () => {
   });
 
   return (
-    <div className="space-y-6  mb-60">
+    <div className="flex flex-col gap-6 mb-60">
       {fields.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-sm font-medium text-slate-500">
-            Added Volunteering Experience
+          <h3 className="text-sm font-medium text-muted-foreground">
+            Added Volunteering
           </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
-            {fields.map((volunteeringField, index) => (
+            {fields.map((volField, index) => (
               <AccordionItem
-                key={volunteeringField.id}
-                value={`volunteering-${volunteeringField.id}`}
+                key={volField.id}
+                value={`volunteering-${volField.id}`}
                 className="border-none"
               >
-                <Card key={volunteeringField.id} className="mx-0.5">
-                  <CardHeader className="p-4">
-                    <AccordionTrigger className="py-0 min-w-0">
+                <Card key={volField.id} className="mx-0.5 shadow-sm rounded-lg">
+                  <CardHeader className="p-0">
+                    <AccordionTrigger className="p-4 min-w-0 rounded-lg hover:no-underline hover:bg-accent data-[state=open]:hover:bg-background">
                       <div className="flex flex-1 items-start justify-between min-w-0">
                         <div className="flex items-center gap-3 min-w-0">
                           <FormField
@@ -98,18 +79,16 @@ const VolunteeringFieldArray = () => {
                             render={({ field }) => (
                               <>
                                 {field?.value ? (
-                                  <div className="size-10 min-w-10 overflow-hidden rounded-md bg-slate-100">
+                                  <div className="size-10 min-w-10 overflow-hidden rounded-md bg-muted">
                                     <Image
-                                      src={field?.value || "/placeholder.svg"}
-                                      alt={
-                                        volunteeringField?.organization || ""
-                                      }
+                                      src={field?.value}
+                                      alt={volField?.organization || ""}
                                       width={80}
                                       height={80}
                                     />
                                   </div>
                                 ) : (
-                                  <div className="flex size-10 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 text-xs">
+                                  <div className="flex size-10 min-w-10 items-center justify-center rounded-md border-2 border-grid bg-muted text-muted-foreground text-center text-xs">
                                     Logo
                                   </div>
                                 )}
@@ -140,7 +119,9 @@ const VolunteeringFieldArray = () => {
                                       {field.value}
                                     </span>
                                   ) : (
-                                    <span>Organization {index + 1}</span>
+                                    <span>
+                                      Organization of volunteering {index + 1}
+                                    </span>
                                   )
                                 }
                               />
@@ -158,44 +139,10 @@ const VolunteeringFieldArray = () => {
                           <h4 className="text-base font-medium">
                             Volunteering Details
                           </h4>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="text-slate-400 hover:text-red-500"
-                              >
-                                <Trash className="size-4" />
-                                Remove
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Are you absolutely sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  This action cannot be undone. This will
-                                  permanently remove this volunteering entry
-                                  from our servers.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  className={cn(
-                                    buttonVariants({
-                                      variant: "destructive",
-                                    })
-                                  )}
-                                  onClick={() => remove(index)}
-                                >
-                                  Yes, remove
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                          <RemoveAlertDialog
+                            type="volunteering"
+                            onRemove={() => remove(index)}
+                          />
                         </div>
 
                         <VolunteeringFormFields
@@ -211,35 +158,21 @@ const VolunteeringFieldArray = () => {
         </div>
       )}
 
-      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full h-20 rounded-md border-2 border-grid bg-muted p-6 text-center text-muted-foreground"
-          >
-            <Plus className="size-4" />
-            Add Volunteering
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[600px] p-4" side="right">
+      <AddNewPopover title="Add Volunteering">
+        {(onClose) => (
           <AddNewVolunteeringForm
             addToVolunteering={(data) => {
               prepend(data);
-              setPopoverOpen(false);
+              onClose();
             }}
             cancelButton={
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setPopoverOpen(false)}
-              >
+              <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
             }
           />
-        </PopoverContent>
-      </Popover>
+        )}
+      </AddNewPopover>
     </div>
   );
 };

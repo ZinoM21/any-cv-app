@@ -37,7 +37,7 @@ export default function LoadingGenerate() {
 
           <CardContent>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow">
+              <div className="group flex flex-col items-center justify-center rounded-lg border border-muted bg-background p-6 text-center shadow-sm transition-all hover:border-input hover:bg-muted hover:shadow">
                 <Skeleton className="mb-3 rounded-full size-12" />
                 <Skeleton className="mb-3 h-5 w-7" />
                 <Skeleton className="mb-1 h-4 w-24" />
@@ -45,7 +45,7 @@ export default function LoadingGenerate() {
                 <Skeleton className="h-5 w-20" />
               </div>
 
-              <div className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:shadow">
+              <div className="group flex flex-col items-center justify-center rounded-lg border border-muted bg-background p-6 text-center shadow-sm transition-all hover:border-input hover:bg-muted hover:shadow">
                 <Skeleton className="mb-3 rounded-full size-12" />
                 <Skeleton className="mb-3 h-5 w-16" />
                 <Skeleton className="mb-1 h-4 w-24" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, ReactNode } from "react";
+import { useEffect } from "react";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -34,7 +34,7 @@ import EditorFinalActionButton from "./editor-final-action-button";
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
   initialValues: z.infer<T>;
-  children: ReactNode;
+  children: React.ReactElement;
   tabName: EditorTabName;
 }
 

@@ -69,7 +69,7 @@ export default function CVEditor({
           <div
             className={cn(
               getMobileViewClassName("preview"),
-              "lg:flex w-full flex-1 flex-col bg-slate-100"
+              "lg:flex w-full flex-1 flex-col"
             )}
           >
             <div className="flex-1 overflow-y-auto">

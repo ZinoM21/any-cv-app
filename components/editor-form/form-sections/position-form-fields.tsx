@@ -92,9 +92,9 @@ export default function PositionFormFields({
         <Input
           value={positionField?.duration || calculateDuration()}
           disabled
-          className="bg-slate-50 text-slate-500"
+          className="bg-muted text-muted-foreground"
         />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted-foreground">
           Automatically calculated based on dates
         </p>
       </div> */}

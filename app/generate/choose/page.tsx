@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { ProfileData, PromiseSearchParams } from "@/lib/types";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default async function GeneratingPage({
   searchParams,
@@ -49,39 +50,45 @@ export default async function GeneratingPage({
           </CardHeader>
 
           <CardContent className="grid gap-4 sm:grid-cols-2">
-            <Link
-              href={`/generate/cv/template?username=${username}`}
-              className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-muted hover:shadow"
+            <Button
+              variant="outline"
+              className="h-fit p-6 group flex flex-col items-center justify-center text-center shadow-sm hover:shadow whitespace-normal transition-all"
+              asChild
             >
-              <div className="mb-3 rounded-full bg-blue-100 p-3">
-                <FileText className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="mb-1 font-medium  ">CV</h3>
-              <p className="mb-3 text-sm text-muted0">
-                Create a professional resume
-              </p>
-              <span className="inline-flex items-center text-sm font-medium text-blue-600">
-                Get started{" "}
-                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
-            </Link>
+              <Link href={`/generate/cv/template?username=${username}`}>
+                <div className="mb-3 rounded-full bg-blue-100 p-3">
+                  <FileText className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="mb-1 font-medium  ">CV</h3>
+                <p className="mb-3 text-sm text-muted-foreground">
+                  Create a professional resume
+                </p>
+                <span className="inline-flex items-center text-sm font-medium text-blue-600">
+                  Get started{" "}
+                  <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </Link>
+            </Button>
 
-            <Link
-              href={`/generate/website/template?username=${username}`}
-              className="group flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-background p-6 text-center shadow-sm transition-all hover:border-slate-300 hover:bg-muted hover:shadow"
+            <Button
+              variant="outline"
+              className="h-fit p-6 group flex flex-col items-center justify-center text-center shadow-sm hover:shadow whitespace-normal  transition-all"
+              asChild
             >
-              <div className="mb-3 rounded-full bg-purple-100 p-3">
-                <Globe className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="mb-1 font-medium  ">Website</h3>
-              <p className="mb-3 text-sm text-slate-500">
-                Build your personal website
-              </p>
-              <span className="inline-flex items-center text-sm font-medium text-purple-600">
-                Get started{" "}
-                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
-            </Link>
+              <Link href={`/generate/website/template?username=${username}`}>
+                <div className="mb-3 rounded-full bg-purple-100 p-3">
+                  <Globe className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="mb-1 font-medium  ">Website</h3>
+                <p className="mb-3 text-sm text-muted-foreground">
+                  Build your personal website
+                </p>
+                <span className="inline-flex items-center text-sm font-medium text-purple-600">
+                  Get started{" "}
+                  <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </Link>
+            </Button>
           </CardContent>
           <CardFooter className="text-sm text-muted-foreground">
             You can do the other one later.

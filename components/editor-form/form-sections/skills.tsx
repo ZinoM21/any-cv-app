@@ -5,13 +5,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { EditorForm } from "../editor-form";
 import { EditorTabName } from "@/config/editor-tab-names";
 import {
@@ -69,83 +63,87 @@ const SkillsFormFields = () => {
   };
 
   return (
-    <Card className="mb-60 mx-0.5">
-      <CardHeader className="p-4">
-        <CardTitle className="text-base">Add Skills</CardTitle>
-        <CardDescription>
-          Add relevant skills that showcase your expertise
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4 p-4 pt-0">
-        <FormField
-          control={control}
-          name="skills"
-          render={({ field }) => (
-            <FormItem className="flex gap-2 space-y-0">
+    <div className="grid gap-4">
+      <h3 className="text-sm font-medium text-muted-foreground">Add Skills</h3>
+
+      <FormField
+        control={control}
+        name="skills"
+        render={({ field }) => (
+          <div className="flex gap-2">
+            <FormItem className="flex-1 flex flex-col gap-2 space-y-0">
               <FormLabel htmlFor="newSkill" className="sr-only">
                 New Skill
               </FormLabel>
-              <div className="flex-1 space-y-2">
-                <FormControl>
-                  <Input
-                    id="newSkill"
-                    value={newSkill}
-                    onChange={(e) => setNewSkill(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        addNewSkill(field.value);
-                      }
-                    }}
-                    placeholder="e.g., JavaScript, Project Management, UX Design"
-                  />
-                </FormControl>
-                <FormDescription>
-                  Pro tip: Press Enter to quickly add a skill{" "}
-                </FormDescription>
-                <FormMessage />
-              </div>
-              <Button
-                onClick={() => addNewSkill(field.value)}
-                disabled={!isNewUniqueSkill(field.value, newSkill)}
-              >
-                <Plus className="mr-2 size-4" />
-                Add
-              </Button>
-            </FormItem>
-          )}
-        />
-
-        {fields.length > 0 && (
-          <div className="space-y-2">
-            <FormLabel>Your Skills</FormLabel>
-            <div className="flex flex-wrap gap-2">
-              {fields.map((field, index) => (
-                <FormField
-                  key={field.id}
-                  control={control}
-                  name={`skills.${index}`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <Badge variant="outline">
-                        {field.value}
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          className="ml-1 size-5 p-1"
-                          onClick={() => remove(index)}
-                        >
-                          <X className="size-3" />
-                        </Button>
-                      </Badge>
-                    </FormItem>
-                  )}
+              <FormControl>
+                <Input
+                  id="newLanguage"
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addNewSkill(field.value);
+                    }
+                  }}
+                  placeholder="e.g., JavaScript, Project Management, UX Design"
+                  className="h-8"
                 />
-              ))}
-            </div>
+              </FormControl>
+              <FormDescription>
+                Add languages you speak (e.g., &quot;English - Fluent&quot;,
+                &quot;Spanish - Native&quot;).
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => addNewSkill(field.value)}
+              disabled={!isNewUniqueSkill(field.value, newSkill)}
+            >
+              <Plus className="mr-2 size-4" />
+              Add
+            </Button>
           </div>
         )}
-      </CardContent>
-    </Card>
+      />
+
+      {fields.length > 0 && (
+        <div className="space-y-2">
+          <FormLabel>
+            <h3 className="text-sm font-medium text-muted-foreground">
+              Added Skills
+            </h3>
+          </FormLabel>
+          <div className="flex flex-wrap gap-2">
+            {fields.map((field, index) => (
+              <FormField
+                key={field.id}
+                control={control}
+                name={`skills.${index}`}
+                render={({ field }) => (
+                  <FormItem>
+                    <Badge variant="secondary">
+                      {field.value}
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="ml-1 size-5 p-1"
+                        onClick={() => remove(index)}
+                      >
+                        <X className="size-3" />
+                      </Button>
+                    </Badge>
+                  </FormItem>
+                )}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };

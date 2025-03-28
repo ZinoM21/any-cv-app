@@ -16,7 +16,7 @@ export default function CVTemplateCard({
 }) {
   return (
     <Card className="group/card flex flex-col overflow-hidden transition-all hover:shadow-md">
-      <CardContent className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
+      <CardContent className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
         <Image
           src={getCVImage(template.id)}
           alt={`${template.name} CV Template Preview`}

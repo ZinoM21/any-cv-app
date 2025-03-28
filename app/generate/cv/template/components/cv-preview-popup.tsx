@@ -41,7 +41,7 @@ export default function CVPreviewPopup({
           <DialogTitle>{templateName} Template - Preview</DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-auto bg-slate-100 p-4">
+        <div className="flex-1 overflow-auto rounded-lg bg-muted">
           <Worker
             workerUrl={
               "https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js"
@@ -52,6 +52,14 @@ export default function CVPreviewPopup({
               renderLoader={() => <PDFLoadingSkeleton />}
               theme="light"
               defaultScale={1}
+              pageLayout={{
+                buildPageStyles: ({ pageIndex }) => {
+                  return {
+                    paddingTop: pageIndex === 0 ? 20 : 0,
+                    backgroundColor: "hsl(var(--muted))",
+                  };
+                },
+              }}
             />
           </Worker>
         </div>

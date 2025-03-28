@@ -18,7 +18,7 @@ export function SummaryForm({ tabName }: { tabName: EditorTabName }) {
       initialValues={initialValues}
       tabName={tabName}
     >
-      <div className="grid gap-4 mb-60">
+      <div className="grid gap-4 mb-60 mx-0.5">
         <SummaryFormFields />
 
         <Separator className="mt-4" />

@@ -129,7 +129,7 @@ export function SignUpForm() {
             )}
           />
 
-          {error && <div className="text-sm text-red-500">{error}</div>}
+          {error && <div className="text-sm text-destructive">{error}</div>}
 
           <Button
             type="submit"

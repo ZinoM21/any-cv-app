@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,24 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Plus, Trash } from "lucide-react";
 import { FormField } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import { EditorForm } from "../editor-form";
 
@@ -43,10 +25,12 @@ import {
   EditProjectsFormValues,
 } from "@/lib/editor-forms-schemas";
 import { EditorTabName } from "@/config/editor-tab-names";
-import { cn, formatDateRange } from "@/lib/utils";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import ProjectFormFields from "./project-form-fields";
 import AddNewProjectForm from "./add-new-project-form";
+import AddNewPopover from "../add-new-popover";
+import RemoveAlertDialog from "../remove-alert-dialog";
+import { formatDateRange } from "@/lib/utils";
 
 export function ProjectsForm({ tabName }: { tabName: EditorTabName }) {
   const { getProjectsInitialValues } = useEditorFormInitialValues();
@@ -64,8 +48,6 @@ export function ProjectsForm({ tabName }: { tabName: EditorTabName }) {
 }
 
 const ProjectsFieldArray = () => {
-  const [popoverOpen, setPopoverOpen] = useState(false);
-
   const { control } = useFormContext<EditProjectsFormValues>();
 
   const { fields, remove, prepend } = useFieldArray({
@@ -74,56 +56,63 @@ const ProjectsFieldArray = () => {
   });
 
   return (
-    <div className="space-y-6 mb-60">
+    <div className="flex flex-col gap-6 mb-60">
       {fields.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-sm font-medium text-slate-500">Added Projects</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">
+            Added Projects
+          </h3>
 
           <Accordion type="single" collapsible className="space-y-6">
             {fields.map((projectField, index) => (
               <AccordionItem
                 key={projectField.id}
-                value={`project-${projectField.id}`}
+                value={`projects-${projectField.id}`}
                 className="border-none"
               >
-                <Card key={projectField.id} className="mx-0.5">
-                  <CardHeader className="p-4">
-                    <AccordionTrigger className="py-0 min-w-0">
+                <Card
+                  key={projectField.id}
+                  className="mx-0.5 shadow-sm rounded-lg"
+                >
+                  <CardHeader className="p-0">
+                    <AccordionTrigger className="p-4 min-w-0 rounded-lg hover:no-underline hover:bg-accent data-[state=open]:hover:bg-background">
                       <div className="flex flex-1 items-start justify-between min-w-0">
-                        <div className="flex flex-col min-w-0">
-                          <CardTitle className="text-base">
-                            <FormField
-                              name={`projects.${index}.title`}
-                              render={({ field }) =>
-                                field.value ? (
-                                  <span className="block truncate">
-                                    {field.value}
-                                  </span>
-                                ) : (
-                                  <span>Project {index + 1}</span>
-                                )
-                              }
-                            />
-                          </CardTitle>
-                          <CardDescription>
-                            <FormField
-                              name={`projects.${index}.startDate`}
-                              render={({ field: startDateField }) => (
-                                <FormField
-                                  name={`projects.${index}.endDate`}
-                                  render={({ field: endDateField }) => (
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="min-w-0">
+                            <CardTitle className="text-base">
+                              <FormField
+                                name={`projects.${index}.role`}
+                                render={({ field }) =>
+                                  field.value ? (
                                     <span className="block truncate">
-                                      {startDateField.value &&
-                                        formatDateRange(
-                                          startDateField.value,
-                                          endDateField.value
-                                        )}
+                                      {field.value}
                                     </span>
-                                  )}
-                                />
-                              )}
-                            />
-                          </CardDescription>
+                                  ) : (
+                                    <span>Project {index + 1}</span>
+                                  )
+                                }
+                              />
+                            </CardTitle>
+                            <CardDescription>
+                              <FormField
+                                name={`projects.${index}.startDate`}
+                                render={({ field: startDateField }) => (
+                                  <FormField
+                                    name={`projects.${index}.endDate`}
+                                    render={({ field: endDateField }) => (
+                                      <span className="block truncate">
+                                        {startDateField.value &&
+                                          formatDateRange(
+                                            startDateField.value,
+                                            endDateField.value
+                                          )}
+                                      </span>
+                                    )}
+                                  />
+                                )}
+                              />
+                            </CardDescription>
+                          </div>
                         </div>
                       </div>
                     </AccordionTrigger>
@@ -136,44 +125,10 @@ const ProjectsFieldArray = () => {
                           <h4 className="text-base font-medium">
                             Project Details
                           </h4>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="text-slate-400 hover:text-red-500"
-                              >
-                                <Trash className="size-4" />
-                                Remove
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Are you absolutely sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  This action cannot be undone. This will
-                                  permanently remove this project entry from our
-                                  servers.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  className={cn(
-                                    buttonVariants({
-                                      variant: "destructive",
-                                    })
-                                  )}
-                                  onClick={() => remove(index)}
-                                >
-                                  Yes, remove
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
+                          <RemoveAlertDialog
+                            type="project"
+                            onRemove={() => remove(index)}
+                          />
                         </div>
 
                         <ProjectFormFields
@@ -189,35 +144,21 @@ const ProjectsFieldArray = () => {
         </div>
       )}
 
-      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full h-20 rounded-md border-2 border-grid bg-muted p-6 text-center text-muted-foreground"
-          >
-            <Plus className="size-4" />
-            Add Project
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[600px] p-4" side="right">
+      <AddNewPopover title="Add Project">
+        {(onClose) => (
           <AddNewProjectForm
             addToProjects={(data) => {
               prepend(data);
-              setPopoverOpen(false);
+              onClose();
             }}
             cancelButton={
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setPopoverOpen(false)}
-              >
+              <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
             }
           />
-        </PopoverContent>
-      </Popover>
+        )}
+      </AddNewPopover>
     </div>
   );
 };

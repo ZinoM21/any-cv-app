@@ -12,9 +12,9 @@ export function BreadcrumpHeader() {
 
         <div className="hidden lg:flex gap-2 lg:items-center">
           <AuthOrDashboardButton />
-          <ThemeToggle />
         </div>
         <HeaderDropdownMenu />
+        <ThemeToggle />
       </div>
     </GenericHeader>
   );

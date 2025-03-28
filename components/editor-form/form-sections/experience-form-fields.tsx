@@ -110,7 +110,7 @@ export default function ExperienceFormFields({
             <FormControl>
               <div className="flex items-center gap-4">
                 {field.value ? (
-                  <div className="h-16 w-16 overflow-hidden rounded-md bg-slate-100">
+                  <div className="h-16 w-16 overflow-hidden rounded-md bg-muted">
                     <Image
                       src={field.value || "/placeholder.svg"}
                       alt={companyName + "Logo" || ""}
@@ -120,7 +120,7 @@ export default function ExperienceFormFields({
                     />
                   </div>
                 ) : (
-                  <div className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-grid bg-muted text-muted-foreground">
                     Logo
                   </div>
                 )}
@@ -169,12 +169,12 @@ export default function ExperienceFormFields({
               </PopoverContent>
             </Popover>
           </div>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-muted-foreground">
             Add at least one position to continue
           </p>
         </div>
 
-        <div className="rounded-md bg-indigo-50 p-3">
+        <div className="rounded-md bg-primary/10 p-3">
           <Accordion
             type="single"
             collapsible
@@ -190,7 +190,7 @@ export default function ExperienceFormFields({
                   value={`${
                     fieldNamePrefix ? fieldNamePrefix + "." : ""
                   }position-${posIndex}`}
-                  className="border-b border-slate-200 last:border-0 py-3 first:pt-1 last:pb-1"
+                  className="border-b border-muted last:border-0 py-3 first:pt-1 last:pb-1"
                 >
                   <AccordionTrigger className="py-0">
                     <span className="font-medium text-base">
@@ -199,7 +199,7 @@ export default function ExperienceFormFields({
                           ? `Position ${posIndex + 1}`
                           : "New Position")}
                       {position.startDate && (
-                        <span className="ml-2 text-xs font-normal text-slate-500 whitespace-nowrap">
+                        <span className="ml-2 text-xs font-normal text-muted-foreground whitespace-nowrap">
                           {format(position.startDate, "MMM uu")} -{" "}
                           {position.endDate
                             ? format(position.endDate, "MMM uu")
@@ -220,7 +220,7 @@ export default function ExperienceFormFields({
                               type="button"
                               variant="ghost"
                               size="sm"
-                              className="text-slate-400 hover:text-red-500"
+                              className="text-muted-foreground hover:text-destructive"
                             >
                               <Trash className="size-4" />
                               Remove
