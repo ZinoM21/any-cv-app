@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Image from "next/image";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Label } from "@/components/ui/label";
@@ -41,20 +40,20 @@ import AddNewPositionForm from "./add-new-position-form";
 import PositionFormFields from "./position-form-fields";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { SignedImage } from "@/components/signed-image";
 
 export default function ExperienceFormFields({
   fieldNamePrefix,
 }: {
   fieldNamePrefix?: string;
 }) {
+  const [popoverOpen, setPopoverOpen] = useState(false);
   const getFieldName = (fieldName: string) =>
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
 
   const { control, getValues } = useFormContext();
 
   const companyName = getValues(getFieldName("company"));
-
-  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const {
     fields: positionFields,
@@ -109,22 +108,12 @@ export default function ExperienceFormFields({
             </FormLabel>
             <FormControl>
               <div className="flex items-center gap-4">
-                {field.value ? (
-                  <div className="h-16 w-16 overflow-hidden rounded-md bg-muted">
-                    <Image
-                      src={field.value || "/placeholder.svg"}
-                      alt={companyName + "Logo" || ""}
-                      width={80}
-                      height={80}
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-grid bg-muted text-muted-foreground">
-                    Logo
-                  </div>
-                )}
-
+                <SignedImage
+                  src={field?.value}
+                  alt={companyName}
+                  width={80}
+                  height={80}
+                />
                 <Button
                   type="button"
                   variant="outline"

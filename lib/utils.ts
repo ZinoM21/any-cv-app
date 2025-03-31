@@ -17,6 +17,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const formatDate = (date: Date) =>
+  date ? format(new Date(date), "MMM uu") : "";
+
 export function extractUsernameFromLinkedInUrl(username: string): string {
   // Check if the input is a URL
   if (username.includes("/")) {

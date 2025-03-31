@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -31,6 +30,7 @@ import { EditorTabName } from "@/config/editor-tab-names";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import AddNewPopover from "../add-new-popover";
 import RemoveAlertDialog from "../remove-alert-dialog";
+import { SignedImage } from "@/components/signed-image";
 
 export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
   const { getExperienceInitialValues } = useEditorFormInitialValues();
@@ -96,22 +96,13 @@ const ExperiencesFieldArray = () => {
                           <FormField
                             name={`experiences.${expIndex}.companyLogoUrl`}
                             render={({ field }) => (
-                              <>
-                                {field?.value ? (
-                                  <div className="size-10 min-w-10 overflow-hidden rounded-md bg-muted">
-                                    <Image
-                                      src={field?.value}
-                                      alt={experienceField?.company || ""}
-                                      width={80}
-                                      height={80}
-                                    />
-                                  </div>
-                                ) : (
-                                  <div className="flex size-10 min-w-10 items-center justify-center rounded-md border-2 border-grid bg-muted text-muted-foreground text-center text-xs">
-                                    Logo
-                                  </div>
-                                )}
-                              </>
+                              <SignedImage
+                                src={field?.value}
+                                alt={experienceField?.company}
+                                width={80}
+                                height={80}
+                                className="size-10 min-w-10"
+                              />
                             )}
                           />
 

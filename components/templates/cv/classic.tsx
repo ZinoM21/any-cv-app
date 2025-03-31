@@ -1,7 +1,7 @@
 import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
-import { format } from "date-fns"; // Importing the format function from date-fns
 import { ProfileData } from "@/lib/types";
+import { formatDate } from "@/lib/utils";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -104,10 +104,6 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
     volunteering,
     projects,
   } = profileData;
-
-  // Helper function to format dates
-  const formatDate = (date: Date) =>
-    date ? format(new Date(date), "MMM uu") : "";
 
   return (
     <Document>

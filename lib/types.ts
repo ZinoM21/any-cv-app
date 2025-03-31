@@ -118,3 +118,7 @@ export type AuthValidity = {
 };
 
 export type PromiseSearchParams = Promise<SearchParams>;
+
+export type SignedUrl = {
+  signed_url: string;
+};

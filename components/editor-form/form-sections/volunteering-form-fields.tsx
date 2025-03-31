@@ -1,3 +1,4 @@
+import { SignedImage } from "@/components/signed-image";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
@@ -10,7 +11,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import Image from "next/image";
 
 import { useFormContext } from "react-hook-form";
 
@@ -67,26 +67,16 @@ export default function VolunteeringFormFields({
             </FormLabel>
             <FormControl>
               <div className="flex items-center gap-4">
-                {field.value ? (
-                  <div className="h-16 w-16 overflow-hidden rounded-md bg-muted">
-                    <Image
-                      src={field.value || "/placeholder.svg"}
-                      alt={organizationName + "Logo" || ""}
-                      width={80}
-                      height={80}
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-                ) : (
-                  <span className="flex h-16 w-16 items-center justify-center rounded-md border-2 border-dashed border-muted bg-muted text-muted-foreground">
-                    Logo
-                  </span>
-                )}
-
+                <SignedImage
+                  src={field?.value}
+                  alt={organizationName}
+                  width={80}
+                  height={80}
+                />
                 <Button
                   type="button"
                   variant="outline"
-                  // onClick={() => handleOrganizationLogoUpload(expIndex)}
+                  // onClick={() => handleCompanyLogoUpload(expIndex)}
                 >
                   Change Logo
                 </Button>

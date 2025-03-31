@@ -1,3 +1,5 @@
+import { SignedImage } from "@/components/signed-image";
+import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
   FormControl,
@@ -17,9 +19,11 @@ export default function EducationFormFields({
 }: {
   fieldNamePrefix?: string;
 }) {
-  const { control } = useFormContext();
+  const { control, getValues } = useFormContext();
   const getFieldName = (fieldName: string) =>
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
+
+  const school = getValues(getFieldName("school"));
 
   return (
     <>
@@ -82,6 +86,36 @@ export default function EducationFormFields({
           )}
         />
       </div>
+
+      <FormField
+        control={control}
+        name={getFieldName("schoolPictureUrl")}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel htmlFor={getFieldName("schoolPictureUrl")}>
+              School Logo (Optional)
+            </FormLabel>
+            <FormControl>
+              <div className="flex items-center gap-4">
+                <SignedImage
+                  src={field?.value}
+                  alt={school}
+                  width={80}
+                  height={80}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  // onClick={() => handleCompanyLogoUpload(expIndex)}
+                >
+                  Change Logo
+                </Button>
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField

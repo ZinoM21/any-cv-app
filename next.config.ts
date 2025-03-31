@@ -21,9 +21,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "media.licdn.com",
+        hostname: "znrkeqidnogtvgxwbhzq.supabase.co",
         port: "",
-        pathname: "/dms/image/**",
+        pathname: "/storage/v1/object/sign/files/**",
       },
     ],
   },
