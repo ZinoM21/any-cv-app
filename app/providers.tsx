@@ -60,6 +60,7 @@ export function Providers({
         <NextThemesProvider
           attribute="class"
           defaultTheme="system"
+          disableTransitionOnChange
           enableSystem
         >
           <TooltipProvider>{children}</TooltipProvider>

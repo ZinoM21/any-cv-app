@@ -5,6 +5,7 @@ import { GenericHeader } from "@/components/generic-header";
 import BuiltAnyCVLogo from "@/components/logo";
 import AuthOrDashboardButton from "@/components/auth/auth-dashboard-button";
 import { HeaderDropdownMenu } from "@/components/auth/profile-button";
+import ThemeToggle from "@/components/theme-toggle";
 
 export function Header() {
   return (
@@ -24,6 +25,7 @@ export function Header() {
               <AuthOrDashboardButton />
             </div>
             <HeaderDropdownMenu />
+            <ThemeToggle />
           </div>
         </nav>
       </div>

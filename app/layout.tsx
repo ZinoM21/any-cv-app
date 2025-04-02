@@ -18,7 +18,7 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased`}>
         <Providers session={session}>
           <div className="bg-gradient-to-b from-primary/20 to-background">
