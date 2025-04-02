@@ -10,6 +10,7 @@ export const editSummaryFormSchema = z.object({
   phone: z.string().optional(),
   location: z.string().optional(),
   languages: z.array(z.string()),
+  profilePictureUrl: z.string().optional(),
 });
 
 export type EditSummaryFormValues = z.infer<typeof editSummaryFormSchema>;

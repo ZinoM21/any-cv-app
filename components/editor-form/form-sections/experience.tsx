@@ -29,7 +29,7 @@ import { EditorTabName } from "@/config/editor-tab-names";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import AddNewPopover from "../add-new-popover";
 import RemoveAlertDialog from "../remove-alert-dialog";
-import { SignedImage } from "@/components/signed-image";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 
 export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
   const { getExperienceInitialValues } = useEditorFormInitialValues();
@@ -53,21 +53,6 @@ const ExperiencesFieldArray = () => {
     control,
     name: "experiences",
   });
-
-  // const handleCompanyLogoUpload = (index?: number) => {
-  //   // In a real app, this would open a file picker and handle the upload
-  //   const url = prompt("Enter URL for company logo (for demo purposes):");
-  //   if (url) {
-  //     if (index !== undefined) {
-  //       setValue(`experiences.${index}.companyLogoUrl`, url);
-  //     } else {
-  //       setNewExperience({
-  //         ...newExperience,
-  //         companyLogoUrl: url,
-  //       });
-  //     }
-  //   }
-  // };
 
   return (
     <div className="flex flex-col gap-6 mb-60">

@@ -1,7 +1,7 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Label } from "@/components/ui/label";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
@@ -17,26 +17,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Plus, Trash } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { Position } from "@/lib/types";
 import AddNewPositionForm from "./add-new-position-form";
 import PositionFormFields from "./position-form-fields";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { SignedImage } from "@/components/signed-image";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import AddNewPopover from "../add-new-popover";
+import { ImageInput } from "@/components/editor-form/form-sections/image-input";
+import RemoveAlertDialog from "../remove-alert-dialog";
 
 export default function ExperienceFormFields({
   fieldNamePrefix,
@@ -45,6 +35,8 @@ export default function ExperienceFormFields({
 }) {
   const getFieldName = (fieldName: string) =>
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
+
+  const posPrefix = fieldNamePrefix ? `${fieldNamePrefix}.` : "";
 
   const { control, getValues } = useFormContext();
 
@@ -69,7 +61,7 @@ export default function ExperienceFormFields({
             <FormItem>
               <FormLabel htmlFor={getFieldName("company")}>Company</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="Acme LLC" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -82,7 +74,7 @@ export default function ExperienceFormFields({
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={getFieldName("companyProfileUrl")}>
-                Company Profile URL (Optional)
+                Link (Optional)
               </FormLabel>
               <FormControl>
                 <Input placeholder="https://company.com" {...field} />
@@ -99,7 +91,7 @@ export default function ExperienceFormFields({
         render={({ field }) => (
           <FormItem>
             <FormLabel htmlFor={getFieldName("companyLogoUrl")}>
-              Company Logo (Optional)
+              Logo (Optional)
             </FormLabel>
             <FormControl>
               <div className="flex items-center gap-4">
@@ -109,13 +101,7 @@ export default function ExperienceFormFields({
                   width={80}
                   height={80}
                 />
-                <Button
-                  type="button"
-                  variant="outline"
-                  // onClick={() => handleCompanyLogoUpload(expIndex)}
-                >
-                  Change Logo
-                </Button>
+                <ImageInput field={field} fileName="company_logo" />
               </div>
             </FormControl>
             <FormMessage />
@@ -157,17 +143,13 @@ export default function ExperienceFormFields({
             type="single"
             collapsible
             className="w-full"
-            defaultValue={`${
-              fieldNamePrefix ? fieldNamePrefix + "." : ""
-            }position-0`}
+            defaultValue={`${posPrefix}position.0`}
           >
             {(positionFields as (Position & { id: string })[]).map(
               (position, posIndex) => (
                 <AccordionItem
                   key={posIndex}
-                  value={`${
-                    fieldNamePrefix ? fieldNamePrefix + "." : ""
-                  }position-${posIndex}`}
+                  value={`${posPrefix}position.${posIndex}`}
                   className="border-b border-muted last:border-0 py-3 first:pt-1 last:pb-1"
                 >
                   <AccordionTrigger className="py-0">
@@ -192,50 +174,14 @@ export default function ExperienceFormFields({
                         <h4 className="text-sm font-medium">
                           Position Details
                         </h4>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="text-muted-foreground hover:text-destructive"
-                            >
-                              <Trash className="size-4" />
-                              Remove
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Are you absolutely sure?
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This action cannot be undone. This will
-                                permanently remove this position entry from our
-                                servers.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                className={cn(
-                                  buttonVariants({
-                                    variant: "destructive",
-                                  })
-                                )}
-                                onClick={() => remove(posIndex)}
-                              >
-                                Yes, remove
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                        <RemoveAlertDialog
+                          type="position"
+                          onRemove={() => remove(posIndex)}
+                        />
                       </div>
 
                       <PositionFormFields
-                        fieldNamePrefix={`${
-                          fieldNamePrefix ? fieldNamePrefix + "." : ""
-                        }positions.${posIndex}`}
+                        fieldNamePrefix={`${posPrefix}position.${posIndex}`}
                       />
                     </div>
                   </AccordionContent>

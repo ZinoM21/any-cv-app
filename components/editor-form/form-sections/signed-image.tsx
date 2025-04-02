@@ -22,7 +22,10 @@ export function SignedImage({
 
   return (
     <div
-      className={cn("size-16 overflow-hidden rounded-md bg-muted", className)}
+      className={cn(
+        "size-16 overflow-hidden rounded-md bg-muted shrink-0",
+        className
+      )}
     >
       {logoUrl ? (
         <Image
@@ -30,7 +33,7 @@ export function SignedImage({
           alt={alt || "Image"}
           width={width || 80}
           height={height || 80}
-          className="h-full w-full object-contain"
+          className="size-full object-contain"
         />
       ) : isLoading ? (
         <div className="flex h-full w-full items-center justify-center">

@@ -27,7 +27,7 @@ import { EditorTabName } from "@/config/editor-tab-names";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import AddNewPopover from "../add-new-popover";
 import RemoveAlertDialog from "../remove-alert-dialog";
-import { SignedImage } from "@/components/signed-image";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 
 export function EducationForm({ tabName }: { tabName: EditorTabName }) {
   const { getEducationInitialValues } = useEditorFormInitialValues();

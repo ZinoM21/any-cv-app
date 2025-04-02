@@ -27,6 +27,7 @@ export const useEditorFormInitialValues = () => {
     phone: profileData?.phone || "",
     location: profileData?.location || "",
     languages: profileData?.languages || [],
+    profilePictureUrl: profileData?.profilePictureUrl || "",
   });
 
   /**

@@ -1,5 +1,4 @@
-import { SignedImage } from "@/components/signed-image";
-import { Button } from "@/components/ui/button";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
   FormControl,
@@ -13,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { useFormContext } from "react-hook-form";
+import { ImageInput } from "@/components/editor-form/form-sections/image-input";
 
 export default function EducationFormFields({
   fieldNamePrefix,
@@ -93,7 +93,7 @@ export default function EducationFormFields({
         render={({ field }) => (
           <FormItem>
             <FormLabel htmlFor={getFieldName("schoolPictureUrl")}>
-              School Logo (Optional)
+              Logo (Optional)
             </FormLabel>
             <FormControl>
               <div className="flex items-center gap-4">
@@ -103,13 +103,7 @@ export default function EducationFormFields({
                   width={80}
                   height={80}
                 />
-                <Button
-                  type="button"
-                  variant="outline"
-                  // onClick={() => handleCompanyLogoUpload(expIndex)}
-                >
-                  Change Logo
-                </Button>
+                <ImageInput field={field} fileName="school_logo" />
               </div>
             </FormControl>
             <FormMessage />
