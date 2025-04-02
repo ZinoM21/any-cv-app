@@ -2,7 +2,6 @@
 
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -176,15 +175,11 @@ const ExperiencesFieldArray = () => {
       <AddNewPopover title="Add Experience">
         {(onClose) => (
           <AddNewExperienceForm
-            addToExperiences={(data) => {
+            onSubmit={(data) => {
               prepend(data);
               onClose();
             }}
-            cancelButton={
-              <Button type="button" variant="outline" onClick={onClose}>
-                Cancel
-              </Button>
-            }
+            onCancel={onClose}
           />
         )}
       </AddNewPopover>

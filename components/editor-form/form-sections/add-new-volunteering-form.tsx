@@ -1,10 +1,8 @@
-import { ReactNode } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { CardTitle } from "@/components/ui/card";
 import VolunteeringFormFields from "./volunteering-form-fields";
 
 import {
@@ -22,11 +20,11 @@ const initialValues = {
 };
 
 export default function AddNewVolunteeringForm({
-  addToVolunteering,
-  cancelButton,
+  onSubmit,
+  onCancel,
 }: {
-  addToVolunteering: (data: AddNewVolunteeringFormValues) => void;
-  cancelButton: ReactNode;
+  onSubmit: (data: AddNewVolunteeringFormValues) => void;
+  onCancel: () => void;
 }) {
   const formMethods = useForm<AddNewVolunteeringFormValues>({
     resolver: zodResolver(addNewVolunteeringFormSchema),
@@ -41,24 +39,25 @@ export default function AddNewVolunteeringForm({
   } = formMethods;
 
   const onSubmitNewVolunteering = (data: AddNewVolunteeringFormValues) => {
-    addToVolunteering(data);
+    onSubmit(data);
     reset();
   };
 
   return (
     <Form {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmitNewVolunteering)}>
-        <div className="grid gap-4">
-          <CardTitle>Add New Volunteering</CardTitle>
+      <form
+        onSubmit={handleSubmit(onSubmitNewVolunteering)}
+        className="grid gap-4"
+      >
+        <VolunteeringFormFields />
 
-          <VolunteeringFormFields />
-
-          <div className="flex gap-2 justify-end">
-            {cancelButton}
-            <Button type="submit" disabled={!isValid}>
-              Add Volunteering
-            </Button>
-          </div>
+        <div className="flex gap-2 justify-end">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={!isValid}>
+            Add Volunteering
+          </Button>
         </div>
       </form>
     </Form>

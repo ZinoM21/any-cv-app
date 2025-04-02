@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { Label } from "@/components/ui/label";
@@ -17,11 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,13 +36,13 @@ import PositionFormFields from "./position-form-fields";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { SignedImage } from "@/components/signed-image";
+import AddNewPopover from "../add-new-popover";
 
 export default function ExperienceFormFields({
   fieldNamePrefix,
 }: {
   fieldNamePrefix?: string;
 }) {
-  const [popoverOpen, setPopoverOpen] = useState(false);
   const getFieldName = (fieldName: string) =>
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
 
@@ -132,31 +127,25 @@ export default function ExperienceFormFields({
         <div className="border-b pb-2">
           <div className="flex items-center justify-between">
             <Label className="text-base font-medium">Positions</Label>
-            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-              <PopoverTrigger asChild>
+            <AddNewPopover
+              title="Add Position"
+              trigger={
                 <Button variant="outline" size="sm">
                   <Plus className="size-3" />
                   Add Position
                 </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[600px] p-4" side="right">
+              }
+            >
+              {(onClose) => (
                 <AddNewPositionForm
-                  addToPositions={(data) => {
+                  onSubmit={(data) => {
                     prepend(data);
-                    setPopoverOpen(false);
+                    onClose();
                   }}
-                  cancelButton={
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setPopoverOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                  }
+                  onCancel={onClose}
                 />
-              </PopoverContent>
-            </Popover>
+              )}
+            </AddNewPopover>
           </div>
           <p className="text-xs text-muted-foreground">
             Add at least one position to continue

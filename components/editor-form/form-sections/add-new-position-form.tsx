@@ -1,12 +1,10 @@
 "use client";
-import { ReactNode } from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { CardTitle } from "@/components/ui/card";
 import {
   AddNewPositionFormValues,
   addNewPositionFormSchema,
@@ -23,11 +21,11 @@ const initialValues = {
 };
 
 export default function AddNewPositionForm({
-  addToPositions,
-  cancelButton,
+  onSubmit,
+  onCancel,
 }: {
-  addToPositions: (data: AddNewPositionFormValues) => void;
-  cancelButton: ReactNode;
+  onSubmit: (data: AddNewPositionFormValues) => void;
+  onCancel: () => void;
 }) {
   const formMethods = useForm<AddNewPositionFormValues>({
     resolver: zodResolver(addNewPositionFormSchema),
@@ -42,7 +40,7 @@ export default function AddNewPositionForm({
   } = formMethods;
 
   const onSubmitNewPosition = (data: AddNewPositionFormValues) => {
-    addToPositions(data);
+    onSubmit(data);
     reset();
   };
 
@@ -50,12 +48,12 @@ export default function AddNewPositionForm({
     <Form {...formMethods}>
       <form onSubmit={handleSubmit(onSubmitNewPosition)}>
         <div className="grid gap-4">
-          <CardTitle>Add New Position</CardTitle>
-
           <PositionFormFields />
 
           <div className="flex gap-2 justify-end">
-            {cancelButton}
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Cancel
+            </Button>
             <Button type="submit" disabled={!isValid}>
               Add Position
             </Button>

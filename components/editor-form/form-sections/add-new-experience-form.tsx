@@ -1,11 +1,8 @@
-import { ReactNode } from "react";
-
 import { useForm } from "react-hook-form";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CardTitle } from "@/components/ui/card";
 import ExperienceFormFields from "./experience-form-fields";
 import {
   addNewExperienceFormSchema,
@@ -28,11 +25,11 @@ const initialValues = {
 };
 
 export default function AddNewExperienceForm({
-  addToExperiences,
-  cancelButton,
+  onSubmit,
+  onCancel,
 }: {
-  addToExperiences: (data: AddNewExperienceFormValues) => void;
-  cancelButton: ReactNode;
+  onSubmit: (data: AddNewExperienceFormValues) => void;
+  onCancel: () => void;
 }) {
   const formMethods = useForm<AddNewExperienceFormValues>({
     resolver: zodResolver(addNewExperienceFormSchema),
@@ -47,24 +44,25 @@ export default function AddNewExperienceForm({
   } = formMethods;
 
   const onSubmitNewExperience = (data: AddNewExperienceFormValues) => {
-    addToExperiences(data);
+    onSubmit(data);
     reset();
   };
 
   return (
     <Form {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmitNewExperience)}>
-        <div className="grid gap-4">
-          <CardTitle>Add New Experience</CardTitle>
+      <form
+        onSubmit={handleSubmit(onSubmitNewExperience)}
+        className="grid gap-4"
+      >
+        <ExperienceFormFields />
 
-          <ExperienceFormFields />
-
-          <div className="flex gap-2 justify-end">
-            {cancelButton}
-            <Button type="submit" disabled={!isValid}>
-              Add Experience
-            </Button>
-          </div>
+        <div className="flex gap-2 justify-end">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={!isValid}>
+            Add Experience
+          </Button>
         </div>
       </form>
     </Form>

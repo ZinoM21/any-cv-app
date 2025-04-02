@@ -1,10 +1,8 @@
-import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CardTitle } from "@/components/ui/card";
 import ProjectFormFields from "./project-form-fields";
 import {
   addNewProjectFormSchema,
@@ -21,11 +19,11 @@ const initialValues = {
 };
 
 export default function AddNewProjectForm({
-  addToProjects,
-  cancelButton,
+  onSubmit,
+  onCancel,
 }: {
-  addToProjects: (data: AddNewProjectFormValues) => void;
-  cancelButton: ReactNode;
+  onSubmit: (data: AddNewProjectFormValues) => void;
+  onCancel: () => void;
 }) {
   const formMethods = useForm<AddNewProjectFormValues>({
     resolver: zodResolver(addNewProjectFormSchema),
@@ -40,24 +38,22 @@ export default function AddNewProjectForm({
   } = formMethods;
 
   const onSubmitNewProject = (data: AddNewProjectFormValues) => {
-    addToProjects(data);
+    onSubmit(data);
     reset();
   };
 
   return (
     <Form {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmitNewProject)}>
-        <div className="grid gap-4">
-          <CardTitle>Add New Project</CardTitle>
+      <form onSubmit={handleSubmit(onSubmitNewProject)} className="grid gap-4">
+        <ProjectFormFields />
 
-          <ProjectFormFields />
-
-          <div className="flex gap-2 justify-end">
-            {cancelButton}
-            <Button type="submit" disabled={!isValid}>
-              Add Project
-            </Button>
-          </div>
+        <div className="flex gap-2 justify-end">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={!isValid}>
+            Add Project
+          </Button>
         </div>
       </form>
     </Form>

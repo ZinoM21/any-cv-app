@@ -7,8 +7,6 @@ import {
   addNewEducationFormSchema,
   AddNewEducationFormValues,
 } from "@/lib/editor-forms-schemas";
-import { CardTitle } from "@/components/ui/card";
-import { ReactNode } from "react";
 
 const initialValues = {
   school: "",
@@ -22,11 +20,11 @@ const initialValues = {
 };
 
 export default function AddNewEducationForm({
-  addToEducations,
-  cancelButton,
+  onSubmit,
+  onCancel,
 }: {
-  addToEducations: (data: AddNewEducationFormValues) => void;
-  cancelButton: ReactNode;
+  onSubmit: (data: AddNewEducationFormValues) => void;
+  onCancel: () => void;
 }) {
   const formMethods = useForm<AddNewEducationFormValues>({
     resolver: zodResolver(addNewEducationFormSchema),
@@ -41,24 +39,25 @@ export default function AddNewEducationForm({
   } = formMethods;
 
   const onSubmitNewEducation = (data: AddNewEducationFormValues) => {
-    addToEducations(data);
+    onSubmit(data);
     reset();
   };
 
   return (
     <Form {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmitNewEducation)}>
-        <div className="grid gap-4">
-          <CardTitle>Add New Education</CardTitle>
+      <form
+        onSubmit={handleSubmit(onSubmitNewEducation)}
+        className="grid gap-4"
+      >
+        <EducationFormFields />
 
-          <EducationFormFields />
-
-          <div className="flex gap-2 justify-end">
-            {cancelButton}
-            <Button type="submit" disabled={!isValid}>
-              Add Education
-            </Button>
-          </div>
+        <div className="flex gap-2 justify-end">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={!isValid}>
+            Add Education
+          </Button>
         </div>
       </form>
     </Form>
