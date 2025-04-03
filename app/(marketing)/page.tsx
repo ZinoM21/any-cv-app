@@ -3,7 +3,7 @@ import { SubmitLinkForm } from "@/app/(marketing)/components/submit-link-form";
 
 export default function Home() {
   return (
-    <div className="mt-[64px] flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <div className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
       <section className="w-full flex justify-center py-12 md:py-24 lg:py-32 xl:py-48 ">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-8 text-center">
