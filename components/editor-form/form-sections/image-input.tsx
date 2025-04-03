@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { useSignedUploadUrl } from "@/hooks/use-image-url";
+import { useSignedUploadUrl, useSignedUrl } from "@/hooks/use-image-url";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { extension } from "mime-types";
@@ -30,6 +30,7 @@ export function ImageInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate, isPending } = useSignedUploadUrl();
+  const { refetch } = useSignedUrl(field.value);
 
   const selectFile = () => {
     fileInputRef.current?.click();
@@ -56,12 +57,15 @@ export function ImageInput({
             shouldValidate: true,
             shouldDirty: true,
           });
+
           toast.success("Image uploaded successfully");
 
-          // Reset the input
+          // Reset input
           if (fileInputRef.current) {
             fileInputRef.current.value = "";
           }
+
+          refetch();
         },
         onError: (error) => {
           console.error("Error uploading image:", error);

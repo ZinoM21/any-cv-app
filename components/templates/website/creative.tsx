@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ArrowRight, ExternalLink, Calendar } from "lucide-react";
 import { ProfileData } from "@/lib/types";
 import { formatDateRange } from "@/lib/utils";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 
 export default function TheCreativeWebsite({
   profileData,
@@ -34,7 +35,7 @@ export default function TheCreativeWebsite({
           {/* Header */}
           <header className="mb-16">
             {profilePictureUrl && (
-              <Image
+              <SignedImage
                 src={profilePictureUrl || "/placeholder.svg"}
                 alt={`${firstName} ${lastName}`}
                 width={120}
@@ -141,7 +142,7 @@ export default function TheCreativeWebsite({
               </h2>
               {education.map((edu, index) => (
                 <div key={index} className="mb-4">
-                  <Image
+                  <SignedImage
                     src={
                       edu.schoolPictureUrl ||
                       "/placeholder.svg?height=52&width=84"

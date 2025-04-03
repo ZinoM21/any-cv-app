@@ -18,7 +18,7 @@ export function SignedImage({
   width,
   height,
 }: SignedImageProps) {
-  const { isLoading, data: logoUrl } = useSignedUrl(src);
+  const { isFetching, data: logoUrl } = useSignedUrl(src);
 
   return (
     <div
@@ -27,7 +27,11 @@ export function SignedImage({
         className
       )}
     >
-      {logoUrl ? (
+      {isFetching ? (
+        <div className="flex h-full w-full items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      ) : logoUrl ? (
         <Image
           src={logoUrl}
           alt={alt || "Image"}
@@ -35,10 +39,6 @@ export function SignedImage({
           height={height || 80}
           className="size-full object-contain"
         />
-      ) : isLoading ? (
-        <div className="flex h-full w-full items-center justify-center">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-        </div>
       ) : (
         <div className="flex h-full w-full items-center justify-center text-muted-foreground">
           Logo
