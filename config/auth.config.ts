@@ -84,16 +84,8 @@ export const authConfig: NextAuthConfig = {
             );
 
             if (
-              !(
-                decodedAccessToken.sub ||
-                decodedAccessToken.email ||
-                decodedAccessToken.username
-              ) ||
-              !(
-                decodedRefreshToken.sub ||
-                decodedRefreshToken.email ||
-                decodedRefreshToken.username
-              )
+              !(decodedAccessToken.sub || decodedAccessToken.email) ||
+              !(decodedRefreshToken.sub || decodedRefreshToken.email)
             ) {
               throw new AuthorizationError(
                 "Invalid token structure in token payload"
@@ -110,7 +102,6 @@ export const authConfig: NextAuthConfig = {
               user: {
                 id: decodedAccessToken.sub as string,
                 email: decodedAccessToken.email as string,
-                username: decodedAccessToken.username as string,
               },
               validity,
             };

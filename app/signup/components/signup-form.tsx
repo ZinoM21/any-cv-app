@@ -26,7 +26,6 @@ export function SignUpForm() {
       firstName: "",
       lastName: "",
       email: "",
-      username: "",
       password: "",
       confirmPassword: "",
     },
@@ -81,20 +80,6 @@ export function SignUpForm() {
                     placeholder="john.doe@example.com"
                     {...field}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="johndoe" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

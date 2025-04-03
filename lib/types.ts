@@ -93,7 +93,6 @@ export type WebsiteTemplate = CVTemplate;
 
 export type User = {
   id: string;
-  username: string;
   email: string;
   firstName?: string;
   lastName?: string;
@@ -107,7 +106,6 @@ export type Tokens = {
 export type DecodedToken = {
   id: string;
   email: string;
-  username: string;
   exp: number;
   iat: number;
 };

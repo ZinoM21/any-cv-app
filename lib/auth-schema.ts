@@ -26,10 +26,6 @@ export const signUpSchema = z
       .string({ required_error: "Last name is required" })
       .min(1, "Last name is required"),
     email: emailSchema,
-    username: z
-      .string({ required_error: "Username is required" })
-      .min(3, "Username must be at least 3 characters")
-      .max(20, "Username must be less than 20 characters"),
     password: passwordSchema,
     confirmPassword: z
       .string({ required_error: "Please confirm your password" })
