@@ -1,3 +1,6 @@
+import { ProfileData } from "@/lib/types";
+
+import { redirect } from "next/navigation";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { TemplateId } from "./types";
@@ -12,6 +15,9 @@ import classicWebsite from "@/public/websites/images/classic.jpg";
 
 import { StaticImageData } from "next/image";
 import { format } from "date-fns";
+import { SearchParams } from "next/dist/server/request/search-params";
+import { getServerApi } from "./server-api";
+import { ApiError } from "./api-client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -90,3 +96,47 @@ export const formatDateRange = (startDate: Date, endDate?: Date): string => {
 
   return `${start} - ${end}`;
 };
+
+export const getUsernameFromParamsOrRedirect = (
+  searchParams: SearchParams,
+  redirectTo: string = "/"
+) => {
+  const username = searchParams.username;
+  if (!username) {
+    redirect(redirectTo);
+  }
+  return Array.isArray(username) ? username[0] : username;
+};
+
+export const getTemplateIdFromParamsOrRedirect = (
+  searchParams: SearchParams,
+  redirectTo: string = "/"
+) => {
+  const templateId = searchParams.templateId;
+  if (!templateId) {
+    redirect(redirectTo);
+  }
+  return Array.isArray(templateId) ? templateId[0] : templateId;
+};
+
+/**
+ * Fetches profile data for a username, or redirects to home if an error occurs
+ *
+ * @param username LinkedIn username to fetch profile for
+ * @returns ProfileData if successful, or redirects to home
+ */
+export async function getProfileDataOrRedirect(
+  username: string,
+  redirectTo: string = "/"
+): Promise<ProfileData> {
+  const serverApi = await getServerApi();
+  try {
+    return await serverApi.get<ProfileData>(`/v1/profile/${username}`);
+  } catch (error) {
+    console.error("Failed to fetch profile data:", error);
+    if (error instanceof ApiError && error.status == 404) {
+      redirect(redirectTo);
+    }
+    throw error;
+  }
+}

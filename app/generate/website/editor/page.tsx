@@ -1,7 +1,12 @@
 import { getTemplateById } from "@/components/templates/website/website-template-gate";
-import { ProfileData, PromiseSearchParams, TemplateId } from "@/lib/types";
+import { PromiseSearchParams, TemplateId } from "@/lib/types";
 import { redirect } from "next/navigation";
 import WebsiteEditor from "./components/website-edior";
+import {
+  getProfileDataOrRedirect,
+  getUsernameFromParamsOrRedirect,
+  getTemplateIdFromParamsOrRedirect,
+} from "@/lib/utils";
 
 export default async function WebsiteEditorPage({
   searchParams,
@@ -9,29 +14,16 @@ export default async function WebsiteEditorPage({
   searchParams: PromiseSearchParams;
 }) {
   const params = await searchParams;
-  const { username, templateId } = params;
 
-  if (!username) {
-    redirect("/");
+  const username = getUsernameFromParamsOrRedirect(params);
+
+  const redirectTo = `/generate/website/template?username=${username}`;
+  const templateId = getTemplateIdFromParamsOrRedirect(params, redirectTo);
+  if (!Object.values(TemplateId).includes(templateId as TemplateId)) {
+    redirect(redirectTo);
   }
 
-  if (
-    !templateId ||
-    (templateId &&
-      !Object.values(TemplateId).includes(templateId as TemplateId))
-  ) {
-    redirect(`/generate/website/template?username=${username}`);
-  }
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/${username}`
-  );
-
-  if (!response.ok) {
-    redirect("/");
-  }
-
-  const profileData: ProfileData = await response.json();
+  const profileData = await getProfileDataOrRedirect(username);
   const template = getTemplateById(templateId as TemplateId);
 
   return (

@@ -9,9 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ProfileData, PromiseSearchParams } from "@/lib/types";
-import { redirect } from "next/navigation";
+import { PromiseSearchParams } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import {
+  getProfileDataOrRedirect,
+  getUsernameFromParamsOrRedirect,
+} from "@/lib/utils";
 
 export default async function GeneratingPage({
   searchParams,
@@ -19,21 +22,8 @@ export default async function GeneratingPage({
   searchParams: PromiseSearchParams;
 }) {
   const params = await searchParams;
-  const { username } = params;
-
-  if (!username) {
-    redirect("/");
-  }
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/${username}`
-  );
-
-  if (!response.ok) {
-    redirect("/");
-  }
-
-  const profileData: ProfileData = await response.json();
+  const username = getUsernameFromParamsOrRedirect(params);
+  const profileData = await getProfileDataOrRedirect(username);
 
   return (
     <div className="h-full max-w-[1400px] mx-auto px-4 py-12">

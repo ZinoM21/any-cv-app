@@ -30,6 +30,7 @@ import { toast } from "sonner";
 import { ChevronLeft, FileCheck, Save } from "lucide-react";
 
 import EditorFinalActionButton from "./editor-final-action-button";
+import { useApi } from "@/hooks/use-api";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -82,29 +83,17 @@ export function EditorForm<T extends z.ZodTypeAny>({
 
   const canSave = isDirty && isValid;
 
+  const api = useApi();
+
   const { mutateAsync: mutateProfileData } = useMutation({
     mutationFn: async (values: {
       newValues: Partial<ProfileData>;
       moveToNextTab: boolean;
-    }) => {
-      const { newValues } = values;
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/${profileData?.username}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newValues),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
-      }
-
-      return response.json();
-    },
+    }) =>
+      api.patch<Partial<ProfileData>>(
+        `/v1/profile/${profileData?.username}`,
+        values.newValues
+      ),
     onMutate: async ({ newValues, moveToNextTab }) => {
       // Capture current state for rollback
       const snapshot = { prevProfileData: profileData, previousTab: activeTab };
@@ -140,7 +129,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
       }
 
       console.error(error);
-      toast.error(error.message);
+      toast.error("Failed to update profile");
     },
   });
 

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ArrowRight, ExternalLink, Calendar } from "lucide-react";
 import { ProfileData } from "@/lib/types";
 import { formatDateRange } from "@/lib/utils";

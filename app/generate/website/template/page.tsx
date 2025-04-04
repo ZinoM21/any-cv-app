@@ -1,7 +1,9 @@
-import { redirect } from "next/navigation";
-
-import { ProfileData, PromiseSearchParams } from "@/lib/types";
+import { PromiseSearchParams } from "@/lib/types";
 import { websiteTemplates } from "@/config/templates";
+import {
+  getProfileDataOrRedirect,
+  getUsernameFromParamsOrRedirect,
+} from "@/lib/utils";
 
 import WebsiteTemplateCard from "./components/website-template-card";
 
@@ -11,21 +13,10 @@ export default async function WebsiteTemplatePage({
   searchParams: PromiseSearchParams;
 }) {
   const params = await searchParams;
-  const { username } = params;
 
-  if (!username) {
-    redirect("/");
-  }
+  const username = getUsernameFromParamsOrRedirect(params);
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/${username}`
-  );
-
-  if (!response.ok) {
-    redirect("/");
-  }
-
-  const profileData: ProfileData = await response.json();
+  const profileData = await getProfileDataOrRedirect(username);
 
   return (
     <div className="flex flex-col gap-10 h-full max-w-[1400px] mx-auto pt-12 px-4 sm:px-6 lg:px-8">
@@ -44,7 +35,7 @@ export default async function WebsiteTemplatePage({
           <WebsiteTemplateCard
             key={template.id}
             template={template}
-            username={username as string}
+            username={username}
           />
         ))}
       </div>

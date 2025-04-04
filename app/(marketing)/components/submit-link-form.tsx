@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { ProfileData } from "@/lib/types";
 import { useProfileStore } from "@/hooks/use-profile";
+import { useApi } from "@/hooks/use-api";
 
 const submitLinkFormSchema = z.object({
   linkedInUrl: z
@@ -54,29 +55,11 @@ export function SubmitLinkForm() {
   const router = useRouter();
   const setProfileData = useProfileStore((state) => state.setProfile);
   const [isNavigating, setIsNavigating] = useState(false);
+  const api = useApi();
 
   const mutation = useMutation({
     mutationFn: async (username: string) => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/info/${username}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 404) {
-        const { detail: err } = await response.json();
-        throw new Error(err);
-      }
-
-      if (!response.ok) {
-        throw new Error("Failed to generate CV");
-      }
-
-      return response.json();
+      return api.post<ProfileData>(`/v1/profile/${username}`);
     },
     onSuccess: (data: ProfileData) => {
       setIsNavigating(true);
