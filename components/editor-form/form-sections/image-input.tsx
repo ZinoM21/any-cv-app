@@ -9,6 +9,8 @@ import {
   FieldValues,
   useFormContext,
 } from "react-hook-form";
+import { useSession } from "@/hooks/use-session";
+import SignInDialog from "@/components/auth/sign-in-dialog";
 
 interface ImageInputProps {
   field: ControllerRenderProps<FieldValues>;
@@ -27,6 +29,7 @@ export function ImageInput({
   fileName,
 }: ImageInputProps) {
   const { setValue } = useFormContext();
+  const { isSignedIn } = useSession();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate, isPending } = useSignedUploadUrl();
@@ -84,6 +87,24 @@ export function ImageInput({
     );
   };
 
+  const UploadButton = (
+    <Button
+      type="button"
+      variant="outline"
+      onClick={isSignedIn ? selectFile : undefined}
+      disabled={isPending}
+    >
+      {isPending ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Uploading...
+        </>
+      ) : (
+        label
+      )}
+    </Button>
+  );
+
   return (
     <>
       <input
@@ -93,21 +114,17 @@ export function ImageInput({
         style={{ display: "none" }}
         accept="image/*"
       />
-      <Button
-        type="button"
-        variant="outline"
-        onClick={selectFile}
-        disabled={isPending}
-      >
-        {isPending ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Uploading...
-          </>
-        ) : (
-          label
-        )}
-      </Button>
+
+      {isSignedIn ? (
+        UploadButton
+      ) : (
+        <SignInDialog
+          trigger={UploadButton}
+          onSuccess={selectFile}
+          customTitle="Sign in to upload images"
+          customDescription="You need to be signed in to upload or change your."
+        />
+      )}
     </>
   );
 }

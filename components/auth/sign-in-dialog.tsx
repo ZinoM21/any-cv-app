@@ -31,7 +31,7 @@ export default function SignInDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="grid lg:grid-cols-2 max-w-fit p-0">
+      <DialogContent className="grid lg:grid-cols-2 max-w-fit lg:max-w-[700px] p-0">
         <div className="flex flex-col items-stretch gap-4 p-6">
           <DialogHeader className="flex flex-col items-center text-center">
             <DialogTitle className="text-2xl text-center">
