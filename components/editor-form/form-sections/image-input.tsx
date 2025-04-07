@@ -122,7 +122,7 @@ export function ImageInput({
           trigger={UploadButton}
           onSuccess={selectFile}
           customTitle="Sign in to upload images"
-          customDescription="You need to be signed in to upload or change your."
+          customDescription="You need to be signed in to upload or change images."
         />
       )}
     </>

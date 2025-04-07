@@ -15,6 +15,15 @@ import BuiltAnyCVLogo from "../logo";
 import { ReactNode, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer";
+import { DrawerTrigger } from "../ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function SignInDialog({
   trigger,
@@ -27,19 +36,48 @@ export default function SignInDialog({
   customTitle?: string;
   customDescription?: string;
 }) {
+  const isMobile = useIsMobile();
+
   const [isOpen, setOpen] = useState(false);
+  const [isOpenMobile, setOpenMobile] = useState(false);
+
+  const title = customTitle || "Log in to BuiltAnyCV";
+  const description =
+    customDescription || "Generate beautiful resumes and websites in seconds.";
+
+  if (isMobile) {
+    return (
+      <Drawer open={isOpenMobile} onOpenChange={setOpenMobile}>
+        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+        <DrawerContent className="sm:max-w-[425px]">
+          <DrawerHeader>
+            <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription>{description}</DrawerDescription>
+          </DrawerHeader>
+          <div className="p-4 border-t overflow-y-auto max-h-[calc(100vh-10rem)]">
+            <SignInForm
+              className="flex-1"
+              redirect={false}
+              onSuccess={() => {
+                setOpenMobile(false);
+                onSuccess?.();
+              }}
+            />
+          </div>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="grid lg:grid-cols-2 max-w-fit lg:max-w-[700px] p-0">
         <div className="flex flex-col items-stretch gap-4 p-6">
           <DialogHeader className="flex flex-col items-center text-center">
-            <DialogTitle className="text-2xl text-center">
-              {customTitle || "Log in to BuiltAnyCV"}
-            </DialogTitle>
+            <DialogTitle className="text-2xl text-center">{title}</DialogTitle>
             <DialogDescription className="text-balance text-muted-foreground text-center max-w-72">
-              {customDescription ||
-                "Generate beautiful resumes and websites in seconds."}
+              {description}
             </DialogDescription>
           </DialogHeader>
           <SignInForm
