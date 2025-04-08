@@ -38,3 +38,41 @@ declare module "next-auth/jwt" {
     accessToken: string;
   }
 }
+
+/**
+ * Type definition for the auth hook return value.
+ */
+interface UseAuthReturn {
+  /**
+   * Signs in a user with the provided credentials
+   */
+  signIn: (
+    credentials?: SignInFormValues,
+    options?: SignInOptions & {
+      onSuccess?: () => void;
+    }
+  ) => Promise<void>;
+
+  /**
+   * Imitates the `signIn` function from next-auth, just for sign up.
+   * Call it without params to just redirect to /signup page.
+   * Call it with credentials and it will attempt to sign up the user.
+   * @param credentials - The user signup credentials
+   * @param options - Additional options for signup process
+   * @returns A promise that resolves when signup is complete
+   */
+  signUp: (
+    credentials?: SignUpFormValues,
+    options?: SignInOptions
+  ) => Promise<void>;
+
+  /**
+   * Whether authentication is in progress
+   */
+  isLoading: boolean;
+
+  /**
+   * Error message if authentication failed
+   */
+  error: string | undefined;
+}

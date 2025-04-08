@@ -17,7 +17,7 @@ import { StaticImageData } from "next/image";
 import { format } from "date-fns";
 import { SearchParams } from "next/dist/server/request/search-params";
 import { getServerApi } from "./server-api";
-import { ApiError } from "./api-client";
+import { ApiError } from "./errors";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -134,7 +134,7 @@ export async function getProfileDataOrRedirect(
     return await serverApi.get<ProfileData>(`/v1/profile/${username}`);
   } catch (error) {
     console.error("Failed to fetch profile data:", error);
-    if (error instanceof ApiError && error.status == 404) {
+    if (error instanceof ApiError) {
       redirect(redirectTo);
     }
     throw error;

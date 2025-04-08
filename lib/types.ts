@@ -104,7 +104,7 @@ export type Tokens = {
 };
 
 export type DecodedToken = {
-  id: string;
+  sub: string;
   email: string;
   exp: number;
   iat: number;

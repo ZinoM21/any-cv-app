@@ -4,6 +4,7 @@
  */
 
 import { Session } from "next-auth";
+import { ApiError } from "./errors";
 
 export interface ApiRequestOptions extends RequestInit {
   token?: string;
@@ -14,19 +15,6 @@ export interface ApiRequestOptions extends RequestInit {
  * Base URL for API requests
  */
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
-
-/**
- * Custom API error type
- */
-export class ApiError extends Error {
-  status: number;
-
-  constructor(message: string, status: number) {
-    super(message);
-    this.name = "ApiError";
-    this.status = status;
-  }
-}
 
 /**
  * Makes an API request with automatic authentication if token is provided.
@@ -70,28 +58,36 @@ export async function apiRequest<T>(
   }
 
   // Request
-  const response = await fetch(url, {
-    ...fetchOptions,
-    headers,
-  });
+  try {
+    const response = await fetch(url, {
+      ...fetchOptions,
+      headers,
+    });
 
-  // Error
-  if (!response.ok) {
-    let errorMessage: string;
-    try {
-      const errorData = await response.json();
-      errorMessage =
-        errorData.detail ||
-        errorData.message ||
-        `API error: ${response.status}`;
-    } catch {
-      errorMessage = `API error: ${response.status}`;
+    // Error
+    if (!response.ok) {
+      let errorMessage: string;
+      try {
+        const errorData = await response.json();
+        errorMessage =
+          errorData.detail ||
+          errorData.message ||
+          `API error: ${response.status}`;
+      } catch {
+        errorMessage = `API error: ${response.status}`;
+      }
+
+      throw new ApiError(errorMessage, response.status);
     }
 
-    throw new ApiError(errorMessage, response.status);
+    return response.json();
+  } catch (error) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    console.error("Failed to fetch", error);
+    throw new ApiError("Failed to fetch", 500);
   }
-
-  return response.json();
 }
 
 /**

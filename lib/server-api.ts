@@ -7,15 +7,7 @@ import { createAuthenticatedApiClient } from "@/lib/api-client";
  *
  * @returns API client methods for making authenticated requests
  */
-export async function createServerApiClient() {
+export async function getServerApi() {
   const session = await auth();
   return createAuthenticatedApiClient(session);
-}
-
-/**
- * Lazy-initialized server API client.
- * Use this function to get the API client when needed.
- */
-export function getServerApi() {
-  return createServerApiClient();
 }
