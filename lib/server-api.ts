@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { createAuthenticatedApiClient } from "@/lib/api-client";
+import { createApiClient } from "@/lib/api-client";
 
 /**
  * Server-side function that provides access to the API client with authentication
@@ -9,5 +9,5 @@ import { createAuthenticatedApiClient } from "@/lib/api-client";
  */
 export async function getServerApi() {
   const session = await auth();
-  return createAuthenticatedApiClient(session);
+  return createApiClient(session?.accessToken);
 }

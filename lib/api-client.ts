@@ -3,7 +3,6 @@
  * to the backend API.
  */
 
-import { Session } from "next-auth";
 import { ApiError } from "./errors";
 
 export interface ApiRequestOptions extends RequestInit {
@@ -159,15 +158,4 @@ export function createApiClient(token?: string) {
       options: Omit<ApiRequestOptions, "token"> = {}
     ) => apiRequest<T>(endpoint, { ...options, method: "DELETE", token }),
   };
-}
-
-/**
- * Creates a client-side API client that automatically includes
- * the authentication token from the session when available.
- *
- * @param session Session information including accessToken if authenticated
- * @returns API client methods with authentication
- */
-export function createAuthenticatedApiClient(session: Session | null) {
-  return createApiClient(session?.accessToken);
 }

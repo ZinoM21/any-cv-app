@@ -63,18 +63,11 @@ export function useSignedUploadUrl() {
     mutationFn: async ({ file }: { file: File }) => {
       const signedUrl = await getSignedUploadUrl(file);
 
-      const uploadResponse = await fetch(signedUrl, {
-        method: "PUT",
+      await api.put(signedUrl, file, {
         headers: {
           "Content-Type": file.type,
         },
-        body: file,
       });
-
-      if (!uploadResponse.ok) {
-        throw new Error("Failed to upload file");
-      }
-
       return file.name;
     },
   });

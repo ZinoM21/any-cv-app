@@ -1,7 +1,12 @@
 import * as jose from "jose";
-import { DecodedToken, Tokens } from "./types";
-import { AuthorizationError, InvalidCredentialsError } from "@/lib/errors";
+import { AccessResponse, DecodedToken, Tokens } from "./types";
+import {
+  ApiError,
+  AuthorizationError,
+  InvalidCredentialsError,
+} from "@/lib/errors";
 import { SignInFormValues } from "./auth-schema";
+import { createApiClient } from "./api-client";
 
 const encodedSecret = new TextEncoder().encode(process.env.AUTH_SECRET);
 const EXPIRY_BUFFER_MS = 30 * 1000; // 30 sec
@@ -15,35 +20,38 @@ const EXPIRY_BUFFER_MS = 30 * 1000; // 30 sec
 export const authenticateUser = async (
   parsedCreds: SignInFormValues
 ): Promise<Tokens> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/login`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(parsedCreds),
-    }
-  );
+  const api = createApiClient();
+  try {
+    const tokens = await api.post<Tokens>("/v1/auth/login", parsedCreds);
 
-  if (!response.ok) {
-    // Only handle 401/404 as InvalidCredentialsError, the rest as generic errors
-    if (response.status === 401 || response.status === 404) {
-      throw new InvalidCredentialsError();
-    } else {
+    if (!tokens || !tokens.access || !tokens.refresh) {
       throw new AuthorizationError(
-        "Request failed with status: " + response.status
+        "Invalid response from authentication service"
       );
     }
-  }
 
-  const tokens: Tokens = await response.json();
+    return tokens;
+  } catch (error) {
+    if (error instanceof ApiError) {
+      // Catch all API errors
+      if (error.status === 401 || error.status === 404) {
+        throw new InvalidCredentialsError();
+      }
+    }
 
-  if (!tokens || !tokens.access || !tokens.refresh) {
+    if (error instanceof AuthorizationError) {
+      // Catch invalid return values from the API
+      throw error;
+    }
+
+    // Catch rest
     throw new AuthorizationError(
-      "Invalid response from authentication service"
+      `Request failed${
+        error instanceof ApiError &&
+        " with status: " + error.status + " :" + error.message
+      }`
     );
   }
-
-  return tokens;
 };
 
 /**
@@ -55,36 +63,37 @@ export const authenticateUser = async (
 export const fetchRefreshToken = async (
   refreshToken: string
 ): Promise<string> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/refresh-access`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+  const api = createApiClient();
+
+  try {
+    const refreshResponse = await api.post<AccessResponse>(
+      "/v1/auth/refresh-access",
+      {
         refresh_token: refreshToken,
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    console.error(
-      `Failed to refresh token: ${response.status}`,
-      await response.text()
+      }
     );
-    throw new Error(`Failed to refresh token: ${response.status}`);
+
+    const { access } = refreshResponse;
+
+    if (!access) {
+      console.error("No access token received:", refreshResponse);
+      throw new Error("Invalid response format from refresh endpoint");
+    }
+
+    return access;
+  } catch (error) {
+    if (error instanceof AuthorizationError) {
+      // Catch invalid return values from the API
+      throw error;
+    }
+
+    const status = error instanceof ApiError ? error.status : undefined;
+    const errorMessage =
+      error instanceof ApiError ? status + ": " + error.message : error;
+
+    // Catch rest
+    throw new AuthorizationError(`Request failed: ${errorMessage}`, status);
   }
-
-  const refreshResponse = await response.json();
-  const { access } = refreshResponse;
-
-  if (!access) {
-    console.error("No access token received:", refreshResponse);
-    throw new Error("Invalid response format from refresh endpoint");
-  }
-
-  return access;
 };
 
 export const getDecodedToken = async (token: string): Promise<DecodedToken> => {

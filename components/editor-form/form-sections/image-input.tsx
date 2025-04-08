@@ -72,7 +72,7 @@ export function ImageInput({
         },
         onError: (error) => {
           console.error("Error uploading image:", error);
-          if (error.message.includes("5MB")) {
+          if (error.message.includes("MB")) {
             toast.error("Failed to upload image: " + error.message);
           } else {
             toast.error("Failed to upload image. Please try again.");

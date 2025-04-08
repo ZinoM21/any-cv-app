@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "./use-session";
-import { createAuthenticatedApiClient } from "@/lib/api-client";
+import { createApiClient } from "@/lib/api-client";
 
 /**
  * React hook that provides access to the API client with authentication
@@ -11,7 +11,7 @@ import { createAuthenticatedApiClient } from "@/lib/api-client";
  */
 export function useApi() {
   const { data: session } = useSession();
-  return createAuthenticatedApiClient(session);
+  return createApiClient(session?.accessToken);
 }
 
 export default useApi;

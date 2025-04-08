@@ -10,6 +10,8 @@ import { toast } from "sonner";
 
 import { SignInFormValues, SignUpFormValues } from "@/lib/auth-schema";
 import { UseAuthReturn } from "@/lib/next-auth";
+import useApi from "./use-api";
+import { User } from "@/lib/types";
 
 type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect">;
 
@@ -22,6 +24,7 @@ type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect">;
  */
 export function useAuth(): UseAuthReturn {
   const { replace } = useRouter();
+  const api = useApi();
   const searchParams = useSearchParams();
 
   const signInMutation = useMutation({
@@ -117,26 +120,7 @@ export function useAuth(): UseAuthReturn {
     }: {
       credentials: SignUpFormValues;
       options?: SignInOptions;
-    }) => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
-        }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || "Failed to register");
-      }
-
-      const user = await response.json();
-      return user;
-    },
+    }) => await api.post<User>("/v1/auth/register", credentials),
     onSuccess: async (user, { credentials, options }) => {
       await signInMutation.mutateAsync({
         credentials: { email: user.email, password: credentials.password },

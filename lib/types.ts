@@ -103,6 +103,8 @@ export type Tokens = {
   refresh: string;
 };
 
+export type AccessResponse = Pick<Tokens, "access">;
+
 export type DecodedToken = {
   sub: string;
   email: string;
