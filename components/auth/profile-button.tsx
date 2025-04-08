@@ -105,7 +105,7 @@ export function HeaderDropdownMenu({
         )}
         {isSignedIn ? (
           <DropdownMenuItem
-            onClick={() => signOut()}
+            onClick={() => signOut({ redirectTo: "/" })}
             className="justify-between hover:cursor-pointer"
           >
             Log out
