@@ -60,7 +60,7 @@ export const PDF = ({
         fileUrl={url}
         plugins={plugins}
         renderLoader={() => (
-          <div className="pt-5">
+          <div className="pt-5 w-full h-full bg-muted flex justify-center">
             <PDFLoadingSkeleton />
           </div>
         )}
