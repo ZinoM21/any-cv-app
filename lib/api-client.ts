@@ -100,10 +100,12 @@ export function createApiClient(token?: string) {
     /**
      * Send a GET request to the API
      */
-    get: <T>(
-      endpoint: string,
-      options: Omit<ApiRequestOptions, "token"> = {}
-    ) => apiRequest<T>(endpoint, { ...options, method: "GET", token }),
+    get: <T>(endpoint: string, options: ApiRequestOptions = {}) =>
+      apiRequest<T>(endpoint, {
+        ...options,
+        method: "GET",
+        token: options.token || token,
+      }),
 
     /**
      * Send a POST request to the API
@@ -111,13 +113,13 @@ export function createApiClient(token?: string) {
     post: <T>(
       endpoint: string,
       data?: unknown,
-      options: Omit<ApiRequestOptions, "token"> = {}
+      options: ApiRequestOptions = {}
     ) =>
       apiRequest<T>(endpoint, {
         ...options,
         method: "POST",
         body: data ? JSON.stringify(data) : undefined,
-        token,
+        token: options.token || token,
       }),
 
     /**
@@ -126,13 +128,13 @@ export function createApiClient(token?: string) {
     patch: <T>(
       endpoint: string,
       data?: unknown,
-      options: Omit<ApiRequestOptions, "token"> = {}
+      options: ApiRequestOptions = {}
     ) =>
       apiRequest<T>(endpoint, {
         ...options,
         method: "PATCH",
         body: data ? JSON.stringify(data) : undefined,
-        token,
+        token: options.token || token,
       }),
 
     /**
@@ -141,21 +143,23 @@ export function createApiClient(token?: string) {
     put: <T>(
       endpoint: string,
       data?: unknown,
-      options: Omit<ApiRequestOptions, "token"> = {}
+      options: ApiRequestOptions = {}
     ) =>
       apiRequest<T>(endpoint, {
         ...options,
         method: "PUT",
         body: data ? JSON.stringify(data) : undefined,
-        token,
+        token: options.token || token,
       }),
 
     /**
      * Send a DELETE request to the API
      */
-    delete: <T>(
-      endpoint: string,
-      options: Omit<ApiRequestOptions, "token"> = {}
-    ) => apiRequest<T>(endpoint, { ...options, method: "DELETE", token }),
+    delete: <T>(endpoint: string, options: ApiRequestOptions = {}) =>
+      apiRequest<T>(endpoint, {
+        ...options,
+        method: "DELETE",
+        token: options.token || token,
+      }),
   };
 }

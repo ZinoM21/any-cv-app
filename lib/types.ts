@@ -121,4 +121,7 @@ export type PromiseSearchParams = Promise<SearchParams>;
 
 export type SignedUrl = {
   signed_url: string;
+
+export type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect"> & {
+  onSuccess?: () => void;
 };

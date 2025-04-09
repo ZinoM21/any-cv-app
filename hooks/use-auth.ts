@@ -1,19 +1,17 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import {
-  signIn as authorize,
-  SignInOptions as DefaultSignInOptions,
-} from "next-auth/react";
+import { signIn as authorize } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { SignInFormValues, SignUpFormValues } from "@/lib/auth-schema";
 import { UseAuthReturn } from "@/lib/next-auth";
 import useApi from "./use-api";
-import { User } from "@/lib/types";
-
-type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect">;
+import { SignInOptions, User } from "@/lib/types";
+import { useProfileStore } from "./use-profile";
+import { useProfileTransfer } from "./use-transfer-profile";
+import { useShallow } from "zustand/react/shallow";
 
 /**
  * Custom hook for authentication
@@ -24,17 +22,33 @@ type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect">;
  */
 export function useAuth(): UseAuthReturn {
   const { replace } = useRouter();
-  const api = useApi();
   const searchParams = useSearchParams();
+
+  const api = useApi();
+
+  const [profileData, setProfileData] = useProfileStore(
+    useShallow((state) => [state.profile, state.setProfile])
+  );
+
+  const { mutate: mutateProfileTransfer } = useProfileTransfer();
+
+  const transferProfileIfPresent = async () => {
+    // If a guest profile username was provided, call the transfer endpoint & update state
+    if (profileData?.username) {
+      mutateProfileTransfer(profileData.username, {
+        onSuccess: (data) => {
+          setProfileData(data);
+        },
+      });
+    }
+  };
 
   const signInMutation = useMutation({
     mutationFn: async ({
       credentials,
     }: {
       credentials: SignInFormValues;
-      options?: SignInOptions & {
-        onSuccess?: () => void;
-      };
+      options?: SignInOptions;
     }) => {
       // The fetch is handled by the authorize function from AuthJS
       const response = await authorize("credentials", {
@@ -53,6 +67,7 @@ export function useAuth(): UseAuthReturn {
     },
     onSuccess: async (response, { options }) => {
       const { onSuccess, redirect, redirectTo } = options || {};
+      await transferProfileIfPresent();
       if (onSuccess) {
         onSuccess();
       }
@@ -79,9 +94,7 @@ export function useAuth(): UseAuthReturn {
    */
   const signIn = async (
     credentials?: SignInFormValues,
-    options?: SignInOptions & {
-      onSuccess?: () => void;
-    }
+    options?: SignInOptions
   ) => {
     // Get redirect url
     const { redirect = true, redirectTo: initialRedirectTo } = options ?? {};
@@ -110,7 +123,7 @@ export function useAuth(): UseAuthReturn {
     // Otherwise sign in user & pass redirect
     await signInMutation.mutateAsync({
       credentials,
-      options: { redirect, redirectTo },
+      options: { redirect, redirectTo, ...options },
     });
   };
 
@@ -171,7 +184,7 @@ export function useAuth(): UseAuthReturn {
     // Otherwise sign up user & pass redirect
     await signUpMutation.mutateAsync({
       credentials,
-      options: { redirect, redirectTo },
+      options: { redirect, redirectTo, ...options },
     });
   };
 

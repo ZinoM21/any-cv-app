@@ -4,7 +4,12 @@ import NextAuth, {
   Session as DefaultSession,
 } from "next-auth";
 import { type JWT as DefaultJWT } from "next-auth/jwt";
-import { AuthValidity, Tokens, type User as UserObject } from "./types";
+import {
+  AuthValidity,
+  SignInOptions,
+  Tokens,
+  type User as UserObject,
+} from "./types";
 
 declare module "next-auth" {
   /**
@@ -48,9 +53,7 @@ interface UseAuthReturn {
    */
   signIn: (
     credentials?: SignInFormValues,
-    options?: SignInOptions & {
-      onSuccess?: () => void;
-    }
+    options?: SignInOptions
   ) => Promise<void>;
 
   /**
