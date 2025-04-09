@@ -1,6 +1,7 @@
 import { buttonVariants } from "@/components/ui/button";
 import { VariantProps } from "class-variance-authority";
 import { SearchParams } from "next/dist/server/request/search-params";
+import { SignInOptions as DefaultSignInOptions } from "next-auth/react";
 
 export type ProfileData = {
   firstName: string;
@@ -120,7 +121,9 @@ export type AuthValidity = {
 export type PromiseSearchParams = Promise<SearchParams>;
 
 export type SignedUrl = {
-  signed_url: string;
+  url: string;
+  path: string;
+};
 
 export type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect"> & {
   onSuccess?: () => void;

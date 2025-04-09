@@ -18,11 +18,14 @@ export function useSignedUrl(filePath: string | undefined | null) {
         return null;
       }
       try {
-        const response = await api.post<SignedUrl>(`/v1/files/signed-url`, {
-          file_path: filePath,
-        });
+        const signedUrlResponse = await api.post<SignedUrl>(
+          `/v1/files/signed-url`,
+          {
+            file_path: filePath,
+          }
+        );
 
-        return response.signed_url;
+        return signedUrlResponse;
       } catch (error) {
         console.error("Failed to fetch signed URL", error);
         throw new Error("Failed to fetch signed URL");
@@ -40,11 +43,10 @@ export function useSignedUrl(filePath: string | undefined | null) {
 export function useSignedUploadUrl() {
   const api = useApi();
 
-  const getSignedUploadUrl = async (file: File) => {
-    try {
-      const response = await api.post<SignedUrl>(
+  const { mutateAsync: getSignedUploadUrl } = useMutation({
+    mutationFn: async (file: File) => {
+      const signedUrlResponse = await api.post<SignedUrl>(
         `/v1/files/signed-upload-url`,
-
         {
           file_name: file.name,
           file_type: file.type,
@@ -52,23 +54,31 @@ export function useSignedUploadUrl() {
         }
       );
 
-      return response.signed_url;
-    } catch (error) {
+      return signedUrlResponse;
+    },
+    onError: (error) => {
       console.error("Failed to fetch signed URL", error);
       throw new Error("Failed to fetch signed URL");
-    }
-  };
+    },
+  });
 
   return useMutation({
     mutationFn: async ({ file }: { file: File }) => {
-      const signedUrl = await getSignedUploadUrl(file);
+      const signedUrlResponse = await getSignedUploadUrl(file);
 
-      await api.put(signedUrl, file, {
+      const uploadResponse = await fetch(signedUrlResponse.url, {
+        method: "PUT",
         headers: {
           "Content-Type": file.type,
         },
+        body: file,
       });
-      return file.name;
+
+      if (!uploadResponse.ok) {
+        throw new Error("Failed to upload file");
+      }
+
+      return signedUrlResponse.path;
     },
   });
 }

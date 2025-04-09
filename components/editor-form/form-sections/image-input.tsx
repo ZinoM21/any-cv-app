@@ -32,7 +32,7 @@ export function ImageInput({
   const { isSignedIn } = useSession();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { mutate, isPending } = useSignedUploadUrl();
+  const { mutate: upload, isPending } = useSignedUploadUrl();
   const { refetch } = useSignedUrl(field.value);
 
   const selectFile = () => {
@@ -52,7 +52,7 @@ export function ImageInput({
       type: _file.type,
     });
 
-    mutate(
+    upload(
       { file },
       {
         onSuccess: (imagePath) => {
