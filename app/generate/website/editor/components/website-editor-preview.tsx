@@ -1,4 +1,4 @@
-import { websiteTemplateComponentMap } from "@/components/templates/website/website-template-gate";
+import { getTemplateWebsiteById } from "@/components/templates/website/website-template-gate";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -11,10 +11,6 @@ export default function WebsiteEditorPreview({
 }: {
   templateId: TemplateId;
 }) {
-  const TemplateWebsiteComponent =
-    websiteTemplateComponentMap[templateId] ||
-    websiteTemplateComponentMap[TemplateId.Classic];
-
   const { toggleSidebar } = useSidebar();
 
   const profileData = useProfileStore((state) => state.profile);
@@ -35,7 +31,7 @@ export default function WebsiteEditorPreview({
           </kbd>
         </Button>
       </div>
-      <TemplateWebsiteComponent profileData={profileData} />
+      {getTemplateWebsiteById(templateId, profileData)}
       <div className="absolute left-4">
         <Badge
           className="fixed bottom-4 bg-background py-2 shadow-2xl"

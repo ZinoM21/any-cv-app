@@ -19,6 +19,12 @@ export type ProfileData = {
   skills: string[] | [];
   volunteering: VolunteeringExperience[] | [];
   projects: Project[] | [];
+  publishingOptions?: PublishingOptions;
+};
+
+export type PublishingOptions = {
+  darkMode?: boolean;
+  templateId?: TemplateId;
 };
 
 export type Experience = {
@@ -125,6 +131,9 @@ export type SignedUrl = {
   path: string;
 };
 
-export type SignInOptions = Pick<DefaultSignInOptions, "redirectTo" | "redirect"> & {
+export type SignInOptions = Pick<
+  DefaultSignInOptions,
+  "redirectTo" | "redirect"
+> & {
   onSuccess?: () => void;
 };

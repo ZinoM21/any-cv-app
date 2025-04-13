@@ -35,7 +35,7 @@ export default function TheCreativeWebsite({
           <header className="mb-16">
             {profilePictureUrl && (
               <SignedImage
-                src={profilePictureUrl || "/placeholder.svg"}
+                src={profilePictureUrl}
                 alt={`${firstName} ${lastName}`}
                 width={120}
                 height={120}
@@ -142,10 +142,7 @@ export default function TheCreativeWebsite({
               {education.map((edu, index) => (
                 <div key={index} className="mb-4">
                   <SignedImage
-                    src={
-                      edu.schoolPictureUrl ||
-                      "/placeholder.svg?height=52&width=84"
-                    }
+                    src={edu.schoolPictureUrl}
                     alt={edu.school}
                     width={84}
                     height={52}

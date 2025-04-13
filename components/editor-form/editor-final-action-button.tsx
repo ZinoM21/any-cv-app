@@ -9,6 +9,7 @@ import PublishWebsiteButton from "@/app/generate/website/editor/components/publi
 
 export default function EditorFinalActionButton() {
   const [open, setOpen] = useState(false);
+  const [websiteUrl, setWebsiteUrl] = useState<string | undefined>();
 
   const pathname = usePathname();
   const isWebsite = pathname.includes("/website");
@@ -19,11 +20,19 @@ export default function EditorFinalActionButton() {
   return (
     <>
       {isCV && <DownloadCVButton onSuccess={() => setOpen(true)} />}
-      {isWebsite && <PublishWebsiteButton onSuccess={() => setOpen(true)} />}
+      {isWebsite && (
+        <PublishWebsiteButton
+          onSuccess={(websiteUrl) => {
+            setOpen(true);
+            setWebsiteUrl(websiteUrl);
+          }}
+        />
+      )}
       <SuggestNextActionDialog
         nextAction={nextAction}
         isOpen={open}
         setOpen={setOpen}
+        websiteUrl={websiteUrl}
       />
     </>
   );

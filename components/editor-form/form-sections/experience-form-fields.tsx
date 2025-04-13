@@ -36,11 +36,10 @@ export default function ExperienceFormFields({
   const getFieldName = (fieldName: string) =>
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
 
-  const posPrefix = fieldNamePrefix ? `${fieldNamePrefix}.` : "";
-
   const { control, getValues } = useFormContext();
 
   const companyName = getValues(getFieldName("company"));
+  const posFieldName = getFieldName("positions");
 
   const {
     fields: positionFields,
@@ -48,7 +47,7 @@ export default function ExperienceFormFields({
     remove,
   } = useFieldArray({
     control,
-    name: getFieldName("positions"),
+    name: posFieldName,
   });
 
   return (
@@ -143,13 +142,13 @@ export default function ExperienceFormFields({
             type="single"
             collapsible
             className="w-full"
-            defaultValue={`${posPrefix}position.0`}
+            defaultValue={`${posFieldName}.0`}
           >
             {(positionFields as (Position & { id: string })[]).map(
               (position, posIndex) => (
                 <AccordionItem
                   key={posIndex}
-                  value={`${posPrefix}position.${posIndex}`}
+                  value={`${posFieldName}.${posIndex}`}
                   className="border-b border-muted last:border-0 py-3 first:pt-1 last:pb-1"
                 >
                   <AccordionTrigger className="py-0">
@@ -181,7 +180,7 @@ export default function ExperienceFormFields({
                       </div>
 
                       <PositionFormFields
-                        fieldNamePrefix={`${posPrefix}position.${posIndex}`}
+                        fieldNamePrefix={`${posFieldName}.${posIndex}`}
                       />
                     </div>
                   </AccordionContent>

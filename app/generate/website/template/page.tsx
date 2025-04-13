@@ -14,7 +14,7 @@ export default async function WebsiteTemplatePage({
 }) {
   const params = await searchParams;
 
-  const username = getUsernameFromParamsOrRedirect(params);
+  const username = getUsernameFromParamsOrRedirect(params.username);
 
   const profileData = await getProfileDataOrRedirect(username);
 

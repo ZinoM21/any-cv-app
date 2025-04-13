@@ -1,4 +1,4 @@
-import { websiteTemplateComponentMap } from "@/components/templates/website/website-template-gate";
+import { getTemplateWebsiteById } from "@/components/templates/website/website-template-gate";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,10 +19,6 @@ export default function WebsitePreviewPopup({
   templateId: TemplateId;
   templateName: string;
 }) {
-  const TemplateWebsiteComponent =
-    websiteTemplateComponentMap[templateId] ||
-    websiteTemplateComponentMap[TemplateId.Classic];
-
   return (
     <Dialog key={templateId}>
       <DialogTrigger asChild>
@@ -47,7 +43,7 @@ export default function WebsitePreviewPopup({
         </DialogHeader>
 
         <div className="flex-1 overflow-auto p-4">
-          <TemplateWebsiteComponent profileData={demoData} />
+          {getTemplateWebsiteById(templateId, demoData)}
         </div>
       </DialogContent>
     </Dialog>

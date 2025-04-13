@@ -20,7 +20,7 @@ export const websiteTemplateComponentMap: {
 /**
  * Returns the appropriate template Website component based on templateId
  */
-export const getTemplateWebsiteById = async (
+export const getTemplateWebsiteById = (
   templateId: TemplateId,
   profileData: Partial<ProfileData>
 ) => {

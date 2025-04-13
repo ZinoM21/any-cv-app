@@ -15,9 +15,9 @@ import classicWebsite from "@/public/websites/images/classic.jpg";
 
 import { StaticImageData } from "next/image";
 import { format } from "date-fns";
-import { SearchParams } from "next/dist/server/request/search-params";
 import { getServerApi } from "./server-api";
 import { ApiError } from "./errors";
+import { getValidUsername, getValidTemplateId } from "./validation";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -97,26 +97,33 @@ export const formatDateRange = (startDate: Date, endDate?: Date): string => {
   return `${start} - ${end}`;
 };
 
+/**
+ * Fetches a username from params entry, or redirects to home if invalid
+ *
+ * @param username Username to fetch
+ * @param redirectTo Redirect URL (default: "/")
+ * @returns Valid username
+ */
 export const getUsernameFromParamsOrRedirect = (
-  searchParams: SearchParams,
+  username: string | string[] | undefined | null,
   redirectTo: string = "/"
 ) => {
-  const username = searchParams.username;
-  if (!username) {
+  const validUsername = getValidUsername(username);
+  if (!validUsername) {
     redirect(redirectTo);
   }
-  return Array.isArray(username) ? username[0] : username;
+  return validUsername;
 };
 
 export const getTemplateIdFromParamsOrRedirect = (
-  searchParams: SearchParams,
+  templateId: string | string[] | undefined | null,
   redirectTo: string = "/"
 ) => {
-  const templateId = searchParams.templateId;
-  if (!templateId) {
+  const validTemplateId = getValidTemplateId(templateId);
+  if (!validTemplateId) {
     redirect(redirectTo);
   }
-  return Array.isArray(templateId) ? templateId[0] : templateId;
+  return validTemplateId;
 };
 
 /**

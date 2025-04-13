@@ -37,7 +37,7 @@ export default function RemoveAlertDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently remove this
+            This action cannot be undone. This will permanently remove this{" "}
             {type} entry from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
