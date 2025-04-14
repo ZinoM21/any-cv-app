@@ -32,10 +32,10 @@ export function ImageInput({
   const { isSignedIn } = useSession();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { mutate: upload, isPending } = useSignedUploadUrl();
+  const { mutateAsync: upload, isPending } = useSignedUploadUrl();
   const { refetch } = useSignedUrl(field.value);
 
-  const selectFile = () => {
+  const selectFile = async () => {
     fileInputRef.current?.click();
   };
 
@@ -52,10 +52,10 @@ export function ImageInput({
       type: _file.type,
     });
 
-    upload(
+    await upload(
       { file },
       {
-        onSuccess: (imagePath) => {
+        onSuccess: async (imagePath) => {
           setValue(field.name, imagePath, {
             shouldValidate: true,
             shouldDirty: true,
@@ -68,7 +68,7 @@ export function ImageInput({
             fileInputRef.current.value = "";
           }
 
-          refetch();
+          await refetch();
         },
         onError: (error) => {
           console.error("Error uploading image:", error);

@@ -53,7 +53,7 @@ export default function DownloadCVButton({
         ) : (
           <SignInDialog
             trigger={<DownloadButton />}
-            onSuccess={() => {
+            onSuccess={async () => {
               downloadCV();
               onDownloadSuccess();
             }}

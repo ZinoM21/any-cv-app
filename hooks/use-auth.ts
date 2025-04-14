@@ -30,13 +30,13 @@ export function useAuth(): UseAuthReturn {
     useShallow((state) => [state.profile, state.setProfile])
   );
 
-  const { mutate: mutateProfileTransfer } = useProfileTransfer();
+  const { mutateAsync: mutateProfileTransfer } = useProfileTransfer();
 
   const transferProfileIfPresent = async () => {
     // If a guest profile username was provided, call the transfer endpoint & update state
     if (profileData?.username) {
-      mutateProfileTransfer(profileData.username, {
-        onSuccess: (data) => {
+      await mutateProfileTransfer(profileData.username, {
+        onSuccess: async (data) => {
           setProfileData(data);
         },
       });
@@ -69,7 +69,7 @@ export function useAuth(): UseAuthReturn {
       const { onSuccess, redirect, redirectTo } = options || {};
       await transferProfileIfPresent();
       if (onSuccess) {
-        onSuccess();
+        await onSuccess();
       }
       if (redirect) {
         replace(response?.url || redirectTo || "/");

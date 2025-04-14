@@ -2,13 +2,12 @@
 
 import SignInDialog from "@/components/auth/sign-in-dialog";
 import { Button } from "@/components/ui/button";
-import useSession from "@/hooks/use-session";
-import { Loader2, Ship } from "lucide-react";
-import { toast } from "sonner";
 import { useProfileUpdateMutation } from "@/hooks/use-profile-update-mutation";
+import useSession from "@/hooks/use-session";
 import { getTemplateIdFromParamsOrRedirect } from "@/lib/utils";
-import { getUsernameFromParamsOrRedirect } from "@/lib/utils";
+import { Loader2, Ship } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 const PublishButton = ({
   onClick,
@@ -41,14 +40,12 @@ const PublishButton = ({
 export default function PublishWebsiteButton({
   onSuccess,
 }: {
-  onSuccess?: (websiteUrl: string) => void;
+  onSuccess?: () => void;
 }) {
   const { isSignedIn } = useSession();
 
   const searchParams = useSearchParams();
-  const username = getUsernameFromParamsOrRedirect(
-    searchParams.get("username")
-  );
+
   const templateId = getTemplateIdFromParamsOrRedirect(
     searchParams.get("templateId")
   );
@@ -66,11 +63,7 @@ export default function PublishWebsiteButton({
         publishingOptions,
       },
       {
-        onSuccess: () => {
-          const websiteUrl = `${window.location.origin}/${username}`;
-          toast.success(`Your website is now live at ${websiteUrl}`);
-          onSuccess?.(websiteUrl);
-        },
+        onSuccess,
         onError: (error) => {
           console.error("Error publishing website:", error);
           toast.error("Failed to publish website. Please try again.");

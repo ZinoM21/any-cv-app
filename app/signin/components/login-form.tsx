@@ -26,7 +26,7 @@ export function SignInForm({
   redirect = true,
   ...props
 }: React.ComponentProps<"form"> & {
-  onSuccess?: () => void;
+  onSuccess?: () => Promise<void>;
   redirect?: boolean;
 }) {
   const { signIn, signUp, isLoading } = useAuth();
@@ -40,7 +40,7 @@ export function SignInForm({
   });
 
   const submit = signInForm.handleSubmit(async (credentials) => {
-    signIn(credentials, { redirect, onSuccess });
+    await signIn(credentials, { redirect, onSuccess });
   });
 
   return (

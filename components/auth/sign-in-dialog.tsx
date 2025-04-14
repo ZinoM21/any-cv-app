@@ -32,7 +32,7 @@ export default function SignInDialog({
   customDescription,
 }: {
   trigger: ReactNode;
-  onSuccess?: () => void;
+  onSuccess?: () => Promise<void>;
   customTitle?: string;
   customDescription?: string;
 }) {
@@ -58,9 +58,9 @@ export default function SignInDialog({
             <SignInForm
               className="flex-1"
               redirect={false}
-              onSuccess={() => {
+              onSuccess={async () => {
                 setOpenMobile(false);
-                onSuccess?.();
+                await onSuccess?.();
               }}
             />
           </div>
@@ -83,9 +83,9 @@ export default function SignInDialog({
           <SignInForm
             className="flex-1"
             redirect={false}
-            onSuccess={() => {
+            onSuccess={async () => {
               setOpen(false);
-              onSuccess?.();
+              await onSuccess?.();
             }}
           />
         </div>
