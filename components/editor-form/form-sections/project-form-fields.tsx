@@ -28,7 +28,7 @@ export default function ProjectFormFields({
         name={getFieldName("title")}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Project Title</FormLabel>
+            <FormLabel>Title or Name</FormLabel>
             <FormControl>
               <Input {...field} placeholder="Portfolio Website" />
             </FormControl>
@@ -81,7 +81,7 @@ export default function ProjectFormFields({
         name={getFieldName("url")}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Project URL (Optional)</FormLabel>
+            <FormLabel>Link (Optional)</FormLabel>
             <FormControl>
               <Input
                 type="url"
@@ -116,7 +116,7 @@ export default function ProjectFormFields({
         name={getFieldName("description")}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Project Description (Optional)</FormLabel>
+            <FormLabel>Description (Optional)</FormLabel>
             <FormControl>
               <Textarea
                 {...field}

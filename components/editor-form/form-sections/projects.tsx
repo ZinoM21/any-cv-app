@@ -80,7 +80,7 @@ const ProjectsFieldArray = () => {
                           <div className="min-w-0">
                             <CardTitle className="text-base">
                               <FormField
-                                name={`projects.${index}.role`}
+                                name={`projects.${index}.title`}
                                 render={({ field }) =>
                                   field.value ? (
                                     <span className="block truncate">
