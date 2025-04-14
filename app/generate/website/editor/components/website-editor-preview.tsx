@@ -1,10 +1,9 @@
 import { getTemplateWebsiteById } from "@/components/templates/website/website-template-gate";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useProfileStore } from "@/hooks/use-profile";
 import { TemplateId } from "@/lib/types";
-import { FileUser, SidebarIcon } from "lucide-react";
+import { SidebarIcon } from "lucide-react";
 
 export default function WebsiteEditorPreview({
   templateId,
@@ -32,17 +31,6 @@ export default function WebsiteEditorPreview({
         </Button>
       </div>
       {getTemplateWebsiteById(templateId, profileData)}
-      <div className="absolute left-4">
-        <Badge
-          className="fixed bottom-4 bg-background py-2 shadow-2xl"
-          variant="outline"
-        >
-          <div className="flex h-6 w-6 items-center justify-center mr-2 rounded-md bg-primary text-primary-foreground">
-            <FileUser className="size-4" />
-          </div>
-          Made with BuiltAnyCV
-        </Badge>
-      </div>
     </>
   );
 }

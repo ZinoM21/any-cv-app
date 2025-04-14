@@ -1,4 +1,5 @@
 import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import MadeWithBadge from "@/components/made-with-badge";
 import { ProfileData } from "@/lib/types";
 import { formatDateRange } from "@/lib/utils";
 import { ArrowRight, Calendar, ExternalLink } from "lucide-react";
@@ -281,6 +282,7 @@ export default function TheCreativeWebsite({
           </section>
         </div>
       </div>
+      <MadeWithBadge />
     </main>
   );
 }
