@@ -1,11 +1,11 @@
-import { PromiseSearchParams, TemplateId } from "@/lib/types";
-import CVEditor from "./components/cv-editor";
 import { getTemplateById } from "@/components/templates/cv/cv-template-gate";
+import { PromiseSearchParams, TemplateId } from "@/lib/types";
 import {
   getProfileDataOrRedirect,
-  getUsernameFromParamsOrRedirect,
   getTemplateIdFromParamsOrRedirect,
+  getUsernameFromParamsOrRedirect,
 } from "@/lib/utils";
+import CVEditor from "./components/cv-editor";
 
 export default async function CVEditorPage({
   searchParams,

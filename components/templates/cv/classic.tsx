@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Create Document Component
 const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
   const {
     firstName,

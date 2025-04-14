@@ -5,7 +5,7 @@ export const demoData: ProfileData = {
   firstName: "John",
   lastName: "Doe",
   profilePictureUrl: "",
-  headline: "Software Engineer | Product Manager | Tech Enthusiast",
+  headline: "Software Engineer",
   about:
     "Passionate software engineer with 5+ years of experience building web and mobile applications. Currently focusing on AI-driven solutions.",
   experiences: [

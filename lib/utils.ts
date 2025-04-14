@@ -8,6 +8,7 @@ import { TemplateId } from "./types";
 import minimalCV from "@/public/cvs/images/minimal.jpg";
 import creativeCV from "@/public/cvs/images/creative.jpg";
 import classicCV from "@/public/cvs/images/classic.jpg";
+import modernCV from "@/public/cvs/images/modern.jpg";
 
 import minimalWebsite from "@/public/websites/images/minimal.jpg";
 import creativeWebsite from "@/public/websites/images/creative.jpg";
@@ -65,6 +66,8 @@ export const getCVImage = (templateId: TemplateId): StaticImageData => {
       return classicCV;
     case TemplateId.Minimal:
       return minimalCV;
+    case TemplateId.Modern:
+      return modernCV;
     default:
       return classicCV;
   }

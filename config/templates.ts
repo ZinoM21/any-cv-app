@@ -7,9 +7,14 @@ export const cvTemplates: CVTemplate[] = [
     description: "Clean and straightforward design focusing on content clarity",
   },
   {
+    id: TemplateId.Modern,
+    name: "Modern",
+    description: "Modern design with unique elements for creative industries",
+  },
+  {
     id: TemplateId.Creative,
     name: "Creative",
-    description: "Modern design with unique elements for creative industries",
+    description: "Creative design with unique elements for creative industries",
   },
   {
     id: TemplateId.Classic,

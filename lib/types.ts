@@ -88,6 +88,7 @@ export enum TemplateId {
   Minimal = "minimal",
   Creative = "creative",
   Classic = "classic",
+  Modern = "modern",
 }
 
 export type CVTemplate = {

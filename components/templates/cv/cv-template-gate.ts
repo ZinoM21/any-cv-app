@@ -1,9 +1,10 @@
-import { ReactElement } from "react";
-import { CVTemplate, ProfileData, TemplateId } from "@/lib/types";
-import TheClassic from "./classic";
-import { ResumeDocument } from "./resume-two";
 import { cvTemplates } from "@/config/templates";
+import { CVTemplate, ProfileData, TemplateId } from "@/lib/types";
 import { DocumentProps } from "@react-pdf/renderer";
+import { ReactElement } from "react";
+import TheClassic from "./classic";
+import TheModern from "./modern";
+import { ResumeDocument } from "./resume-two";
 
 const templateComponentMap: {
   [P in TemplateId]: (props: {
@@ -11,6 +12,7 @@ const templateComponentMap: {
   }) => ReactElement<DocumentProps>;
 } = {
   [TemplateId.Classic]: TheClassic,
+  [TemplateId.Modern]: TheModern,
   [TemplateId.Creative]: ResumeDocument,
   [TemplateId.Minimal]: ResumeDocument,
 };
