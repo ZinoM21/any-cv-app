@@ -1,9 +1,9 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { Providers } from "./providers";
-import { geistSans } from "@/styles/fonts";
-import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/sonner";
+import { geistSans } from "@/styles/fonts";
+import type { Metadata } from "next";
+import "./globals.css";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "BuiltAnyCV",
