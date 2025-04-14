@@ -2,17 +2,17 @@
 
 import { useEffect } from "react";
 
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { useMutation } from "@tanstack/react-query";
 
-import { useShallow } from "zustand/react/shallow";
 import { isEqual } from "lodash";
+import { useShallow } from "zustand/react/shallow";
 
-import { useProfileStore } from "@/hooks/use-profile";
 import { useEditorTabStore } from "@/hooks/use-editor-tabs";
+import { useProfileStore } from "@/hooks/use-profile";
 
 import { EditorTabName, editorTabName } from "@/config/editor-tab-names";
 
@@ -26,11 +26,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ArrowLeft, FileCheck, Save } from "lucide-react";
 import { toast } from "sonner";
-import { ChevronLeft, FileCheck, Save } from "lucide-react";
 
-import EditorFinalActionButton from "./editor-final-action-button";
 import { useApi } from "@/hooks/use-api";
+import EditorFinalActionButton from "./editor-final-action-button";
 
 interface EditorFormProps<T extends z.ZodSchema> {
   schema: T;
@@ -165,27 +165,23 @@ export function EditorForm<T extends z.ZodTypeAny>({
       >
         {/* Form Header */}
         <div className="flex gap-2 w-full items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {!isFirstTab && (
               <Button
                 size="icon"
-                variant="outline"
+                variant="ghost"
                 onClick={() => setActiveTab(previousTab)}
-                className="pl-1.5 pr-2"
               >
-                <ChevronLeft />
+                <ArrowLeft />
               </Button>
             )}
             <h2 className="text-xl font-semibold  ">{capitalize(tabName)}</h2>
-          </div>
-
-          <div className="flex gap-2">
-            <Tooltip delayDuration={300}>
+            <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   disabled={!canSave}
                   size="icon"
-                  variant="outline"
+                  variant="ghost"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
@@ -195,13 +191,20 @@ export function EditorForm<T extends z.ZodTypeAny>({
                     submit(data, false);
                   })}
                 >
-                  {isDirty ? <Save /> : <FileCheck />}
+                  {isDirty ? (
+                    <Save className="text-primary" />
+                  ) : (
+                    <FileCheck className="text-green-500" />
+                  )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent className="bg-secondary-foreground">
+              <TooltipContent>
                 <p>{isDirty ? "Save Changes" : "Changes are saved."}</p>
               </TooltipContent>
             </Tooltip>
+          </div>
+
+          <div className="flex gap-2">
             {isLastTab ? (
               <EditorFinalActionButton />
             ) : (

@@ -6,8 +6,11 @@ import { useProfileUpdateMutation } from "@/hooks/use-profile-update-mutation";
 import useSession from "@/hooks/use-session";
 import { getTemplateIdFromParamsOrRedirect } from "@/lib/utils";
 import { Loader2, Ship } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
+import PublishWebsiteDialog from "./publish-website-dialog";
 
 const PublishButton = ({
   onClick,
@@ -42,6 +45,8 @@ export default function PublishWebsiteButton({
 }: {
   onSuccess?: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+
   const { isSignedIn } = useSession();
 
   const searchParams = useSearchParams();
@@ -50,17 +55,18 @@ export default function PublishWebsiteButton({
     searchParams.get("templateId")
   );
 
-  const publishingOptions = {
-    darkMode: true,
-    templateId: templateId,
-  };
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === "dark";
 
   const { mutateAsync, isPending: isPublishing } = useProfileUpdateMutation();
 
   const publish = async () => {
     await mutateAsync(
       {
-        publishingOptions,
+        publishingOptions: {
+          darkMode: isDarkMode,
+          templateId: templateId,
+        },
       },
       {
         onSuccess,
@@ -72,16 +78,26 @@ export default function PublishWebsiteButton({
     );
   };
 
-  if (isSignedIn) {
-    return <PublishButton onClick={publish} loading={isPublishing} />;
-  }
-
   return (
-    <SignInDialog
-      trigger={<PublishButton loading={isPublishing} />}
-      onSuccess={publish}
-      customTitle="Log in to publish your site"
-      customDescription="Please enter your credentials to publish your site."
-    />
+    <>
+      {isSignedIn ? (
+        <PublishButton onClick={() => setOpen(true)} loading={isPublishing} />
+      ) : (
+        <SignInDialog
+          trigger={<PublishButton loading={isPublishing} />}
+          onSuccess={async () => setOpen(true)}
+          customTitle="Log in to publish your site"
+          customDescription="Please enter your credentials to publish your site."
+        />
+      )}
+      <PublishWebsiteDialog
+        open={open}
+        setOpen={setOpen}
+        onConfirm={async () => {
+          setOpen(false);
+          await publish();
+        }}
+      />
+    </>
   );
 }

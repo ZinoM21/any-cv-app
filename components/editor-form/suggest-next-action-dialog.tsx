@@ -17,8 +17,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Button } from "../ui/button";
 import { useState } from "react";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 
@@ -74,7 +74,7 @@ export default function SuggestNextActionDialog({
                 <Input
                   value={websiteUrl}
                   readOnly
-                  className="flex-1 bg-slate-50 text-slate-800"
+                  className="flex-1"
                   onClick={(e) => e.currentTarget.select()}
                 />
                 <Button
@@ -86,7 +86,7 @@ export default function SuggestNextActionDialog({
                   {copied ? (
                     <Check className="h-4 w-4 text-green-600" />
                   ) : (
-                    <Copy className="h-4 w-4 text-slate-600" />
+                    <Copy className="h-4 w-4" />
                   )}
                   <span className="sr-only">
                     {copied ? "Copied" : "Copy URL"}

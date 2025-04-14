@@ -1,7 +1,7 @@
-import { ArrowRight, ExternalLink, Calendar } from "lucide-react";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { ProfileData } from "@/lib/types";
 import { formatDateRange } from "@/lib/utils";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { ArrowRight, Calendar, ExternalLink } from "lucide-react";
 
 export default function TheCreativeWebsite({
   profileData,
@@ -43,40 +43,42 @@ export default function TheCreativeWebsite({
               />
             )}
             <h1 className="text-4xl font-bold mb-2">{`${firstName} ${lastName}`}</h1>
-            {headline && <p className="text-xl text-gray-600">{headline}</p>}
+            {headline && (
+              <p className="text-xl text-muted-foreground">{headline}</p>
+            )}
             {location && (
-              <p className="text-sm text-gray-500 mt-2">{location}</p>
+              <p className="text-sm text-muted-foreground mt-2">{location}</p>
             )}
           </header>
 
           {/* Projects */}
           {projects && projects.length > 0 && (
             <section className="mb-16">
-              <h2 className="text-sm font-semibold text-gray-500 mb-6 uppercase">
+              <h2 className="text-sm font-semibold text-muted-foreground mb-6 uppercase">
                 Projects
               </h2>
               <div className="flex gap-8 flex-wrap">
                 {projects.map((project, index) => (
                   <div
                     key={index}
-                    className="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow flex-1"
+                    className="bg-muted rounded-lg p-6 hover:shadow-md transition-shadow flex-1"
                   >
                     <div className="flex flex-col justify-between items-start mb-2">
                       <h3 className="text-xl font-semibold">{project.title}</h3>
-                      <span className="text-sm text-gray-500 flex items-center">
+                      <span className="text-sm text-muted-foreground flex items-center">
                         <Calendar className="h-3 w-3 mr-1" />
                         {formatDateRange(project.startDate, project.endDate)}
                       </span>
                     </div>
 
                     {project.associatedWith && (
-                      <p className="text-sm text-gray-600 mb-2">
+                      <p className="text-sm text-muted-foreground mb-2">
                         {project.associatedWith}
                       </p>
                     )}
 
                     {project.description && (
-                      <p className="text-gray-700 mb-3">
+                      <p className="text-muted-foreground mb-3">
                         {project.description}
                       </p>
                     )}
@@ -100,7 +102,7 @@ export default function TheCreativeWebsite({
           {/* Experience */}
           {experiences && experiences.length > 0 && (
             <section className="mb-16">
-              <h2 className="text-sm font-semibold text-gray-500 mb-6 uppercase">
+              <h2 className="text-sm font-semibold text-muted-foreground mb-6 uppercase">
                 Experience
               </h2>
               {experiences.map((experience, expIndex) =>
@@ -110,11 +112,11 @@ export default function TheCreativeWebsite({
                     className="mb-8 last:mb-0"
                   >
                     <h3 className="text-xl font-semibold mb-1">{`${position.title}, ${experience.company}`}</h3>
-                    <p className="text-gray-500 mb-2">
+                    <p className="text-muted-foreground mb-2">
                       {formatDateRange(position.startDate, position.endDate)}
                     </p>
                     {position.description && (
-                      <p className="text-gray-700 mb-2">
+                      <p className="text-muted-foreground mb-2">
                         {position.description}
                       </p>
                     )}
@@ -136,7 +138,7 @@ export default function TheCreativeWebsite({
           {/* Education */}
           {education && education.length > 0 && (
             <section className="mb-16">
-              <h2 className="text-sm font-semibold text-gray-500 mb-6 uppercase">
+              <h2 className="text-sm font-semibold text-muted-foreground mb-6 uppercase">
                 Education
               </h2>
               {education.map((edu, index) => (
@@ -153,11 +155,11 @@ export default function TheCreativeWebsite({
                     {edu.degree}
                     {edu.fieldOfStudy ? ` in ${edu.fieldOfStudy}` : ""}
                   </p>
-                  <p className="text-gray-500 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     {formatDateRange(edu.startDate, edu.endDate)}
                   </p>
                   {edu.description && (
-                    <p className="text-gray-700">{edu.description}</p>
+                    <p className="text-muted-foreground">{edu.description}</p>
                   )}
                 </div>
               ))}
@@ -167,20 +169,22 @@ export default function TheCreativeWebsite({
           {/* Volunteering */}
           {volunteering && volunteering.length > 0 && (
             <section className="mb-16">
-              <h2 className="text-sm font-semibold text-gray-500 mb-6 uppercase">
+              <h2 className="text-sm font-semibold text-muted-foreground mb-6 uppercase">
                 Volunteering
               </h2>
               {volunteering.map((vol, index) => (
                 <div key={index} className="mb-8 last:mb-0">
                   <h3 className="text-xl font-semibold mb-1">{`${vol.role}, ${vol.organization}`}</h3>
                   {vol.cause && (
-                    <p className="text-gray-600 mb-1">{vol.cause}</p>
+                    <p className="text-muted-foreground mb-1">{vol.cause}</p>
                   )}
-                  <p className="text-gray-500 mb-2">
+                  <p className="text-muted-foreground mb-2">
                     {formatDateRange(vol.startDate, vol.endDate)}
                   </p>
                   {vol.description && (
-                    <p className="text-gray-700 mb-2">{vol.description}</p>
+                    <p className="text-muted-foreground mb-2">
+                      {vol.description}
+                    </p>
                   )}
                 </div>
               ))}
@@ -189,12 +193,12 @@ export default function TheCreativeWebsite({
         </div>
 
         {/* Right Column */}
-        <div className="bg-gray-100 p-8 rounded-lg">
+        <div className="bg-muted p-8 rounded-lg">
           <section className="mb-12">
             <h2 className="text-sm font-semibold text-blue-600 mb-4 uppercase">
               About Me
             </h2>
-            <p className="text-gray-700">
+            <p className="text-muted-foreground">
               {about || "No information provided."}
             </p>
           </section>
@@ -240,7 +244,7 @@ export default function TheCreativeWebsite({
                 <li>
                   <a
                     href={`mailto:${email}`}
-                    className="flex items-center text-gray-700 hover:text-blue-600"
+                    className="flex items-center text-muted-foreground hover:text-blue-600"
                   >
                     <ArrowRight className="h-4 w-4 mr-2 text-blue-600" />
                     {email}
@@ -248,12 +252,12 @@ export default function TheCreativeWebsite({
                 </li>
               )}
               {phone && (
-                <li className="flex items-center text-gray-700">
+                <li className="flex items-center text-muted-foreground">
                   <a
                     href={`tel:${phone}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-gray-700 hover:text-blue-600"
+                    className="flex items-center text-muted-foreground hover:text-blue-600"
                   >
                     <ArrowRight className="h-4 w-4 mr-2 text-blue-600" />
                     {phone}
@@ -266,7 +270,7 @@ export default function TheCreativeWebsite({
                     href={`https://linkedin.com/in/${username}/`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-gray-700 hover:text-blue-600"
+                    className="flex items-center text-muted-foreground hover:text-blue-600"
                   >
                     <ArrowRight className="h-4 w-4 mr-2 text-blue-600" />
                     linkedin.com/in/{username}
