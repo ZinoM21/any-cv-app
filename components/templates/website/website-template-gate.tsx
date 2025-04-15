@@ -1,11 +1,12 @@
-import { ReactElement } from "react";
 import { ProfileData, TemplateId, WebsiteTemplate } from "@/lib/types";
+import { ReactElement } from "react";
 
 import { websiteTemplates } from "@/config/templates";
 import { DocumentProps } from "@react-pdf/renderer";
-import TheCreativeWebsite from "./creative";
 import TheClassicWebsite from "./classic";
+import TheCreativeWebsite from "./creative";
 import TheMinimalWebsite from "./minimal";
+import TheModernWebsite from "./modern";
 
 export const websiteTemplateComponentMap: {
   [P in TemplateId]: (props: {
@@ -14,6 +15,7 @@ export const websiteTemplateComponentMap: {
 } = {
   [TemplateId.Classic]: TheClassicWebsite,
   [TemplateId.Creative]: TheCreativeWebsite,
+  [TemplateId.Modern]: TheModernWebsite,
   [TemplateId.Minimal]: TheMinimalWebsite,
 };
 

@@ -10,7 +10,6 @@ export const revalidate = 3600; // hourly
 export async function generateStaticParams() {
   try {
     const profiles = await getPublishedProfiles();
-    console.log("profiles in static params: ", profiles);
     return profiles.map((profile) => ({
       username: profile.username,
     }));
