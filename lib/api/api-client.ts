@@ -3,6 +3,8 @@
  * to the backend API.
  */
 
+import { signOut as signOutServer } from "@/auth";
+import { signOut as signOutClient } from "next-auth/react";
 import { ApiError } from "../errors";
 
 export interface ApiRequestOptions extends RequestInit {
@@ -81,6 +83,13 @@ export async function apiRequest<T>(
 
     return response.json();
   } catch (error) {
+    if (error instanceof ApiError && error.message.includes("expired")) {
+      if (typeof window !== "undefined") {
+        signOutClient({ redirectTo: "/" });
+      } else {
+        signOutServer({ redirectTo: "/" });
+      }
+    }
     if (error instanceof ApiError) {
       throw error;
     }
