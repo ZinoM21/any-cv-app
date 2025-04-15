@@ -29,7 +29,7 @@ export function useSession<R extends boolean>(
 
   return {
     ...session,
-    isSignedIn: session.status === "authenticated",
+    isSignedIn: !!session.data, // better than using status, since it switches to loading on session update
     isSignedOut: session.status === "unauthenticated",
     isLoading: session.status === "loading",
   };

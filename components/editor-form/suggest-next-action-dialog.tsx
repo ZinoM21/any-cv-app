@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { buildQueryString } from "@/lib/utils";
 import {
   ArrowRight,
   Check,
@@ -21,7 +22,6 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
-
 export default function SuggestNextActionDialog({
   nextAction,
   isOpen,
@@ -34,9 +34,7 @@ export default function SuggestNextActionDialog({
   websiteUrl?: string;
 }) {
   const searchParams = useSearchParams();
-  const searchParamsString = searchParams.toString()
-    ? `?${searchParams.toString()}`
-    : "";
+  const searchParamsString = buildQueryString(searchParams);
 
   const [copied, setCopied] = useState(false);
 

@@ -10,11 +10,11 @@ import SignInDialog from "./sign-in-dialog";
 
 export default function AuthOrDashboardButton({ className }: ButtonProps) {
   const { signUp } = useAuth();
-  const { isSignedOut } = useSession();
+  const { isSignedIn } = useSession();
 
   return (
     <>
-      {!isSignedOut ? (
+      {isSignedIn ? (
         <Button variant="outline" asChild className={className}>
           <Link href="/dashboard">Dashboard</Link>
         </Button>

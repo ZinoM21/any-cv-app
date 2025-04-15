@@ -16,11 +16,11 @@ export function useApi() {
 
   // Always update session before making a request (since session is changing server-side on access-refresh)
   const get = useCallback(
-    async <T,>(endpoint: string, options: ApiRequestOptions) => {
+    async <T,>(endpoint: string, options?: ApiRequestOptions) => {
       const session = await update();
       return api.get<T>(endpoint, {
         ...options,
-        token: options.token || session?.accessToken,
+        token: options?.token || session?.accessToken,
       });
     },
     [update, api]

@@ -16,6 +16,7 @@ import creativeWebsite from "@/public/websites/images/creative.jpg";
 import minimalWebsite from "@/public/websites/images/minimal.jpg";
 
 import { format } from "date-fns";
+import type { SearchParams } from "next/dist/server/request/search-params";
 import { StaticImageData } from "next/image";
 import { getServerApi } from "./api/server-api";
 import { ApiError } from "./errors";
@@ -190,3 +191,59 @@ export const isValidToken = (exp: number | undefined): boolean => {
   if (!exp) return false;
   return Date.now() < exp * 1000;
 };
+
+/**
+ * Builds a URL query string from search params, with options to exclude specific parameters
+ * or override specific parameters.
+ *
+ * @param searchParams The search params from useSearchParams() or SearchParams from server components
+ * @param options Configuration options
+ * @param options.exclude Array of param keys to exclude
+ * @param options.set Parameters to set/override as key-value pairs (overwrites existing values)
+ * @returns A query string without '?' prefix, ready to be appended to a URL. Defaults to params passed in
+ */
+export function buildQueryString(
+  searchParams: URLSearchParams | SearchParams,
+  options: {
+    exclude?: string[];
+    set?: Record<string, string>;
+  } = {}
+): string {
+  const { exclude = [], set = {} } = options;
+
+  // Initialize params directly from input (when possible)
+  let params: URLSearchParams;
+  if (searchParams instanceof URLSearchParams) {
+    // For client-side URLSearchParams, we can clone it directly
+    params = new URLSearchParams(searchParams);
+
+    // Remove excluded params
+    exclude.forEach((key) => params.delete(key));
+  } else {
+    // For server-side SearchParams (plain object), we need to build it
+    params = new URLSearchParams();
+
+    // Add all non-excluded params
+    Object.entries(searchParams).forEach(([key, value]) => {
+      if (exclude.includes(key) || value === undefined) return;
+
+      if (Array.isArray(value)) {
+        // For arrays, set the last value
+        if (value.length > 0) {
+          params.set(key, value[value.length - 1]);
+        }
+      } else {
+        params.set(key, value);
+      }
+    });
+  }
+
+  // Set/override with additional params
+  Object.entries(set).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      params.set(key, value);
+    }
+  });
+
+  return params.toString();
+}

@@ -3,8 +3,8 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import DownloadCVButton from "@/app/generate/cv/editor/components/download-cv-button";
-import PublishWebsiteButton from "@/app/generate/website/editor/components/publish-website-button";
+import DownloadCVButton from "@/components/editor-form/download-cv-button";
+import PublishWebsiteButton from "@/components/editor-form/publish-website-button";
 import SuggestNextActionDialog from "@/components/editor-form/suggest-next-action-dialog";
 import { getUsernameFromParamsOrRedirect } from "@/lib/utils";
 import { toast } from "sonner";

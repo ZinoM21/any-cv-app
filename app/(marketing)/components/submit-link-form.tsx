@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -10,18 +9,19 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { FileUser, Loader2 } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { extractUsernameFromLinkedInUrl } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useState } from "react";
-import { ProfileData } from "@/lib/types";
-import { useProfileStore } from "@/hooks/use-profile";
+import { Input } from "@/components/ui/input";
 import { useApi } from "@/hooks/use-api";
+import { useProfileStore } from "@/hooks/use-profile";
+import { ProfileData } from "@/lib/types";
+import { buildQueryString, extractUsernameFromLinkedInUrl } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { FileUser, Loader2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const submitLinkFormSchema = z.object({
   linkedInUrl: z
@@ -52,10 +52,12 @@ export function SubmitLinkForm() {
     },
   });
 
+  const api = useApi();
   const router = useRouter();
+  const params = useSearchParams();
+
   const setProfileData = useProfileStore((state) => state.setProfile);
   const [isNavigating, setIsNavigating] = useState(false);
-  const api = useApi();
 
   const mutation = useMutation({
     mutationFn: async (username: string) => {
@@ -64,7 +66,11 @@ export function SubmitLinkForm() {
     onSuccess: (data: ProfileData) => {
       setIsNavigating(true);
       setProfileData(data);
-      router.push(`/generate/choose?username=${data.username}`);
+      router.push(
+        `/generate/choose?${buildQueryString(params, {
+          set: { username: data.username },
+        })}`
+      );
     },
     onError: (error) => {
       console.error(error);

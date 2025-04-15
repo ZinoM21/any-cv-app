@@ -1,5 +1,5 @@
-import { RotatingText } from "@/app/(marketing)/components/rotating-text";
-import { SubmitLinkForm } from "@/app/(marketing)/components/submit-link-form";
+import { RotatingText } from "./components/rotating-text";
+import { SubmitLinkForm } from "./components/submit-link-form";
 
 export default function Home() {
   return (

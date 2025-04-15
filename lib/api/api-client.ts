@@ -5,11 +5,13 @@
 
 import { signOut as signOutServer } from "@/auth";
 import { signOut as signOutClient } from "next-auth/react";
+import type { SearchParams } from "next/dist/server/request/search-params";
 import { ApiError } from "../errors";
+import { buildQueryString } from "../utils";
 
 export interface ApiRequestOptions extends RequestInit {
   token?: string;
-  params?: Record<string, string>;
+  params?: URLSearchParams | SearchParams;
 }
 
 /**
@@ -32,20 +34,9 @@ export async function apiRequest<T>(
   const { token, params, ...fetchOptions } = options;
 
   // URL
-  let url = `${API_BASE_URL}${endpoint}`;
-  if (params) {
-    const queryParams = new URLSearchParams();
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined) {
-        queryParams.append(key, value);
-      }
-    });
-
-    const queryString = queryParams.toString();
-    if (queryString) {
-      url += `?${queryString}`;
-    }
-  }
+  const url = `${API_BASE_URL}${endpoint}?${
+    params && buildQueryString(params)
+  }`;
 
   // Headers
   const headers = new Headers(fetchOptions.headers);

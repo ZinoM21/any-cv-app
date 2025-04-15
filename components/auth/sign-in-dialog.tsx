@@ -10,20 +10,20 @@ import {
 
 import { FileUser } from "lucide-react";
 
-import { SignInForm } from "@/app/signin/components/login-form";
-import BuiltAnyCVLogo from "../logo";
-import { ReactNode, useState } from "react";
+import { SignInForm } from "@/components/auth/login-form";
+import { useIsMobile } from "@/hooks/use-mobile";
 import Image from "next/image";
 import Link from "next/link";
+import { ReactNode, useState } from "react";
+import BuiltAnyCVLogo from "../logo";
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
+  DrawerTrigger,
 } from "../ui/drawer";
-import { DrawerTrigger } from "../ui/drawer";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function SignInDialog({
   trigger,

@@ -24,7 +24,7 @@ export function HeaderDropdownMenu({
   className,
   ...props
 }: React.ComponentProps<"button">) {
-  const { isSignedOut, data: session } = useSession();
+  const { isSignedIn, data: session } = useSession();
   const { signUp } = useAuth();
   const pathname = usePathname();
 
@@ -39,7 +39,7 @@ export function HeaderDropdownMenu({
           size="icon"
           className={cn(
             "rounded-full",
-            !isSignedOut ? "lg:flex" : "lg:hidden",
+            isSignedIn ? "lg:flex" : "lg:hidden",
             className
           )}
           {...props}
@@ -49,7 +49,7 @@ export function HeaderDropdownMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">
-        {!isSignedOut && (
+        {isSignedIn && (
           <>
             <DropdownMenuLabel className="flex gap-2">
               <span className="whitespace-nowrap">My Account</span>
@@ -103,7 +103,7 @@ export function HeaderDropdownMenu({
             <DropdownMenuSeparator />
           </>
         )}
-        {!isSignedOut ? (
+        {isSignedIn ? (
           <DropdownMenuItem
             onClick={() => signOut({ redirectTo: "/" })}
             className="justify-between hover:cursor-pointer"
