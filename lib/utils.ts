@@ -1,24 +1,25 @@
 import { ProfileData } from "@/lib/types";
 
-import { redirect } from "next/navigation";
 import { clsx, type ClassValue } from "clsx";
+import * as jose from "jose";
+import { redirect } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { TemplateId } from "./types";
+import { DecodedToken, TemplateId } from "./types";
 
-import minimalCV from "@/public/cvs/images/minimal.jpg";
-import creativeCV from "@/public/cvs/images/creative.jpg";
 import classicCV from "@/public/cvs/images/classic.jpg";
+import creativeCV from "@/public/cvs/images/creative.jpg";
+import minimalCV from "@/public/cvs/images/minimal.jpg";
 import modernCV from "@/public/cvs/images/modern.jpg";
 
-import minimalWebsite from "@/public/websites/images/minimal.jpg";
-import creativeWebsite from "@/public/websites/images/creative.jpg";
 import classicWebsite from "@/public/websites/images/classic.jpg";
+import creativeWebsite from "@/public/websites/images/creative.jpg";
+import minimalWebsite from "@/public/websites/images/minimal.jpg";
 
-import { StaticImageData } from "next/image";
 import { format } from "date-fns";
-import { getServerApi } from "./server-api";
+import { StaticImageData } from "next/image";
+import { getServerApi } from "./api/server-api";
 import { ApiError } from "./errors";
-import { getValidUsername, getValidTemplateId } from "./validation";
+import { getValidTemplateId, getValidUsername } from "./validation";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -150,3 +151,42 @@ export async function getProfileDataOrRedirect(
     throw error;
   }
 }
+
+const encodedSecret = new TextEncoder().encode(process.env.AUTH_SECRET);
+
+/**
+ * Decodes a JWT token and returns the payload
+ *
+ * @param token The JWT token to decode
+ * @returns The decoded token payload (sub, exp, email, iat)
+ */
+export const getDecodedToken = async (token: string): Promise<DecodedToken> => {
+  try {
+    const { payload } = await jose.jwtVerify<DecodedToken>(
+      token,
+      encodedSecret
+    );
+
+    const { sub, exp, email, iat } = payload;
+
+    if (!exp || !sub || !email || typeof email !== "string" || !iat) {
+      throw new Error("Invalid token structure in token payload");
+    }
+
+    return payload;
+  } catch (jwtError) {
+    console.error("Error verifying JWT:", jwtError);
+    throw jwtError;
+  }
+};
+
+/**
+ * Checks if a JWT token is valid based on its expiration time
+ *
+ * @param exp The expiration time of the token
+ * @returns True if the token is valid, false otherwise
+ */
+export const isValidToken = (exp: number | undefined): boolean => {
+  if (!exp) return false;
+  return Date.now() < exp * 1000;
+};

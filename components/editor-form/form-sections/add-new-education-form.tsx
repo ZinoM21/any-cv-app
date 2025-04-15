@@ -1,12 +1,12 @@
-import { Form } from "@/components/ui/form";
-import EducationFormFields from "./education-form-fields";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
 import {
   addNewEducationFormSchema,
   AddNewEducationFormValues,
-} from "@/lib/editor-forms-schemas";
+} from "@/lib/schemas/editor-forms-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import EducationFormFields from "./education-form-fields";
 
 const initialValues = {
   school: "",

@@ -3,7 +3,7 @@
  * to the backend API.
  */
 
-import { ApiError } from "./errors";
+import { ApiError } from "../errors";
 
 export interface ApiRequestOptions extends RequestInit {
   token?: string;

@@ -1,11 +1,11 @@
 "use client";
 
-import { EditorForm } from "../editor-form";
+import { Separator } from "@/components/ui/separator";
 import { EditorTabName } from "@/config/editor-tab-names";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
-import { editSummaryFormSchema } from "@/lib/editor-forms-schemas";
+import { editSummaryFormSchema } from "@/lib/schemas/editor-forms-schemas";
+import { EditorForm } from "../editor-form";
 import { ContactInfoFormFields } from "./contact-form-fields";
-import { Separator } from "@/components/ui/separator";
 import { SummaryFormFields } from "./summary-form-fields";
 
 export function SummaryForm({ tabName }: { tabName: EditorTabName }) {

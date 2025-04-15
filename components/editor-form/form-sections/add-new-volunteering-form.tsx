@@ -1,14 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import VolunteeringFormFields from "./volunteering-form-fields";
 
 import {
   addNewVolunteeringFormSchema,
   AddNewVolunteeringFormValues,
-} from "@/lib/editor-forms-schemas";
+} from "@/lib/schemas/editor-forms-schemas";
 
 const initialValues = {
   role: "",

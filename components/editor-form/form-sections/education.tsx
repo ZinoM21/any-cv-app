@@ -1,6 +1,11 @@
 "use client";
 
-import { useFieldArray, useFormContext } from "react-hook-form";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   Card,
   CardContent,
@@ -9,25 +14,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FormField } from "@/components/ui/form";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { EditorForm } from "../editor-form";
-import EducationFormFields from "./education-form-fields";
-import AddNewEducationForm from "./add-new-education-form";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { EditorTabName } from "@/config/editor-tab-names";
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import {
   editEducationFormSchema,
   EditEducationFormValues,
-} from "@/lib/editor-forms-schemas";
-import { EditorTabName } from "@/config/editor-tab-names";
-import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
+} from "@/lib/schemas/editor-forms-schemas";
 import AddNewPopover from "../add-new-popover";
+import { EditorForm } from "../editor-form";
 import RemoveAlertDialog from "../remove-alert-dialog";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import AddNewEducationForm from "./add-new-education-form";
+import EducationFormFields from "./education-form-fields";
 
 export function EducationForm({ tabName }: { tabName: EditorTabName }) {
   const { getEducationInitialValues } = useEditorFormInitialValues();

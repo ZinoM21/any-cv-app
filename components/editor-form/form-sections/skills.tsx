@@ -6,13 +6,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
 
-import { EditorForm } from "../editor-form";
-import { EditorTabName } from "@/config/editor-tab-names";
-import {
-  editSkillsFormSchema,
-  EditSkillsFormValues,
-} from "@/lib/editor-forms-schemas";
-import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
+import { Badge } from "@/components/ui/badge";
 import {
   FormControl,
   FormDescription,
@@ -22,7 +16,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { EditorTabName } from "@/config/editor-tab-names";
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
+import {
+  editSkillsFormSchema,
+  EditSkillsFormValues,
+} from "@/lib/schemas/editor-forms-schemas";
+import { EditorForm } from "../editor-form";
 
 export function SkillsForm({ tabName }: { tabName: EditorTabName }) {
   const { getSkillsInitialValues } = useEditorFormInitialValues();

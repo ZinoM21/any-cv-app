@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 
-import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import ProjectFormFields from "./project-form-fields";
+import { Form } from "@/components/ui/form";
 import {
   addNewProjectFormSchema,
   AddNewProjectFormValues,
-} from "@/lib/editor-forms-schemas";
+} from "@/lib/schemas/editor-forms-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ProjectFormFields from "./project-form-fields";
 
 const initialValues = {
   title: "",

@@ -2,15 +2,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
-  FormLabel,
+  FormDescription,
   FormField,
   FormItem,
-  FormDescription,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { EditSummaryFormValues } from "@/lib/editor-forms-schemas";
+import { EditSummaryFormValues } from "@/lib/schemas/editor-forms-schemas";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";

@@ -1,14 +1,10 @@
-import { signInSchema } from "@/lib/auth-schema";
+import { authenticateUser, fetchRefreshToken } from "@/lib/api";
+import { AuthorizationError, InvalidCredentialsError } from "@/lib/errors";
+import { signInSchema } from "@/lib/schemas/auth-schema";
+import { AuthValidity } from "@/lib/types";
+import { getDecodedToken, isValidToken } from "@/lib/utils";
 import { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthValidity } from "@/lib/types";
-import {
-  fetchRefreshToken,
-  authenticateUser,
-  getDecodedToken,
-  isValidToken,
-} from "@/lib/auth.utils";
-import { AuthorizationError, InvalidCredentialsError } from "@/lib/errors";
 
 export const authConfig: NextAuthConfig = {
   debug: process.env.NODE_ENV === "development",

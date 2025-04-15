@@ -3,32 +3,32 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { FormField } from "@/components/ui/form";
 
-import { EditorForm } from "../editor-form";
-import VolunteeringFormFields from "./volunteering-form-fields";
-import AddNewVolunteeringForm from "./add-new-volunteering-form";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { EditorTabName } from "@/config/editor-tab-names";
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import {
   editVolunteeringFormSchema,
   EditVolunteeringFormValues,
-} from "@/lib/editor-forms-schemas";
-import { EditorTabName } from "@/config/editor-tab-names";
-import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
+} from "@/lib/schemas/editor-forms-schemas";
 import AddNewPopover from "../add-new-popover";
+import { EditorForm } from "../editor-form";
 import RemoveAlertDialog from "../remove-alert-dialog";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import AddNewVolunteeringForm from "./add-new-volunteering-form";
+import VolunteeringFormFields from "./volunteering-form-fields";
 
 export function VolunteeringForm({ tabName }: { tabName: EditorTabName }) {
   const { getVolunteeringInitialValues } = useEditorFormInitialValues();

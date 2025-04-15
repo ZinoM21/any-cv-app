@@ -1,8 +1,8 @@
 import { getUsernameFromParamsOrRedirect } from "@/lib/utils";
 
+import { getTemplateWebsiteById } from "@/components/templates/website/website-template-gate";
 import { getPublishedProfileOrRedirect, getPublishedProfiles } from "@/lib/api";
 import { Params } from "next/dist/server/request/params";
-import { getTemplateWebsiteById } from "@/components/templates/website/website-template-gate";
 import { redirect } from "next/navigation";
 
 export const revalidate = 3600; // hourly

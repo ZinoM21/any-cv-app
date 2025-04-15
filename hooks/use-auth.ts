@@ -5,13 +5,13 @@ import { signIn as authorize } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-import { SignInFormValues, SignUpFormValues } from "@/lib/auth-schema";
 import { UseAuthReturn } from "@/lib/next-auth";
-import useApi from "./use-api";
+import { SignInFormValues, SignUpFormValues } from "@/lib/schemas/auth-schema";
 import { SignInOptions, User } from "@/lib/types";
+import { useShallow } from "zustand/react/shallow";
+import useApi from "./use-api";
 import { useProfileStore } from "./use-profile";
 import { useProfileTransfer } from "./use-transfer-profile";
-import { useShallow } from "zustand/react/shallow";
 
 /**
  * Custom hook for authentication

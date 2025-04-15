@@ -3,33 +3,33 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { FormField } from "@/components/ui/form";
 
 import { EditorForm } from "../editor-form";
 
+import { EditorTabName } from "@/config/editor-tab-names";
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import {
   editProjectsFormSchema,
   EditProjectsFormValues,
-} from "@/lib/editor-forms-schemas";
-import { EditorTabName } from "@/config/editor-tab-names";
-import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
-import ProjectFormFields from "./project-form-fields";
-import AddNewProjectForm from "./add-new-project-form";
+} from "@/lib/schemas/editor-forms-schemas";
+import { formatDateRange } from "@/lib/utils";
 import AddNewPopover from "../add-new-popover";
 import RemoveAlertDialog from "../remove-alert-dialog";
-import { formatDateRange } from "@/lib/utils";
+import AddNewProjectForm from "./add-new-project-form";
+import ProjectFormFields from "./project-form-fields";
 
 export function ProjectsForm({ tabName }: { tabName: EditorTabName }) {
   const { getProjectsInitialValues } = useEditorFormInitialValues();

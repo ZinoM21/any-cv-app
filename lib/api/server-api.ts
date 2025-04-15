@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { createApiClient } from "@/lib/api-client";
+import { createApiClient } from "@/lib/api";
 
 /**
  * Server-side function that provides access to the API client with authentication

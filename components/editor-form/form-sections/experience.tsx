@@ -3,33 +3,33 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 import { FormField } from "@/components/ui/form";
 
-import AddNewExperienceForm from "./add-new-experience-form";
-import { EditorForm } from "../editor-form";
-import ExperienceFormFields from "./experience-form-fields";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { EditorTabName } from "@/config/editor-tab-names";
+import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import {
   editExperiencesFormSchema,
   EditExperiencesFormValues,
-} from "@/lib/editor-forms-schemas";
-import { EditorTabName } from "@/config/editor-tab-names";
-import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
+} from "@/lib/schemas/editor-forms-schemas";
 import AddNewPopover from "../add-new-popover";
+import { EditorForm } from "../editor-form";
 import RemoveAlertDialog from "../remove-alert-dialog";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import AddNewExperienceForm from "./add-new-experience-form";
+import ExperienceFormFields from "./experience-form-fields";
 
 export function ExperiencesForm({ tabName }: { tabName: EditorTabName }) {
   const { getExperienceInitialValues } = useEditorFormInitialValues();

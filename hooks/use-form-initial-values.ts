@@ -1,12 +1,12 @@
-import { useProfileStore } from "./use-profile";
 import {
   EditEducationFormValues,
-  EditSummaryFormValues,
   EditExperiencesFormValues,
-  EditSkillsFormValues,
-  EditVolunteeringFormValues,
   EditProjectsFormValues,
-} from "@/lib/editor-forms-schemas";
+  EditSkillsFormValues,
+  EditSummaryFormValues,
+  EditVolunteeringFormValues,
+} from "@/lib/schemas/editor-forms-schemas";
+import { useProfileStore } from "./use-profile";
 
 /**
  * Custom hook to generate initial values for CV editor forms

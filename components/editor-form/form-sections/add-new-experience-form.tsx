@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 
-import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import ExperienceFormFields from "./experience-form-fields";
+import { Form } from "@/components/ui/form";
 import {
   addNewExperienceFormSchema,
   AddNewExperienceFormValues,
-} from "@/lib/editor-forms-schemas";
+} from "@/lib/schemas/editor-forms-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ExperienceFormFields from "./experience-form-fields";
 
 const initialValues = {
   company: "",

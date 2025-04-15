@@ -1,14 +1,14 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import {
   AddNewPositionFormValues,
   addNewPositionFormSchema,
-} from "@/lib/editor-forms-schemas";
+} from "@/lib/schemas/editor-forms-schemas";
 
 import PositionFormFields from "./position-form-fields";
 

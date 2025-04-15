@@ -1,13 +1,12 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { cn } from "@/lib/utils";
 
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -16,7 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { SignInFormValues, signInSchema } from "@/lib/auth-schema";
+import { Input } from "@/components/ui/input";
+import { SignInFormValues, signInSchema } from "@/lib/schemas/auth-schema";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
