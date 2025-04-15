@@ -76,8 +76,8 @@ export const authConfig: NextAuthConfig = {
   ],
   callbacks: {
     async jwt({ token, user: authorizeReturn, account }) {
-      // Initial signin -> attach `authorize` callback return data to token
-      // For checking validity on subsequent requests + passing token to session
+      // Initial signin -> attach `authorize` callback return data to token.
+      // This is used for checking validity on subsequent requests + passing token to client session
       if (authorizeReturn && account && account?.provider === "credentials") {
         return { ...token, data: authorizeReturn };
       }
@@ -117,10 +117,7 @@ export const authConfig: NextAuthConfig = {
         }
       }
 
-      // The current access token and refresh token have both expired
-      // This should not really happen unless getting really unlucky with
-      // the timing of the token expiration because the middleware should
-      // have caught this case before the callback is called
+      // This case is caught by the middleware in SSR and by the api-client in client components
       console.debug("Both tokens have expired");
       return null;
     },
@@ -137,7 +134,7 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
     redirect({ url }) {
-      // Have to specify redirect here because default does not handle it
+      // Have to specify redirect here because default does not handle it properly
       if (url.includes("callbackUrl")) {
         const params = new URLSearchParams(url.split("?")[1]);
         const callbackUrl = params.get("callbackUrl");
