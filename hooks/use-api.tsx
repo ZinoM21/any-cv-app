@@ -87,7 +87,7 @@ export function useApi() {
     post,
     put,
     patch,
-    del,
+    delete: del,
   };
 }
 

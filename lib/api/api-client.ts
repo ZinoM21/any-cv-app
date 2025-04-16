@@ -29,14 +29,12 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
  */
 export async function apiRequest<T>(
   endpoint: string,
-  options: ApiRequestOptions = {}
+  options: ApiRequestOptions = {},
 ): Promise<T> {
   const { token, params, ...fetchOptions } = options;
 
   // URL
-  const url = `${API_BASE_URL}${endpoint}?${
-    params && buildQueryString(params)
-  }`;
+  const url = `${API_BASE_URL}${endpoint}?${buildQueryString(params)}`;
 
   // Headers
   const headers = new Headers(fetchOptions.headers);
@@ -113,7 +111,7 @@ export function createApiClient(token?: string) {
     post: <T>(
       endpoint: string,
       data?: unknown,
-      options: ApiRequestOptions = {}
+      options: ApiRequestOptions = {},
     ) =>
       apiRequest<T>(endpoint, {
         ...options,
@@ -128,7 +126,7 @@ export function createApiClient(token?: string) {
     patch: <T>(
       endpoint: string,
       data?: unknown,
-      options: ApiRequestOptions = {}
+      options: ApiRequestOptions = {},
     ) =>
       apiRequest<T>(endpoint, {
         ...options,
@@ -143,7 +141,7 @@ export function createApiClient(token?: string) {
     put: <T>(
       endpoint: string,
       data?: unknown,
-      options: ApiRequestOptions = {}
+      options: ApiRequestOptions = {},
     ) =>
       apiRequest<T>(endpoint, {
         ...options,

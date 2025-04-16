@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { marketingNav } from "@/config/nav";
+import { dashboardNav, marketingNav } from "@/config/nav";
 import { useAuth } from "@/hooks/use-auth";
 import useSession from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
@@ -40,7 +40,7 @@ export function HeaderDropdownMenu({
           className={cn(
             "rounded-full",
             isSignedIn ? "lg:flex" : "lg:hidden",
-            className
+            className,
           )}
           {...props}
         >
@@ -53,29 +53,31 @@ export function HeaderDropdownMenu({
           <>
             <DropdownMenuLabel className="flex gap-2">
               <span className="whitespace-nowrap">My Account</span>
-              <span className="text-sm text-muted-foreground min-w-0 truncate">
+              <span className="min-w-0 truncate text-sm text-muted-foreground">
                 {session?.user?.email}
               </span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+
+            {/* DASHBOARD (dashboard, account) */}
             <DropdownMenuGroup>
-              {pathname !== "/dashboard" && (
-                <DropdownMenuItem>
-                  <Link href="/dashboard" className="w-full">
-                    Dashboard
+              {dashboardNav.map((item) => (
+                <DropdownMenuItem
+                  key={item.name}
+                  className={item.name === "Dashboard" ? "lg:hidden" : ""}
+                >
+                  <Link href={item.href} className="w-full">
+                    {item.name}
                   </Link>
                 </DropdownMenuItem>
-              )}
-              <DropdownMenuItem>
-                <Link href="/account-settings" className="w-full">
-                  Account Settings
-                </Link>
-              </DropdownMenuItem>
+              ))}
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
           </>
         )}
 
+        {/* MARKETING (templates, pricing, guides, ...) */}
         {isMarketingRoute && (
           <>
             <DropdownMenuGroup className="block lg:hidden">
@@ -91,6 +93,7 @@ export function HeaderDropdownMenu({
           </>
         )}
 
+        {/* HOME */}
         {pathname !== "/" && (
           <>
             <DropdownMenuGroup>
@@ -103,6 +106,8 @@ export function HeaderDropdownMenu({
             <DropdownMenuSeparator />
           </>
         )}
+
+        {/* AUTH */}
         {isSignedIn ? (
           <DropdownMenuItem
             onClick={() => signOut({ redirectTo: "/" })}
@@ -112,7 +117,7 @@ export function HeaderDropdownMenu({
             <LogOut />
           </DropdownMenuItem>
         ) : (
-          <DropdownMenuGroup className="space-y-1 mt-1">
+          <DropdownMenuGroup className="mt-1 space-y-1">
             <Button
               onClick={() => signUp()}
               className="w-full text-sm"

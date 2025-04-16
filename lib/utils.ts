@@ -26,6 +26,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const getInitials = (firstName: string, lastName: string) => {
+  return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+};
+
 export const formatDate = (date: Date) =>
   date ? format(new Date(date), "MMM uu") : "";
 
@@ -34,13 +38,13 @@ export function extractUsernameFromLinkedInUrl(username: string): string {
   if (username.includes("/")) {
     // Match LinkedIn URLs in various formats
     const match = username.match(
-      /^(?:https?:\/\/)?(?:[\w]+\.)?linkedin\.com\/in\/([\w\-]+)\/?.*$/
+      /^(?:https?:\/\/)?(?:[\w]+\.)?linkedin\.com\/in\/([\w\-]+)\/?.*$/,
     );
 
     if (!match) {
       console.warn(`Invalid LinkedIn URL received: ${username}`);
       throw new Error(
-        "Invalid LinkedIn URL. Must be a LinkedIn profile URL (/in/) or just the username"
+        "Invalid LinkedIn URL. Must be a LinkedIn profile URL (/in/) or just the username",
       );
     }
 
@@ -76,7 +80,7 @@ export const getCVImage = (templateId: TemplateId): StaticImageData => {
 };
 
 export const getWebsitePreviewImage = (
-  templateId: TemplateId
+  templateId: TemplateId,
 ): StaticImageData => {
   switch (templateId) {
     case TemplateId.Creative:
@@ -111,7 +115,7 @@ export const formatDateRange = (startDate: Date, endDate?: Date): string => {
  */
 export const getUsernameFromParamsOrRedirect = (
   username: string | string[] | undefined | null,
-  redirectTo: string = "/"
+  redirectTo: string = "/",
 ) => {
   const validUsername = getValidUsername(username);
   if (!validUsername) {
@@ -122,7 +126,7 @@ export const getUsernameFromParamsOrRedirect = (
 
 export const getTemplateIdFromParamsOrRedirect = (
   templateId: string | string[] | undefined | null,
-  redirectTo: string = "/"
+  redirectTo: string = "/",
 ) => {
   const validTemplateId = getValidTemplateId(templateId);
   if (!validTemplateId) {
@@ -139,7 +143,7 @@ export const getTemplateIdFromParamsOrRedirect = (
  */
 export async function getProfileDataOrRedirect(
   username: string,
-  redirectTo: string = "/"
+  redirectTo: string = "/",
 ): Promise<ProfileData> {
   const serverApi = await getServerApi();
   try {
@@ -165,7 +169,7 @@ export const getDecodedToken = async (token: string): Promise<DecodedToken> => {
   try {
     const { payload } = await jose.jwtVerify<DecodedToken>(
       token,
-      encodedSecret
+      encodedSecret,
     );
 
     const { sub, exp, email, iat } = payload;
@@ -192,58 +196,69 @@ export const isValidToken = (exp: number | undefined): boolean => {
   return Date.now() < exp * 1000;
 };
 
+const buildUrlParams = (params: URLSearchParams | SearchParams | undefined) => {
+  if (!params) return new URLSearchParams();
+
+  if (params instanceof URLSearchParams) {
+    return new URLSearchParams(params.toString());
+  }
+
+  const newParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined) return;
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        newParams.append(key, item);
+      });
+    } else {
+      newParams.set(key, value);
+    }
+  });
+  return newParams;
+};
+
 /**
  * Builds a URL query string from search params, with options to exclude specific parameters
  * or override specific parameters.
  *
- * @param searchParams The search params from useSearchParams() or SearchParams from server components
+ * @param params The search params from useSearchParams() or SearchParams from server components. Can be undefined.
  * @param options Configuration options
  * @param options.exclude Array of param keys to exclude
  * @param options.set Parameters to set/override as key-value pairs (overwrites existing values)
- * @returns A query string without '?' prefix, ready to be appended to a URL. Defaults to params passed in
+ * @param options.append Parameters to append as key-value pairs (does not overwrite existing values)
+ * @returns A query string without '?' prefix, ready to be appended to a URL. Defaults to params passed in. Is empty string if params is undefined.
  */
 export function buildQueryString(
-  searchParams: URLSearchParams | SearchParams,
+  params: URLSearchParams | SearchParams | undefined,
   options: {
     exclude?: string[];
     set?: Record<string, string>;
-  } = {}
+    append?: Record<string, string>;
+  } = {},
 ): string {
-  const { exclude = [], set = {} } = options;
+  if (!params) return "";
 
-  // Initialize params directly from input (when possible)
-  let params: URLSearchParams;
-  if (searchParams instanceof URLSearchParams) {
-    // For client-side URLSearchParams, we can clone it directly
-    params = new URLSearchParams(searchParams);
+  const { exclude = [], set = {}, append = {} } = options;
 
-    // Remove excluded params
-    exclude.forEach((key) => params.delete(key));
-  } else {
-    // For server-side SearchParams (plain object), we need to build it
-    params = new URLSearchParams();
+  const newParams = buildUrlParams(params);
 
-    // Add all non-excluded params
-    Object.entries(searchParams).forEach(([key, value]) => {
-      if (exclude.includes(key) || value === undefined) return;
+  // Exclude
+  exclude.forEach((key) => newParams.delete(key));
 
-      if (Array.isArray(value)) {
-        // For arrays, set the last value
-        if (value.length > 0) {
-          params.set(key, value[value.length - 1]);
-        }
-      } else {
-        params.set(key, value);
-      }
-    });
-  }
-
-  // Set/override with additional params
+  // Set/override
   Object.entries(set).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== "") {
-      params.set(key, value);
+      newParams.set(key, value);
     }
   });
 
-  return params.toString();
+  // Append
+  Object.entries(append).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      newParams.append(key, value);
+    }
+  });
+
+  return newParams.toString();
 }

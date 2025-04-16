@@ -6,7 +6,7 @@ import {
 import { redirect } from "next/navigation";
 import { SignInFormValues } from "../schemas/auth-schema";
 import { ProfileData, Tokens, type AccessResponse } from "../types";
-import { createApiClient } from "./api-client";
+import { createApiClient, type ApiRequestOptions } from "./api-client";
 
 /**
  * Fetches a list of published profiles from the API.
@@ -17,7 +17,7 @@ import { createApiClient } from "./api-client";
 export async function getPublishedProfiles() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/published`
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/published`,
     );
     const data: ProfileData[] = await res.json();
     return data;
@@ -36,11 +36,11 @@ export async function getPublishedProfiles() {
  */
 export async function getPublishedProfileOrRedirect(
   username: string,
-  redirectTo: string = "/"
+  redirectTo: string = "/",
 ): Promise<ProfileData> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/published/${username}`
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/profile/published/${username}`,
     );
     if (!res.ok) {
       redirect(redirectTo);
@@ -60,7 +60,7 @@ export async function getPublishedProfileOrRedirect(
  * @returns New access and refresh tokens
  */
 export const authenticateUser = async (
-  parsedCreds: SignInFormValues
+  parsedCreds: SignInFormValues,
 ): Promise<Tokens> => {
   const api = createApiClient();
   try {
@@ -68,7 +68,7 @@ export const authenticateUser = async (
 
     if (!tokens || !tokens.access || !tokens.refresh) {
       throw new AuthorizationError(
-        "Invalid response from authentication service"
+        "Invalid response from authentication service",
       );
     }
 
@@ -91,7 +91,7 @@ export const authenticateUser = async (
       `Request failed${
         error instanceof ApiError &&
         " with status: " + error.status + " :" + error.message
-      }`
+      }`,
     );
   }
 };
@@ -103,7 +103,7 @@ export const authenticateUser = async (
  * @returns New access token
  */
 export const fetchRefreshToken = async (
-  refreshToken: string
+  refreshToken: string,
 ): Promise<string> => {
   const api = createApiClient();
 
@@ -112,7 +112,7 @@ export const fetchRefreshToken = async (
       "/v1/auth/refresh-access",
       {
         refresh_token: refreshToken,
-      }
+      },
     );
 
     const { access } = refreshResponse;
@@ -136,4 +136,16 @@ export const fetchRefreshToken = async (
     // Catch rest
     throw new AuthorizationError(`Request failed: ${errorMessage}`, status);
   }
+};
+
+/**
+ * Fetches a list of profiles of the authenticated user from the API.
+ *
+ * @returns Array of user profiles
+ */
+export const getUserProfiles = async (
+  api: ReturnType<typeof createApiClient>,
+  options: ApiRequestOptions = {},
+): Promise<ProfileData[]> => {
+  return await api.get<ProfileData[]>("/v1/profile/user/list", options);
 };

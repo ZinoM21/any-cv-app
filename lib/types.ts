@@ -1,9 +1,11 @@
 import { buttonVariants } from "@/components/ui/button";
 import { VariantProps } from "class-variance-authority";
-import { SearchParams } from "next/dist/server/request/search-params";
+import type { LucideIcon } from "lucide-react";
 import { SignInOptions as DefaultSignInOptions } from "next-auth/react";
+import { SearchParams } from "next/dist/server/request/search-params";
 
 export type ProfileData = {
+  _id: string;
   firstName: string;
   lastName: string;
   username: string;
@@ -81,6 +83,7 @@ export type NavItem = {
   name: string;
   href: string;
   variant: VariantProps<typeof buttonVariants>["variant"];
+  icon?: LucideIcon;
   disabled?: boolean;
 };
 

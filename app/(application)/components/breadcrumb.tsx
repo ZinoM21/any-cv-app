@@ -35,6 +35,7 @@ export default function BreadCrumb({
   const { isSignedIn } = useSession();
   const { data: profiles, isLoading: isLoadingProfiles } = useUserProfiles();
   const searchParams = useSearchParams();
+  const username = searchParams.get("username");
 
   // expecting /generate/[format]/[action]
   const pathSegments = pathname.split("/").filter(Boolean);
@@ -46,12 +47,12 @@ export default function BreadCrumb({
 
   // Get current format mapping from route config
   const formatConfig = routeMappings.find(
-    (route) => route.path === currentFormat
+    (route) => route.path === currentFormat,
   );
 
   // Get current action from format's available actions
   const actionConfig = formatConfig?.children?.find(
-    (child) => child.path === currentAction
+    (child) => child.path === currentAction,
   );
 
   /**
@@ -60,11 +61,11 @@ export default function BreadCrumb({
    * Otherwise, falls back to the first available action in the target format
    */
   const resolveActionForFormat = (
-    targetFormat: RouteMapping
+    targetFormat: RouteMapping,
   ): string | undefined => {
     // Check if target format supports the current action
     const hasMatchingAction = targetFormat.children?.some(
-      (action) => action.path === currentAction
+      (action) => action.path === currentAction,
     );
 
     // If it does, use current action; otherwise use the first available action
@@ -91,13 +92,13 @@ export default function BreadCrumb({
         </BreadcrumbItem>
 
         {/* Profiles dropdown (only for authenticated users) */}
-        {isSignedIn && (
+        {isSignedIn && username && (
           <>
-            <BreadcrumbSeparator className="hidden sm:block [&>svg]:w-5 [&>svg]:h-5" />
+            <BreadcrumbSeparator className="hidden sm:block [&>svg]:h-5 [&>svg]:w-5" />
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-1 rounded hover:bg-accent text-base">
-                  Profiles
+                <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
+                  {username}
                   <ChevronsUpDown className="size-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
@@ -106,7 +107,7 @@ export default function BreadCrumb({
 
                   {isLoadingProfiles ? (
                     <div className="p-2">
-                      <Skeleton className="h-5 w-32 mb-2" />
+                      <Skeleton className="mb-2 h-5 w-32" />
                       <Skeleton className="h-5 w-28" />
                     </div>
                   ) : profiles && profiles.length > 0 ? (
@@ -143,10 +144,10 @@ export default function BreadCrumb({
         {/* Format dropdown (CV, Website) */}
         {formatConfig && (
           <>
-            <BreadcrumbSeparator className="hidden sm:block [&>svg]:w-5 [&>svg]:h-5" />
+            <BreadcrumbSeparator className="hidden sm:block [&>svg]:h-5 [&>svg]:w-5" />
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-1 rounded hover:bg-accent text-base">
+                <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
                   {formatConfig.label}
                   <ChevronsUpDown className="size-4" />
                 </DropdownMenuTrigger>
@@ -159,7 +160,7 @@ export default function BreadCrumb({
                         key={formatOption.path}
                         href={createNavigationUrl(
                           formatOption.path,
-                          resolveActionForFormat(formatOption)
+                          resolveActionForFormat(formatOption),
                         )}
                       >
                         <DropdownMenuCheckboxItem
@@ -182,10 +183,10 @@ export default function BreadCrumb({
           formatConfig?.children &&
           formatConfig.children.length > 0 && (
             <>
-              <BreadcrumbSeparator className="[&>svg]:w-5 [&>svg]:h-5" />
+              <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
               <BreadcrumbItem>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-1 rounded hover:bg-accent text-base">
+                  <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
                     {actionConfig.label}
                     <ChevronsUpDown className="size-4" />
                   </DropdownMenuTrigger>
@@ -197,7 +198,7 @@ export default function BreadCrumb({
                         key={actionOption.path}
                         href={createNavigationUrl(
                           currentFormat,
-                          actionOption.path
+                          actionOption.path,
                         )}
                       >
                         <DropdownMenuCheckboxItem

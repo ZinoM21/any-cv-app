@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import { Loader2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSignedUrl } from "@/hooks/use-image-url";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 interface SignedImageProps {
   src: string | undefined;
@@ -11,6 +11,7 @@ interface SignedImageProps {
   className?: string;
   width?: number;
   height?: number;
+  fallback?: string;
 }
 
 export function SignedImage({
@@ -19,33 +20,27 @@ export function SignedImage({
   className,
   width,
   height,
+  fallback,
 }: SignedImageProps) {
   const { isFetching, data: signedUrl } = useSignedUrl(src);
 
   return (
-    <div
-      className={cn(
-        "size-16 overflow-hidden rounded-md bg-muted shrink-0",
-        className
-      )}
-    >
+    <Avatar className={cn("size-16 rounded-md", className)}>
       {isFetching ? (
-        <div className="flex h-full w-full items-center justify-center">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-        </div>
+        <AvatarFallback>
+          <Loader2 className="size-6 animate-spin" />
+        </AvatarFallback>
       ) : signedUrl ? (
-        <Image
+        <AvatarImage
           src={signedUrl.url}
           alt={alt || "Image"}
           width={width || 80}
           height={height || 80}
-          className="size-full object-contain"
+          className="object-contain"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-          Logo
-        </div>
+        <AvatarFallback>{fallback || "Logo"}</AvatarFallback>
       )}
-    </div>
+    </Avatar>
   );
 }
