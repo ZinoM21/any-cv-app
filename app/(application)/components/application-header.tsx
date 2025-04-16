@@ -22,11 +22,13 @@ export function ApplicationHeader({
           </div>
         )}
 
-        <Link href="https://builtanycv.userjot.com/">Feedback</Link>
-
-        <div className="hidden gap-2 lg:flex lg:items-center">
-          <AuthOrDashboardButton />
-        </div>
+        <Link
+          href="https://builtanycv.userjot.com/"
+          className="hidden lg:block"
+        >
+          Feedback
+        </Link>
+        <AuthOrDashboardButton />
         <HeaderDropdownMenu />
         <ThemeToggle />
       </div>

@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,10 +13,16 @@ import { getServerApi, getUserProfiles } from "@/lib/api";
 import { buildQueryString, getInitials } from "@/lib/utils";
 import { Edit3, Plus } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-  const api = await getServerApi();
+  const session = await auth();
 
+  if (!session) {
+    redirect("/");
+  }
+
+  const api = await getServerApi();
   const profiles = await getUserProfiles(api, {
     next: { revalidate: 10 },
   });

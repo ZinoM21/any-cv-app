@@ -1,6 +1,6 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { HEADER_CHILDREN_CLASS } from "@/styles/shared";
-import { ApplicationHeader } from "../components/breadcrumb-header";
+import { ApplicationHeader } from "../components/application-header";
 import DashboardSidebar from "./dashboard-sidebar";
 export default function DashboardLayout({
   children,

@@ -14,7 +14,7 @@ import { dashboardNav, marketingNav } from "@/config/nav";
 import { useAuth } from "@/hooks/use-auth";
 import useSession from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
-import { LogOut, Menu, UserRound } from "lucide-react";
+import { FileUser, LogOut, Menu, UserRound } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -64,10 +64,14 @@ export function HeaderDropdownMenu({
               {dashboardNav.map((item) => (
                 <DropdownMenuItem
                   key={item.name}
-                  className={item.name === "Dashboard" ? "lg:hidden" : ""}
+                  className={item.href !== "/account" ? "lg:hidden" : ""}
                 >
-                  <Link href={item.href} className="w-full">
+                  <Link
+                    href={item.href}
+                    className="flex w-full items-center justify-between gap-2"
+                  >
                     {item.name}
+                    {item.icon && <item.icon className="size-4" />}
                   </Link>
                 </DropdownMenuItem>
               ))}
@@ -83,7 +87,10 @@ export function HeaderDropdownMenu({
             <DropdownMenuGroup className="block lg:hidden">
               {marketingNav.map((item) => (
                 <DropdownMenuItem key={item.name}>
-                  <Link href={item.href} className="w-full">
+                  <Link
+                    href={item.href}
+                    className="flex w-full items-center justify-between gap-2"
+                  >
                     {item.name}
                   </Link>
                 </DropdownMenuItem>
@@ -98,8 +105,12 @@ export function HeaderDropdownMenu({
           <>
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Link href="/" className="w-full">
+                <Link
+                  href="/"
+                  className="flex w-full items-center justify-between gap-2"
+                >
                   Home Page
+                  <FileUser className="size-4" />
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>

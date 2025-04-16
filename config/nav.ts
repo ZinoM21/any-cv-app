@@ -1,5 +1,6 @@
 import { NavItem } from "@/lib/types";
 import { FileStack, Settings } from "lucide-react";
+
 export const marketingNav: NavItem[] = [
   {
     name: "Templates",
@@ -16,7 +17,17 @@ export const marketingNav: NavItem[] = [
 
 export const dashboardNav: NavItem[] = [
   { name: "Dashboard", href: "/dashboard", variant: "ghost" },
-  { name: "Account Settings", href: "/account", variant: "ghost" },
+  {
+    name: "Account Settings",
+    href: "/account",
+    variant: "ghost",
+    icon: Settings,
+  },
+  {
+    name: "Feedback",
+    href: "https://builtanycv.userjot.com/",
+    variant: "ghost",
+  },
 ];
 
 export const sidebarNav: NavItem[] = [

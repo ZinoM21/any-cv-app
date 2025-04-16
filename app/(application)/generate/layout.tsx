@@ -1,6 +1,6 @@
 import { HEADER_CHILDREN_CLASS } from "@/styles/shared";
 import { ReactNode } from "react";
-import { ApplicationHeader } from "../components/breadcrumb-header";
+import { ApplicationHeader } from "../components/application-header";
 
 export default function GeneratingLayout({
   children,
