@@ -3,6 +3,7 @@ import { HeaderDropdownMenu } from "@/components/auth/profile-button";
 import { GenericHeader } from "@/components/generic-header";
 import BuiltAnyCVLogo from "@/components/logo";
 import ThemeToggle from "@/components/theme-toggle";
+import Link from "next/link";
 import BreadCrumb from "./breadcrumb";
 
 export function ApplicationHeader({
@@ -16,8 +17,12 @@ export function ApplicationHeader({
         {showBreadcrumb ? (
           <BreadCrumb className="flex-1" />
         ) : (
-          <BuiltAnyCVLogo className="flex-1" />
+          <div className="flex-1">
+            <BuiltAnyCVLogo />
+          </div>
         )}
+
+        <Link href="https://builtanycv.userjot.com/">Feedback</Link>
 
         <div className="hidden gap-2 lg:flex lg:items-center">
           <AuthOrDashboardButton />
