@@ -14,6 +14,7 @@ import { buildQueryString, getInitials } from "@/lib/utils";
 import { Edit3, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import AddProfileDialog from "./add-profile-dialog";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -23,18 +24,20 @@ export default async function DashboardPage() {
   }
 
   const api = await getServerApi();
-  const profiles = await getUserProfiles(api, {
-    next: { revalidate: 10 },
-  });
+  const profiles = await getUserProfiles(api);
 
   return (
     <>
       <div className="mb-4 flex flex-row items-center justify-between sm:mb-6 lg:mb-8">
         <h1 className="text-3xl font-semibold tracking-tight">My Profiles</h1>
-        <Button>
-          <Plus />
-          Create Profile
-        </Button>
+        <AddProfileDialog
+          trigger={
+            <Button>
+              <Plus />
+              Create Profile
+            </Button>
+          }
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">

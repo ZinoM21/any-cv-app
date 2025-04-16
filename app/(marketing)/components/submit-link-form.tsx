@@ -10,17 +10,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useApi } from "@/hooks/use-api";
+import { useCreateProfileMutation } from "@/hooks/use-create-profile-mutation";
 import { useProfileStore } from "@/hooks/use-profile";
 import { ProfileData } from "@/lib/types";
 import { buildQueryString, extractUsernameFromLinkedInUrl } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { FileUser, Loader2 } from "lucide-react";
+import { Check, FileUser, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 const submitLinkFormSchema = z.object({
@@ -38,7 +35,7 @@ const submitLinkFormSchema = z.object({
       },
       {
         message: "Enter LinkedIn profile URL (/in/) or just your username",
-      }
+      },
     ),
 });
 
@@ -52,42 +49,32 @@ export function SubmitLinkForm() {
     },
   });
 
-  const api = useApi();
   const router = useRouter();
   const params = useSearchParams();
 
   const setProfileData = useProfileStore((state) => state.setProfile);
-  const [isNavigating, setIsNavigating] = useState(false);
 
-  const mutation = useMutation({
-    mutationFn: async (username: string) => {
-      return api.post<ProfileData>(`/v1/profile/${username}`);
-    },
-    onSuccess: (data: ProfileData) => {
-      setIsNavigating(true);
-      setProfileData(data);
-      router.push(
-        `/generate/choose?${buildQueryString(params, {
-          set: { username: data.username },
-        })}`
-      );
-    },
-    onError: (error) => {
-      console.error(error);
-      toast.error(error.message);
-    },
-  });
+  const { mutate, isPending, isSuccess } = useCreateProfileMutation();
 
   function onSubmit(values: SubmitLinkFormValues) {
     const username = extractUsernameFromLinkedInUrl(values.linkedInUrl);
-    mutation.mutate(username);
+    mutate(username, {
+      onSuccess: (data: ProfileData) => {
+        setProfileData(data);
+        router.push(
+          `/generate/choose?${buildQueryString(params, {
+            set: { username: data.username },
+          })}`,
+        );
+      },
+    });
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col sm:flex-row gap-2"
+        className="flex flex-col gap-2 sm:flex-row"
         noValidate
       >
         <FormField
@@ -116,11 +103,13 @@ export function SubmitLinkForm() {
           <Button
             type="submit"
             className="w-full sm:w-auto"
-            disabled={mutation.isPending || isNavigating}
+            disabled={isPending}
           >
-            {mutation.isPending || isNavigating ? "Generating..." : "Generate"}
-            {mutation.isPending || isNavigating ? (
+            {isPending ? "Generating..." : "Generate"}
+            {isPending ? (
               <Loader2 className="animate-spin" />
+            ) : isSuccess ? (
+              <Check />
             ) : (
               <FileUser />
             )}

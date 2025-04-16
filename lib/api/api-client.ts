@@ -6,7 +6,15 @@
 import { signOut as signOutServer } from "@/auth";
 import { signOut as signOutClient } from "next-auth/react";
 import type { SearchParams } from "next/dist/server/request/search-params";
-import { ApiError } from "../errors";
+import {
+  ApiError,
+  ApiErrorType,
+  AuthorizationError,
+  ForbiddenError,
+  InvalidCredentialsError,
+  RateLimitExceededError,
+  ServiceUnavailableError,
+} from "../errors";
 import { buildQueryString } from "../utils";
 
 export interface ApiRequestOptions extends RequestInit {
@@ -56,33 +64,54 @@ export async function apiRequest<T>(
 
     // Error
     if (!response.ok) {
-      let errorMessage: string;
-      try {
-        const errorData = await response.json();
-        errorMessage =
-          errorData.detail ||
-          errorData.message ||
-          `API error: ${response.status}`;
-      } catch {
-        errorMessage = `API error: ${response.status}`;
-      }
-
-      throw new ApiError(errorMessage, response.status);
+      const error = await response.json();
+      const message = error.detail || error.message || error.error;
+      throw new ApiError(message, response.status);
     }
 
     return response.json();
   } catch (error) {
-    if (error instanceof ApiError && error.message.includes("expired")) {
-      if (typeof window !== "undefined") {
-        signOutClient({ redirectTo: "/" });
-      } else {
-        signOutServer({ redirectTo: "/" });
+    // Handle all known errors (thrown above intentionally)
+    if (error instanceof ApiError) {
+      // Log
+      console.error(error.message);
+
+      // Then handle
+      if (
+        error.message === ApiErrorType.TokenExpired ||
+        error.message === ApiErrorType.InvalidToken
+      ) {
+        if (typeof window !== "undefined") {
+          signOutClient({ redirectTo: "/" });
+        } else {
+          signOutServer({ redirectTo: "/" });
+        }
+      }
+      if (error.message === ApiErrorType.InvalidCredentials) {
+        throw new InvalidCredentialsError();
+      }
+      if (error.message === ApiErrorType.ServiceUnavailable) {
+        throw new ServiceUnavailableError();
+      }
+      if (error.message === ApiErrorType.Unauthorized) {
+        throw new AuthorizationError();
+      }
+      if (error.message === ApiErrorType.Forbidden) {
+        throw new ForbiddenError();
+      }
+      if (error.message.includes(ApiErrorType.RateLimitExceeded)) {
+        throw new RateLimitExceededError();
+      }
+      if (
+        error.message === ApiErrorType.ResourceNotFound ||
+        error.message === ApiErrorType.ResourceAlreadyExists
+      ) {
+        throw error;
       }
     }
-    if (error instanceof ApiError) {
-      throw error;
-    }
-    console.error("Failed to fetch", error);
+
+    // Handle unknown errors
+    console.error(error);
     throw new ApiError("Failed to fetch", 500);
   }
 }

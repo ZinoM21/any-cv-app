@@ -149,3 +149,10 @@ export const getUserProfiles = async (
 ): Promise<ProfileData[]> => {
   return await api.get<ProfileData[]>("/v1/profile/user/list", options);
 };
+
+export const createProfileFromRemoteData = async (
+  api: ReturnType<typeof createApiClient>,
+  username: string,
+) => {
+  return api.post<ProfileData>(`/v1/profile/${username}`);
+};

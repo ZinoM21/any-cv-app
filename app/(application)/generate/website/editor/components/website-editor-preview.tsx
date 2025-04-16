@@ -20,7 +20,7 @@ export default function WebsiteEditorPreview({
     <>
       <div className="absolute left-4">
         <Button
-          className="fixed top-20 p-2"
+          className="fixed top-20 p-2 z-10"
           variant="outline"
           onClick={toggleSidebar}
         >
