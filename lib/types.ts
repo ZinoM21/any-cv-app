@@ -25,8 +25,9 @@ export type ProfileData = {
 };
 
 export type PublishingOptions = {
-  darkMode?: boolean;
+  appearance?: "light" | "dark";
   templateId?: TemplateId;
+  slug?: string;
 };
 
 export type Experience = {
@@ -91,7 +92,7 @@ export enum TemplateId {
   Minimal = "minimal",
   Creative = "creative",
   Classic = "classic",
-  Modern = "modern",
+  Modern = "modern"
 }
 
 export type CVTemplate = {

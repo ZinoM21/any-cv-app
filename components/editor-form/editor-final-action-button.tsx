@@ -1,12 +1,11 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import DownloadCVButton from "@/components/editor-form/download-cv-button";
 import PublishWebsiteButton from "@/components/editor-form/publish-website-button";
 import SuggestNextActionDialog from "@/components/editor-form/suggest-next-action-dialog";
-import { getUsernameFromParamsOrRedirect } from "@/lib/utils";
 import { toast } from "sonner";
 
 export default function EditorFinalActionButton() {
@@ -19,22 +18,16 @@ export default function EditorFinalActionButton() {
 
   const nextAction = isCV ? "website" : "cv";
 
-  const searchParams = useSearchParams();
-  const username = getUsernameFromParamsOrRedirect(
-    searchParams.get("username")
-  );
-
   return (
     <>
       {isCV && <DownloadCVButton onSuccess={() => setOpen(true)} />}
       {isWebsite && (
         <PublishWebsiteButton
-          onSuccess={() => {
+          onSuccess={(slug) => {
             setOpen(true);
 
-            const url = `${window.location.origin}/${username}`;
+            const url = `${window.location.origin}/${slug}`;
             setWebsiteUrl(url);
-
             toast.success(`Your website is now live at ${url}`);
           }}
         />

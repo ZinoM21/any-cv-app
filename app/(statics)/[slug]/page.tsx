@@ -1,9 +1,9 @@
-import { getUsernameFromParamsOrRedirect } from "@/lib/utils";
-
+import MadeWithBadge from "@/components/made-with-badge";
+import ThemeForcer from "@/components/templates/website/theme-forcer";
 import { getTemplateWebsiteById } from "@/components/templates/website/website-template-gate";
 import { getPublishedProfileOrRedirect, getPublishedProfiles } from "@/lib/api";
 import { Params } from "next/dist/server/request/params";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 export const revalidate = 3600; // hourly
 
@@ -11,7 +11,7 @@ export async function generateStaticParams() {
   try {
     const profiles = await getPublishedProfiles();
     return profiles.map((profile) => ({
-      username: profile.username
+      slug: profile.publishingOptions?.slug
     }));
   } catch (error) {
     console.error("Error generating static params: ", error);
@@ -24,14 +24,16 @@ export default async function UserWebsitePage({
 }: {
   params: Promise<Params>;
 }) {
-  const { username } = await params;
+  const { slug } = await params;
 
-  const validUsername = getUsernameFromParamsOrRedirect(username, "/404");
+  if (typeof slug !== "string") {
+    notFound();
+  }
 
-  const profile = await getPublishedProfileOrRedirect(validUsername);
+  const profile = await getPublishedProfileOrRedirect(slug);
 
   if (!profile.publishingOptions?.templateId) {
-    redirect("/404");
+    notFound();
   }
 
   const template = getTemplateWebsiteById(
@@ -39,5 +41,11 @@ export default async function UserWebsitePage({
     profile
   );
 
-  return template;
+  return (
+    <>
+      {template}
+      <MadeWithBadge />
+      <ThemeForcer profile={profile} />
+    </>
+  );
 }

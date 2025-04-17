@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ApiError } from "../errors";
 import {
   SignInFormValues,
@@ -36,21 +36,22 @@ export async function getPublishedProfiles() {
 /**
  * Fetches a single published profile from the API and redirects to a given URL if the profile is not found.
  *
- * @param username The username of the profile to fetch
+ * @param slug The slug of the profile to fetch
  * @param redirectTo The URL to redirect to if the profile is not found
  * @returns The fetched profile data
  */
 export async function getPublishedProfileOrRedirect(
-  username: string,
+  slug: string,
   redirectTo: string = "/"
 ): Promise<ProfileData> {
   const serverApi = await getServerApi();
   try {
-    return await serverApi.get<ProfileData>(
-      `/v1/profile/published/${username}`
-    );
+    return await serverApi.get<ProfileData>(`/v1/profile/published/${slug}`);
   } catch (error) {
     if (error instanceof ApiError) {
+      if (error.status === 404) {
+        notFound();
+      }
       redirect(redirectTo);
     }
     throw error;

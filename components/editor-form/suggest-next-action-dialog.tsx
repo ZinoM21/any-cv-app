@@ -22,6 +22,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
+
 export default function SuggestNextActionDialog({
   nextAction,
   isOpen,
