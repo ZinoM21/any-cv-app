@@ -1,5 +1,5 @@
 import { authenticateUser, fetchRefreshToken } from "@/lib/api";
-import { AuthorizationError, InvalidCredentialsError } from "@/lib/errors";
+import { InvalidCredentialsError } from "@/lib/errors";
 import { signInSchema } from "@/lib/schemas/auth-schema";
 import { AuthValidity } from "@/lib/types";
 import { getDecodedToken, isValidToken } from "@/lib/utils";
@@ -9,10 +9,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export const authConfig: NextAuthConfig = {
   debug: process.env.NODE_ENV === "development",
   pages: {
-    signIn: "/signin",
+    signIn: "/signin"
   },
   session: {
-    strategy: "jwt",
+    strategy: "jwt"
   },
   secret: process.env.AUTH_SECRET,
   providers: [
@@ -20,46 +20,38 @@ export const authConfig: NextAuthConfig = {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
         try {
           const parsedCreds = await signInSchema.parseAsync({
             email: credentials.email,
-            password: credentials.password,
+            password: credentials.password
           });
 
           const tokens = await authenticateUser(parsedCreds);
 
-          try {
-            const {
-              exp: access_until,
-              sub: user_id,
-              email,
-            } = await getDecodedToken(tokens.access);
+          const {
+            exp: access_until,
+            sub: user_id,
+            email
+          } = await getDecodedToken(tokens.access);
 
-            const { exp: refresh_until } = await getDecodedToken(
-              tokens.refresh
-            );
+          const { exp: refresh_until } = await getDecodedToken(tokens.refresh);
 
-            const validity: AuthValidity = {
-              access_until,
-              refresh_until,
-            };
+          const validity: AuthValidity = {
+            access_until,
+            refresh_until
+          };
 
-            return {
-              tokens,
-              user: {
-                id: user_id,
-                email,
-              },
-              validity,
-            };
-          } catch (tokenError) {
-            throw new AuthorizationError(
-              "Invalid token structure in token payload: " + tokenError
-            );
-          }
+          return {
+            tokens,
+            user: {
+              id: user_id,
+              email
+            },
+            validity
+          };
         } catch (error) {
           console.error(error);
 
@@ -68,11 +60,11 @@ export const authConfig: NextAuthConfig = {
             throw error;
           }
 
-          // Fallback: don't show error to user
+          // Fallback: don't show other errors to user
           return null;
         }
-      },
-    }),
+      }
+    })
   ],
   callbacks: {
     async jwt({ token, user: authorizeReturn, account }) {
@@ -112,7 +104,7 @@ export const authConfig: NextAuthConfig = {
           console.error("Error refreshing token:", error);
           return {
             ...token,
-            error: "RefreshAccessTokenError",
+            error: "RefreshAccessTokenError"
           };
         }
       }
@@ -144,6 +136,6 @@ export const authConfig: NextAuthConfig = {
         }
       }
       return url;
-    },
-  },
+    }
+  }
 };

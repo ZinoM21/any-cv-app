@@ -6,9 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useMutation } from "@tanstack/react-query";
-
-import { isEqual } from "lodash";
 import { useShallow } from "zustand/react/shallow";
 
 import { useEditorTabStore } from "@/hooks/use-editor-tabs";
@@ -16,7 +13,6 @@ import { useProfileStore } from "@/hooks/use-profile";
 
 import { EditorTabName, editorTabName } from "@/config/editor-tab-names";
 
-import type { ProfileData } from "@/lib/types";
 import { capitalize } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
@@ -24,12 +20,11 @@ import { Form } from "@/components/ui/form";
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
+  TooltipTrigger
 } from "@/components/ui/tooltip";
 import { ArrowLeft, FileCheck, Save } from "lucide-react";
-import { toast } from "sonner";
 
-import { useApi } from "@/hooks/use-api";
+import { useOptimisticProfileUpdateMutation } from "@/hooks/use-optimistic-profile-update-mutation";
 import EditorFinalActionButton from "./editor-final-action-button";
 
 interface EditorFormProps<T extends z.ZodSchema> {
@@ -51,11 +46,9 @@ export function EditorForm<T extends z.ZodTypeAny>({
   schema,
   initialValues,
   children,
-  tabName,
+  tabName
 }: EditorFormProps<T>) {
-  const [profileData, setProfileData] = useProfileStore(
-    useShallow((state) => [state.profile, state.setProfile])
-  );
+  const profileData = useProfileStore((state) => state.profile);
 
   const [activeTab, setActiveTab] = useEditorTabStore(
     useShallow((state) => [state.activeTab, state.setActiveTab])
@@ -63,94 +56,49 @@ export function EditorForm<T extends z.ZodTypeAny>({
 
   // Get ordered array of enum values
   const tabValues = Object.values(editorTabName);
-  const tabIndex = tabValues.indexOf(activeTab as EditorTabName);
-  const nextTab = tabValues[tabIndex + 1];
-  const previousTab = tabValues[tabIndex - 1];
-  const isFirstTab = tabIndex === 0;
-  const isLastTab = tabIndex === tabValues.length - 1;
+  const activeTabIndex = tabValues.indexOf(activeTab as EditorTabName);
+  const nextTab = tabValues[activeTabIndex + 1];
+  const previousTab = tabValues[activeTabIndex - 1];
+  const isFirstTab = activeTabIndex === 0;
+  const isLastTab = activeTabIndex === tabValues.length - 1;
 
   const formMethods = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
     defaultValues: initialValues,
-    mode: "all",
+    mode: "all"
   });
 
   const {
     handleSubmit,
     formState: { dirtyFields, isDirty, isValid },
-    reset,
+    reset
   } = formMethods;
 
   const canSave = isDirty && isValid;
 
-  const api = useApi();
+  const { mutateAsync: optimisticUpdateProfileData } =
+    useOptimisticProfileUpdateMutation();
 
-  const { mutateAsync: mutateProfileData } = useMutation({
-    mutationFn: async (values: {
-      newValues: Partial<ProfileData>;
-      moveToNextTab: boolean;
-    }) =>
-      api.patch<Partial<ProfileData>>(
-        `/v1/profile/${profileData?.username}`,
-        values.newValues
-      ),
-    onMutate: async ({ newValues, moveToNextTab }) => {
-      // Capture current state for rollback
-      const snapshot = { prevProfileData: profileData, previousTab: activeTab };
-
-      // Optimistically update state & tab
-      setProfileData((prevProfileData) => ({
-        ...prevProfileData,
-        ...newValues,
-      }));
-      if (moveToNextTab) {
-        setActiveTab(nextTab);
-      }
-
-      return snapshot;
-    },
-    onSuccess: (fetchedValues: Partial<ProfileData>) => {
-      // Revalidate & only update if mismatch bwtn fetched & optimistic data
-      if (!isEqual(fetchedValues, profileData)) {
-        setProfileData((optimisticProfileData) => ({
-          ...optimisticProfileData,
-          ...fetchedValues,
-        }));
-      }
-    },
-    onError: (error, values, snapshot) => {
-      // Roll back optimistic update
-      if (snapshot) {
-        setProfileData(snapshot.prevProfileData as ProfileData);
-
-        if (values.moveToNextTab) {
-          setActiveTab(snapshot.previousTab);
-        }
-      }
-
-      console.error(error);
-      toast.error("Failed to update profile");
-    },
-  });
-
-  const submit = async (data: z.infer<T>, moveToNextTab: boolean = false) => {
+  const submit = async (data: z.infer<T>) => {
+    // Move to next tab (is optimitic when mutation happens)
     if (isDirty) {
       const values = Object.keys(dirtyFields).reduce((fields, key) => {
         const fieldKey = key as keyof typeof data;
         return {
           ...fields,
-          [fieldKey]: data[fieldKey],
+          [fieldKey]: data[fieldKey]
         };
       }, {});
 
-      await mutateProfileData({ newValues: values, moveToNextTab });
-    } else if (moveToNextTab) {
-      setActiveTab(nextTab);
+      await optimisticUpdateProfileData({
+        newValues: values,
+        currentTab: activeTab
+      });
     }
   };
 
   useEffect(() => {
-    // Cannot use default "values" prop in useForm because of undefined values in profileData
+    // Cannot use default "values" prop for state management in useForm because profileData conflicts with form schema
     // Therefore, use reset() to update values when profileData changes
     if (profileData) {
       reset(initialValues);
@@ -161,10 +109,10 @@ export function EditorForm<T extends z.ZodTypeAny>({
     <Form {...formMethods}>
       <form
         onSubmit={handleSubmit((data) => submit(data))}
-        className="flex flex-col h-full gap-4 sm:gap-6"
+        className="flex h-full flex-col gap-4 sm:gap-6"
       >
         {/* Form Header */}
-        <div className="flex gap-2 w-full items-center justify-between">
+        <div className="flex w-full items-center justify-between gap-2">
           <div className="flex items-center gap-1">
             {!isFirstTab && (
               <Button
@@ -175,7 +123,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
                 <ArrowLeft />
               </Button>
             )}
-            <h2 className="text-xl font-semibold  ">{capitalize(tabName)}</h2>
+            <h2 className="text-xl font-semibold">{capitalize(tabName)}</h2>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -188,7 +136,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
                     }
                   }}
                   onClick={handleSubmit((data) => {
-                    submit(data, false);
+                    submit(data);
                   })}
                 >
                   {isDirty ? (
@@ -210,13 +158,15 @@ export function EditorForm<T extends z.ZodTypeAny>({
             ) : (
               <Button
                 onClick={handleSubmit((data) => {
-                  submit(data, true);
+                  submit(data);
+                  setActiveTab(nextTab);
                 })}
                 disabled={!isValid}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleSubmit((data) => {
-                      submit(data, true);
+                      submit(data);
+                      setActiveTab(nextTab);
                     });
                   }
                 }}
@@ -228,7 +178,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
         </div>
 
         {/* Scrollable content area */}
-        <div className="overflow-y-auto flex-1 min-h-0">{children}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
       </form>
     </Form>
   );

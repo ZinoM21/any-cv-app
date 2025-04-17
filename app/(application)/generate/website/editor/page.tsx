@@ -1,15 +1,15 @@
 import { getTemplateById } from "@/components/templates/website/website-template-gate";
+import { getProfileDataOrRedirect } from "@/lib/api";
 import { PromiseSearchParams, TemplateId } from "@/lib/types";
 import {
   buildQueryString,
-  getProfileDataOrRedirect,
   getTemplateIdFromParamsOrRedirect,
-  getUsernameFromParamsOrRedirect,
+  getUsernameFromParamsOrRedirect
 } from "@/lib/utils";
 import WebsiteEditor from "./components/website-edior";
 
 export default async function WebsiteEditorPage({
-  searchParams,
+  searchParams
 }: {
   searchParams: PromiseSearchParams;
 }) {

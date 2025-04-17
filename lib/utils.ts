@@ -1,5 +1,3 @@
-import { ProfileData } from "@/lib/types";
-
 import { clsx, type ClassValue } from "clsx";
 import * as jose from "jose";
 import { redirect } from "next/navigation";
@@ -18,8 +16,6 @@ import minimalWebsite from "@/public/websites/images/minimal.jpg";
 import { format } from "date-fns";
 import type { SearchParams } from "next/dist/server/request/search-params";
 import { StaticImageData } from "next/image";
-import { getServerApi } from "./api/server-api";
-import { ApiError } from "./errors";
 import { getValidTemplateId, getValidUsername } from "./validation";
 
 export function cn(...inputs: ClassValue[]) {
@@ -38,13 +34,13 @@ export function extractUsernameFromLinkedInUrl(username: string): string {
   if (username.includes("/")) {
     // Match LinkedIn URLs in various formats
     const match = username.match(
-      /^(?:https?:\/\/)?(?:[\w]+\.)?linkedin\.com\/in\/([\w\-]+)\/?.*$/,
+      /^(?:https?:\/\/)?(?:[\w]+\.)?linkedin\.com\/in\/([\w\-]+)\/?.*$/
     );
 
     if (!match) {
       console.warn(`Invalid LinkedIn URL received: ${username}`);
       throw new Error(
-        "Invalid LinkedIn URL. Must be a LinkedIn profile URL (/in/) or just the username",
+        "Invalid LinkedIn URL. Must be a LinkedIn profile URL (/in/) or just the username"
       );
     }
 
@@ -80,7 +76,7 @@ export const getCVImage = (templateId: TemplateId): StaticImageData => {
 };
 
 export const getWebsitePreviewImage = (
-  templateId: TemplateId,
+  templateId: TemplateId
 ): StaticImageData => {
   switch (templateId) {
     case TemplateId.Creative:
@@ -115,7 +111,7 @@ export const formatDateRange = (startDate: Date, endDate?: Date): string => {
  */
 export const getUsernameFromParamsOrRedirect = (
   username: string | string[] | undefined | null,
-  redirectTo: string = "/",
+  redirectTo: string = "/"
 ) => {
   const validUsername = getValidUsername(username);
   if (!validUsername) {
@@ -126,7 +122,7 @@ export const getUsernameFromParamsOrRedirect = (
 
 export const getTemplateIdFromParamsOrRedirect = (
   templateId: string | string[] | undefined | null,
-  redirectTo: string = "/",
+  redirectTo: string = "/"
 ) => {
   const validTemplateId = getValidTemplateId(templateId);
   if (!validTemplateId) {
@@ -134,28 +130,6 @@ export const getTemplateIdFromParamsOrRedirect = (
   }
   return validTemplateId;
 };
-
-/**
- * Fetches profile data for a username, or redirects to home if an error occurs
- *
- * @param username LinkedIn username to fetch profile for
- * @returns ProfileData if successful, or redirects to home
- */
-export async function getProfileDataOrRedirect(
-  username: string,
-  redirectTo: string = "/",
-): Promise<ProfileData> {
-  const serverApi = await getServerApi();
-  try {
-    return await serverApi.get<ProfileData>(`/v1/profile/${username}`);
-  } catch (error) {
-    console.error("Failed to fetch profile data:", error);
-    if (error instanceof ApiError) {
-      redirect(redirectTo);
-    }
-    throw error;
-  }
-}
 
 const encodedSecret = new TextEncoder().encode(process.env.AUTH_SECRET);
 
@@ -169,7 +143,7 @@ export const getDecodedToken = async (token: string): Promise<DecodedToken> => {
   try {
     const { payload } = await jose.jwtVerify<DecodedToken>(
       token,
-      encodedSecret,
+      encodedSecret
     );
 
     const { sub, exp, email, iat } = payload;
@@ -235,7 +209,7 @@ export function buildQueryString(
     exclude?: string[];
     set?: Record<string, string>;
     append?: Record<string, string>;
-  } = {},
+  } = {}
 ): string {
   if (!params) return "";
 

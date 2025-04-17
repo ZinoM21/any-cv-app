@@ -1,6 +1,11 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { SignedUrl } from "@/lib/types";
 import { useApi } from "@/hooks/use-api";
+import {
+  getSignedUploadUrl,
+  getSignedUrl,
+  uploadFileToSignedUrl,
+} from "@/lib/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 /**
  * Custom hook to get a signed URL for a file
@@ -13,24 +18,7 @@ export function useSignedUrl(filePath: string | undefined | null) {
 
   return useQuery({
     queryKey: ["imageUrl", filePath],
-    queryFn: async () => {
-      if (!filePath) {
-        return null;
-      }
-      try {
-        const signedUrlResponse = await api.post<SignedUrl>(
-          `/v1/files/signed-url`,
-          {
-            file_path: filePath,
-          }
-        );
-
-        return signedUrlResponse;
-      } catch (error) {
-        console.error("Failed to fetch signed URL", error);
-        throw new Error("Failed to fetch signed URL");
-      }
-    },
+    queryFn: async () => getSignedUrl(api, filePath!),
     enabled: !!filePath,
   });
 }
@@ -43,41 +31,16 @@ export function useSignedUrl(filePath: string | undefined | null) {
 export function useSignedUploadUrl() {
   const api = useApi();
 
-  const { mutateAsync: getSignedUploadUrl } = useMutation({
-    mutationFn: async (file: File) => {
-      const signedUrlResponse = await api.post<SignedUrl>(
-        `/v1/files/signed-upload-url`,
-        {
-          file_name: file.name,
-          file_type: file.type,
-          file_size: file.size,
-        }
-      );
-
-      return signedUrlResponse;
-    },
-    onError: (error) => {
-      console.error("Failed to fetch signed URL", error);
-      throw new Error("Failed to fetch signed URL");
-    },
-  });
-
   return useMutation({
     mutationFn: async ({ file }: { file: File }) => {
-      const signedUrlResponse = await getSignedUploadUrl(file);
+      const signedUrlResponse = await getSignedUploadUrl(api, file);
 
-      const uploadResponse = await fetch(signedUrlResponse.url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": file.type,
-        },
-        body: file,
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error("Failed to upload file");
+      try {
+        await uploadFileToSignedUrl(signedUrlResponse.url, file);
+      } catch (error) {
+        toast.error("Failed to upload file");
+        throw error;
       }
-
       return signedUrlResponse.path;
     },
   });

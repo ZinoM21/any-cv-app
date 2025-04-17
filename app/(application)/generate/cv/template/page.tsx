@@ -1,13 +1,11 @@
 import { cvTemplates } from "@/config/templates";
+import { getProfileDataOrRedirect } from "@/lib/api";
 import { PromiseSearchParams } from "@/lib/types";
-import {
-  getProfileDataOrRedirect,
-  getUsernameFromParamsOrRedirect,
-} from "@/lib/utils";
+import { getUsernameFromParamsOrRedirect } from "@/lib/utils";
 import CVTemplateCard from "./components/cv-template-card";
 
 export default async function CVTemplatePage({
-  searchParams,
+  searchParams
 }: {
   searchParams: PromiseSearchParams;
 }) {
@@ -18,9 +16,9 @@ export default async function CVTemplatePage({
   const profileData = await getProfileDataOrRedirect(username);
 
   return (
-    <div className="flex flex-col gap-10 h-full max-w-[1400px] mx-auto pt-12 px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto flex h-full max-w-[1400px] flex-col gap-10 px-4 pt-12 sm:px-6 lg:px-8">
       <div className="text-center">
-        <h1 className="mb-2 text-3xl font-bold tracking-tight   sm:text-4xl">
+        <h1 className="mb-2 text-3xl font-bold tracking-tight sm:text-4xl">
           Choose Your CV Template, {profileData.firstName}
         </h1>
         <p className="mx-auto max-w-2xl text-muted-foreground">

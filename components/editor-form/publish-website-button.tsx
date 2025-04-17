@@ -4,6 +4,7 @@ import SignInDialog from "@/components/auth/sign-in-dialog";
 import { Button } from "@/components/ui/button";
 import { useProfileUpdateMutation } from "@/hooks/use-profile-update-mutation";
 import useSession from "@/hooks/use-session";
+import { ApiErrorType } from "@/lib/errors";
 import { getTemplateIdFromParamsOrRedirect } from "@/lib/utils";
 import { Loader2, Ship } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -14,7 +15,7 @@ import PublishWebsiteDialog from "./publish-website-dialog";
 
 const PublishButton = ({
   onClick,
-  loading,
+  loading
 }: {
   onClick?: () => void;
   loading?: boolean;
@@ -41,7 +42,7 @@ const PublishButton = ({
 };
 
 export default function PublishWebsiteButton({
-  onSuccess,
+  onSuccess
 }: {
   onSuccess?: () => void;
 }) {
@@ -65,15 +66,18 @@ export default function PublishWebsiteButton({
       {
         publishingOptions: {
           darkMode: isDarkMode,
-          templateId: templateId,
-        },
+          templateId: templateId
+        }
       },
       {
         onSuccess,
         onError: (error) => {
-          console.error("Error publishing website:", error);
-          toast.error("Failed to publish website. Please try again.");
-        },
+          if (error.message === ApiErrorType.ResourceNotFound) {
+            toast.error("Couldn't find this profile. Please try again.");
+            return;
+          }
+          toast.error(`Failed to publish website. ${error.message}`);
+        }
       }
     );
   };

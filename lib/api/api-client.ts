@@ -13,7 +13,7 @@ import {
   ForbiddenError,
   InvalidCredentialsError,
   RateLimitExceededError,
-  ServiceUnavailableError,
+  ServiceUnavailableError
 } from "../errors";
 import { buildQueryString } from "../utils";
 
@@ -37,7 +37,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
  */
 export async function apiRequest<T>(
   endpoint: string,
-  options: ApiRequestOptions = {},
+  options: ApiRequestOptions = {}
 ): Promise<T> {
   const { token, params, ...fetchOptions } = options;
 
@@ -59,7 +59,7 @@ export async function apiRequest<T>(
   try {
     const response = await fetch(url, {
       ...fetchOptions,
-      headers,
+      headers
     });
 
     // Error
@@ -106,13 +106,17 @@ export async function apiRequest<T>(
         error.message === ApiErrorType.ResourceNotFound ||
         error.message === ApiErrorType.ResourceAlreadyExists
       ) {
+        // Throw error hear so it can be handled by the caller
         throw error;
       }
     }
 
     // Handle unknown errors
     console.error(error);
-    throw new ApiError("Failed to fetch", 500);
+    throw new ApiError(
+      "We encountered an error on our end. Please try again later.",
+      500
+    );
   }
 }
 
@@ -131,7 +135,7 @@ export function createApiClient(token?: string) {
       apiRequest<T>(endpoint, {
         ...options,
         method: "GET",
-        token: options.token || token,
+        token: options.token || token
       }),
 
     /**
@@ -140,13 +144,13 @@ export function createApiClient(token?: string) {
     post: <T>(
       endpoint: string,
       data?: unknown,
-      options: ApiRequestOptions = {},
+      options: ApiRequestOptions = {}
     ) =>
       apiRequest<T>(endpoint, {
         ...options,
         method: "POST",
         body: data ? JSON.stringify(data) : undefined,
-        token: options.token || token,
+        token: options.token || token
       }),
 
     /**
@@ -155,13 +159,13 @@ export function createApiClient(token?: string) {
     patch: <T>(
       endpoint: string,
       data?: unknown,
-      options: ApiRequestOptions = {},
+      options: ApiRequestOptions = {}
     ) =>
       apiRequest<T>(endpoint, {
         ...options,
         method: "PATCH",
         body: data ? JSON.stringify(data) : undefined,
-        token: options.token || token,
+        token: options.token || token
       }),
 
     /**
@@ -170,13 +174,13 @@ export function createApiClient(token?: string) {
     put: <T>(
       endpoint: string,
       data?: unknown,
-      options: ApiRequestOptions = {},
+      options: ApiRequestOptions = {}
     ) =>
       apiRequest<T>(endpoint, {
         ...options,
         method: "PUT",
         body: data ? JSON.stringify(data) : undefined,
-        token: options.token || token,
+        token: options.token || token
       }),
 
     /**
@@ -186,7 +190,7 @@ export function createApiClient(token?: string) {
       apiRequest<T>(endpoint, {
         ...options,
         method: "DELETE",
-        token: options.token || token,
-      }),
+        token: options.token || token
+      })
   };
 }

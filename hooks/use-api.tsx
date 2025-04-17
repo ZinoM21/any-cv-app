@@ -14,13 +14,13 @@ export function useApi() {
   const { data: session, update } = useSession();
   const api = createApiClient(session?.accessToken);
 
-  // Always update session before making a request (since session is changing server-side on access-refresh)
+  // Always update session before making a request (session can change server-side -> useSession is stale)
   const get = useCallback(
     async <T,>(endpoint: string, options?: ApiRequestOptions) => {
       const session = await update();
       return api.get<T>(endpoint, {
         ...options,
-        token: options?.token || session?.accessToken,
+        token: options?.token || session?.accessToken
       });
     },
     [update, api]
@@ -35,7 +35,7 @@ export function useApi() {
       const session = await update();
       return api.post<T>(endpoint, data, {
         ...options,
-        token: options?.token || session?.accessToken,
+        token: options?.token || session?.accessToken
       });
     },
     [update, api]
@@ -50,7 +50,7 @@ export function useApi() {
       const session = await update();
       return api.put<T>(endpoint, data, {
         ...options,
-        token: options?.token || session?.accessToken,
+        token: options?.token || session?.accessToken
       });
     },
     [update, api]
@@ -65,7 +65,7 @@ export function useApi() {
       const session = await update();
       return api.patch<T>(endpoint, data, {
         ...options,
-        token: options?.token || session?.accessToken,
+        token: options?.token || session?.accessToken
       });
     },
     [update, api]
@@ -76,7 +76,7 @@ export function useApi() {
       const session = await update();
       return api.delete<T>(endpoint, {
         ...options,
-        token: options?.token || session?.accessToken,
+        token: options?.token || session?.accessToken
       });
     },
     [update, api]
@@ -87,7 +87,7 @@ export function useApi() {
     post,
     put,
     patch,
-    delete: del,
+    delete: del
   };
 }
 

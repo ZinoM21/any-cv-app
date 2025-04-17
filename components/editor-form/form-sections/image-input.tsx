@@ -71,7 +71,6 @@ export function ImageInput({
           await refetch();
         },
         onError: (error) => {
-          console.error("Error uploading image:", error);
           if (error.message.includes("MB")) {
             toast.error("Failed to upload image: " + error.message);
           } else {

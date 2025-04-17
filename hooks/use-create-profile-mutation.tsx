@@ -13,11 +13,11 @@ export function useCreateProfileMutation() {
     },
     onError: (error) => {
       if (error.message === ApiErrorType.ResourceAlreadyExists) {
-        toast.error("Profile already exists");
+        toast.error("Profile already exists. Try another username,");
       } else if (error.message === ApiErrorType.ResourceNotFound) {
-        toast.error("Profile not found");
+        toast.error("Couldn't find this profile.");
       } else {
-        toast.error(error.message);
+        toast.error("Couldn't create profile: " + error.message);
       }
     },
   });

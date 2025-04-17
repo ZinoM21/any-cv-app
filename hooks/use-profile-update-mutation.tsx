@@ -1,7 +1,8 @@
+import { updateProfile } from "@/lib/api/api";
 import { ProfileData } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
-import useApi from "./use-api";
 import { useShallow } from "zustand/react/shallow";
+import useApi from "./use-api";
 import { useProfileStore } from "./use-profile";
 
 export const useProfileUpdateMutation = () => {
@@ -12,19 +13,12 @@ export const useProfileUpdateMutation = () => {
 
   return useMutation({
     mutationFn: async (values: Partial<ProfileData>) =>
-      api.patch<Partial<ProfileData>>(
-        `/v1/profile/${profileData?.username}`,
-        values
-      ),
+      await updateProfile(api, profileData!.username!, values),
     onSuccess: (fetchedValues: Partial<ProfileData>) => {
-      // Update profile state
       setProfileData((prevProfileData) => ({
         ...prevProfileData,
-        ...fetchedValues,
+        ...fetchedValues
       }));
-    },
-    onError: (error) => {
-      console.error(error);
-    },
+    }
   });
 };

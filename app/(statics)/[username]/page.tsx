@@ -11,7 +11,7 @@ export async function generateStaticParams() {
   try {
     const profiles = await getPublishedProfiles();
     return profiles.map((profile) => ({
-      username: profile.username,
+      username: profile.username
     }));
   } catch (error) {
     console.error("Error generating static params: ", error);
@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 }
 
 export default async function UserWebsitePage({
-  params,
+  params
 }: {
   params: Promise<Params>;
 }) {

@@ -5,7 +5,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
 
 import { FileUser } from "lucide-react";
@@ -22,14 +22,14 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
+  DrawerTrigger
 } from "../ui/drawer";
 
 export default function SignInDialog({
   trigger,
   onSuccess,
   customTitle,
-  customDescription,
+  customDescription
 }: {
   trigger: ReactNode;
   onSuccess?: () => Promise<void>;
@@ -54,7 +54,7 @@ export default function SignInDialog({
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
-          <div className="p-4 border-t overflow-y-auto max-h-[calc(100vh-10rem)]">
+          <div className="max-h-[calc(100vh-10rem)] overflow-y-auto border-t p-4">
             <SignInForm
               className="flex-1"
               redirect={false}
@@ -72,11 +72,11 @@ export default function SignInDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="grid lg:grid-cols-2 max-w-fit lg:max-w-[700px] p-0">
+      <DialogContent className="grid max-w-fit p-0 lg:max-w-[700px] lg:grid-cols-2">
         <div className="flex flex-col items-stretch gap-4 p-6">
           <DialogHeader className="flex flex-col items-center text-center">
-            <DialogTitle className="text-2xl text-center">{title}</DialogTitle>
-            <DialogDescription className="text-balance text-muted-foreground text-center max-w-72">
+            <DialogTitle className="text-center text-2xl">{title}</DialogTitle>
+            <DialogDescription className="max-w-72 text-balance text-center text-muted-foreground">
               {description}
             </DialogDescription>
           </DialogHeader>
@@ -89,7 +89,7 @@ export default function SignInDialog({
             }}
           />
         </div>
-        <div className="hidden lg:flex lg:items-center lg:bg-muted lg:px-20 rounded-lg">
+        <div className="hidden rounded-lg lg:flex lg:items-center lg:bg-muted lg:px-20">
           <Image
             src="/svgs/undraw_update_resume.svg"
             alt="Login Image"
@@ -98,7 +98,7 @@ export default function SignInDialog({
             height={235}
           />
         </div>
-        <div className="absolute w-full h-full flex flex-col items-center rounded-lg -z-10">
+        <div className="absolute -z-10 flex h-full w-full flex-col items-center rounded-lg">
           <div className="absolute -top-12 flex items-center gap-2 self-center font-medium text-foreground">
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <FileUser className="size-4" />
