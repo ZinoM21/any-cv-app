@@ -1,4 +1,4 @@
-import { updateProfile } from "@/lib/api/api";
+import { unpublishProfile } from "@/lib/api/api";
 import { ProfileData } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import useApi from "./use-api";
@@ -10,7 +10,7 @@ export const useUnpublishProfile = (username: string) => {
 
   return useMutation({
     mutationFn: async () =>
-      await updateProfile(api, username, { publishingOptions: {} }),
+      await unpublishProfile(api, username),
     onSuccess: (fetchedValues: Partial<ProfileData>) => {
       setProfileData((prevProfileData) => ({
         ...prevProfileData,

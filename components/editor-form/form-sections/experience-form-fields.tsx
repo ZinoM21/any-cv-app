@@ -1,35 +1,36 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
+  AccordionTrigger
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 import { Plus } from "lucide-react";
 
+import { ImageInput } from "@/components/editor-form/form-sections/image-input";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { Position } from "@/lib/types";
+import { getSnakeCaseFileName } from "@/lib/utils";
+import { format } from "date-fns";
+import AddNewPopover from "../add-new-popover";
+import RemoveAlertDialog from "../remove-alert-dialog";
 import AddNewPositionForm from "./add-new-position-form";
 import PositionFormFields from "./position-form-fields";
-import { format } from "date-fns";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
-import AddNewPopover from "../add-new-popover";
-import { ImageInput } from "@/components/editor-form/form-sections/image-input";
-import RemoveAlertDialog from "../remove-alert-dialog";
 
 export default function ExperienceFormFields({
-  fieldNamePrefix,
+  fieldNamePrefix
 }: {
   fieldNamePrefix?: string;
 }) {
@@ -44,10 +45,10 @@ export default function ExperienceFormFields({
   const {
     fields: positionFields,
     prepend,
-    remove,
+    remove
   } = useFieldArray({
     control,
-    name: posFieldName,
+    name: posFieldName
   });
 
   return (
@@ -100,7 +101,10 @@ export default function ExperienceFormFields({
                   width={80}
                   height={80}
                 />
-                <ImageInput field={field} fileName="company_logo" />
+                <ImageInput
+                  field={field}
+                  fileName={getSnakeCaseFileName(companyName)}
+                />
               </div>
             </FormControl>
             <FormMessage />
@@ -149,16 +153,16 @@ export default function ExperienceFormFields({
                 <AccordionItem
                   key={posIndex}
                   value={`${posFieldName}.${posIndex}`}
-                  className="border-b border-muted last:border-0 py-3 first:pt-1 last:pb-1"
+                  className="border-b border-muted py-3 first:pt-1 last:border-0 last:pb-1"
                 >
                   <AccordionTrigger className="py-0">
-                    <span className="font-medium text-base">
+                    <span className="text-base font-medium">
                       {position.title ||
                         (fieldNamePrefix
                           ? `Position ${posIndex + 1}`
                           : "New Position")}
                       {position.startDate && (
-                        <span className="ml-2 text-xs font-normal text-muted-foreground whitespace-nowrap">
+                        <span className="ml-2 whitespace-nowrap text-xs font-normal text-muted-foreground">
                           {format(position.startDate, "MMM uu")} -{" "}
                           {position.endDate
                             ? format(position.endDate, "MMM uu")
@@ -168,7 +172,7 @@ export default function ExperienceFormFields({
                     </span>
                   </AccordionTrigger>
                   <AccordionContent className="pb-0">
-                    <div className="pt-3 space-y-4">
+                    <div className="space-y-4 pt-3">
                       <div className="flex items-center justify-between">
                         <h4 className="text-sm font-medium">
                           Position Details

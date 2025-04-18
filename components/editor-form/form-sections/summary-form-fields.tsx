@@ -1,21 +1,21 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-  FormDescription,
+  FormMessage
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useFormContext } from "react-hook-form";
 
+import { ImageInput } from "@/components/editor-form/form-sections/image-input";
+import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { Separator } from "@/components/ui/separator";
 import LanguageFormFields from "./language-form-fields";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
-import { ImageInput } from "@/components/editor-form/form-sections/image-input";
 
 export const SummaryFormFields = () => {
   const { control, getValues } = useFormContext();

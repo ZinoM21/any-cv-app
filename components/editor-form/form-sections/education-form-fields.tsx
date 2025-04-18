@@ -6,16 +6,17 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { getSnakeCaseFileName } from "@/lib/utils";
 
-import { useFormContext } from "react-hook-form";
 import { ImageInput } from "@/components/editor-form/form-sections/image-input";
+import { useFormContext } from "react-hook-form";
 
 export default function EducationFormFields({
-  fieldNamePrefix,
+  fieldNamePrefix
 }: {
   fieldNamePrefix?: string;
 }) {
@@ -103,7 +104,10 @@ export default function EducationFormFields({
                   width={80}
                   height={80}
                 />
-                <ImageInput field={field} fileName="school_logo" />
+                <ImageInput
+                  field={field}
+                  fileName={getSnakeCaseFileName(school)}
+                />
               </div>
             </FormControl>
             <FormMessage />

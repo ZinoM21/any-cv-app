@@ -68,6 +68,7 @@ const ProfileActions = ({ profile }: { profile: ProfileData }) => {
                 onClick={() => {
                   unpublishProfile();
                 }}
+                className="cursor-pointer"
               >
                 <EyeOff className="mr-2 h-4 w-4" />
                 Unpublish
@@ -79,6 +80,7 @@ const ProfileActions = ({ profile }: { profile: ProfileData }) => {
                 onClick={() => {
                   setIsPublishOpen(true);
                 }}
+                className="cursor-pointer"
               >
                 <Ship className="mr-2 h-4 w-4" />
                 Publish
@@ -89,7 +91,7 @@ const ProfileActions = ({ profile }: { profile: ProfileData }) => {
             onClick={() => {
               setIsDeleteOpen(true);
             }}
-            className="text-destructive"
+            className="cursor-pointer text-destructive"
           >
             <Trash className="mr-2 h-4 w-4" />
             Delete

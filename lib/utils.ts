@@ -236,3 +236,21 @@ export function buildQueryString(
 
   return newParams.toString();
 }
+
+/**
+ * Converts a string to snake_case and appends "_logo" for image file names
+ * @param str Input string to convert
+ * @returns Snake case string with "_logo" suffix
+ */
+export const getSnakeCaseFileName = (str: string): string => {
+  if (!str) return "image_logo";
+
+  // Convert to snake_case
+  let sanitized = str.toLowerCase().replace(/[^a-z0-9]/g, "_");
+  // Remove repeated underscores
+  sanitized = sanitized.replace(/_+/g, "_");
+  // Remove underscores from start/end
+  sanitized = sanitized.replace(/^_|_$/g, "");
+
+  return `${sanitized}_logo`;
+};

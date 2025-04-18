@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { getSnakeCaseFileName } from "@/lib/utils";
 import { ImageInput } from "./image-input";
 import { SignedImage } from "./signed-image";
 
@@ -24,6 +25,7 @@ export default function ProjectFormFields({
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
 
   const thumbnail = getValues(getFieldName("thumbnail"));
+  const projectTitle = getValues(getFieldName("title"));
 
   return (
     <>
@@ -147,12 +149,12 @@ export default function ProjectFormFields({
                   width={80}
                   height={80}
                   fallback="Thumbnail"
-                  className="size-fit w-1/2 aspect-video"
+                  className="aspect-video size-fit w-1/2"
                 />
                 <ImageInput
                   field={field}
                   label="Change thumbnail"
-                  fileName="thumbnail"
+                  fileName={getSnakeCaseFileName(projectTitle)}
                 />
               </div>
             </FormControl>

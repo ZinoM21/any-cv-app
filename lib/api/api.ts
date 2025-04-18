@@ -163,6 +163,13 @@ export const publishProfile = async (
   return await api.patch<ProfileData>(`/v1/profile/${username}/publish`, data);
 };
 
+export const unpublishProfile = async (
+  api: ReturnType<typeof createApiClient>,
+  username: string
+) => {
+  return await api.patch<ProfileData>(`/v1/profile/${username}/unpublish`);
+};
+
 export const getSignedUrl = async (
   api: ReturnType<typeof createApiClient>,
   filePath: string
