@@ -153,9 +153,9 @@ export default function TheCreativeWebsite({
               </h2>
               {education.map((edu, index) => (
                 <div key={index} className="mb-4">
-                  {edu.schoolPictureUrl && slug ? (
+                  {edu.schoolPictureUrl && publishingOptions?.slug ? (
                     <PublicImage
-                      slug={slug}
+                      slug={publishingOptions.slug}
                       src={edu.schoolPictureUrl}
                       alt={edu.school}
                       width={84}
