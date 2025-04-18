@@ -78,6 +78,7 @@ export type Project = {
   description?: string;
   url?: string;
   associatedWith?: string;
+  thumbnail?: string;
 };
 
 export type NavItem = {
@@ -131,7 +132,7 @@ export type AuthValidity = {
 
 export type PromiseSearchParams = Promise<SearchParams>;
 
-export type SignedUrl = {
+export type ImageUrl = {
   url: string;
   path: string;
 };

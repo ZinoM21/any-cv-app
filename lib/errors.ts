@@ -17,7 +17,7 @@ export class AuthorizationError extends AuthError {
 
   constructor(message?: string, status?: number) {
     super(
-      message || "You are not authorized. Please log in or create an account.",
+      message || "You are not authorized. Please log in or create an account."
     );
     this.status = status;
   }
@@ -44,8 +44,14 @@ export class ForbiddenError extends Error {
 export class RateLimitExceededError extends Error {
   constructor() {
     super(
-      "Easy cowboy! Slow down there. You're sending too many requests. Try again later.",
+      "Easy cowboy! Slow down there. You're sending too many requests. Try again later."
     );
+  }
+}
+
+export class InternalServerError extends Error {
+  constructor() {
+    super("We encountered an error on our end. Please try again later.");
   }
 }
 
@@ -55,9 +61,10 @@ export enum ApiErrorType {
   InvalidCredentials = "invalid_credentials",
   ServiceUnavailable = "service_unavailable",
   RateLimitExceeded = "Rate limit exceeded:",
+  InternalServerError = "internal_server_error",
 
   Unauthorized = "unauthorized",
   Forbidden = "forbidden",
   ResourceNotFound = "resource_not_found",
-  ResourceAlreadyExists = "resource_already_exists",
+  ResourceAlreadyExists = "resource_already_exists"
 }

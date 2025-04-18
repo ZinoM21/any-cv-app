@@ -8,7 +8,8 @@ import {
   ProfileData,
   Tokens,
   type AccessResponse,
-  type SignedUrl,
+  type ImageUrl,
+  type PublishingOptions,
   type User
 } from "../types";
 import { createApiClient, type ApiRequestOptions } from "./api-client";
@@ -154,11 +155,37 @@ export const updateProfile = async (
   return await api.patch<ProfileData>(`/v1/profile/${username}`, data);
 };
 
+export const publishProfile = async (
+  api: ReturnType<typeof createApiClient>,
+  username: string,
+  data:PublishingOptions
+) => {
+  return await api.patch<ProfileData>(`/v1/profile/${username}/publish`, data);
+};
+
 export const getSignedUrl = async (
   api: ReturnType<typeof createApiClient>,
   filePath: string
 ) => {
-  return await api.post<SignedUrl>(`/v1/files/signed-url`, {
+  return await api.post<ImageUrl>(`/v1/files/signed-url`, {
+    file_path: filePath
+  });
+};
+
+/**
+ * Gets a public URL for a file associated with a published profile
+ *
+ * @param api The API client to use
+ * @param slug The slug of the published profile
+ * @param filePath The path of the file in storage
+ * @returns SignedUrl containing the public URL
+ */
+export const getPublicUrl = async (
+  api: ReturnType<typeof createApiClient>,
+  slug: string,
+  filePath: string
+): Promise<ImageUrl> => {
+  return await api.post<ImageUrl>(`/v1/files/public/${slug}`, {
     file_path: filePath
   });
 };
@@ -167,7 +194,7 @@ export const getSignedUploadUrl = async (
   api: ReturnType<typeof createApiClient>,
   file: File
 ) => {
-  return await api.post<SignedUrl>(`/v1/files/signed-upload-url`, {
+  return await api.post<ImageUrl>(`/v1/files/signed-upload-url`, {
     file_name: file.name,
     file_type: file.type,
     file_size: file.size

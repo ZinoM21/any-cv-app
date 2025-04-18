@@ -1,21 +1,22 @@
-import { useRef } from "react";
+import SignInDialog from "@/components/auth/sign-in-dialog";
 import { Button } from "@/components/ui/button";
 import { useSignedUploadUrl, useSignedUrl } from "@/hooks/use-image-url";
+import { useSession } from "@/hooks/use-session";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
 import { extension } from "mime-types";
+import { useRef } from "react";
 import {
   ControllerRenderProps,
   FieldValues,
-  useFormContext,
+  useFormContext
 } from "react-hook-form";
-import { useSession } from "@/hooks/use-session";
-import SignInDialog from "@/components/auth/sign-in-dialog";
+import { toast } from "sonner";
 
 interface ImageInputProps {
   field: ControllerRenderProps<FieldValues>;
   label?: string;
   fileName?: string;
+  big?: boolean;
 }
 
 /**
@@ -27,6 +28,7 @@ export function ImageInput({
   field,
   label = "Change Logo",
   fileName,
+  big = false
 }: ImageInputProps) {
   const { setValue } = useFormContext();
   const { isSignedIn } = useSession();
@@ -49,7 +51,7 @@ export function ImageInput({
     const finalFileName = `${name}.${ext}`;
 
     const file = new File([_file], finalFileName, {
-      type: _file.type,
+      type: _file.type
     });
 
     await upload(
@@ -58,7 +60,7 @@ export function ImageInput({
         onSuccess: async (imagePath) => {
           setValue(field.name, imagePath, {
             shouldValidate: true,
-            shouldDirty: true,
+            shouldDirty: true
           });
 
           toast.success("Image uploaded successfully");
@@ -81,12 +83,12 @@ export function ImageInput({
           if (fileInputRef.current) {
             fileInputRef.current.value = "";
           }
-        },
+        }
       }
     );
   };
 
-  const UploadButton = (
+  const UploadButton = !big ? (
     <Button
       type="button"
       variant="outline"
@@ -102,7 +104,47 @@ export function ImageInput({
         label
       )}
     </Button>
-  );
+  ) : null;
+
+  // TODO for later: use nice looking file upload component
+  // <FileUpload
+  //   value={field.value}
+  //   onValueChange={field.onChange}
+  //   accept="image/*"
+  //   maxFiles={2}
+  //   maxSize={5 * 1024 * 1024}
+  //   onFileReject={(_, message) => {
+  //     setError("files", {
+  //       message
+  //     });
+  //   }}
+  //   multiple
+  // >
+  //   <FileUploadDropzone className="flex-row border-dotted">
+  //     <CloudUpload className="size-4" />
+  //     Drag and drop or
+  //     <FileUploadTrigger asChild>
+  //       <Button variant="link" size="sm" className="p-0">
+  //         choose files
+  //       </Button>
+  //     </FileUploadTrigger>
+  //     to upload
+  //   </FileUploadDropzone>
+  //   <FileUploadList>
+  //     {field.value.map((file, index) => (
+  //       <FileUploadItem key={index} value={file}>
+  //         <FileUploadItemPreview />
+  //         <FileUploadItemMetadata />
+  //         <FileUploadItemDelete asChild>
+  //           <Button variant="ghost" size="icon" className="size-7">
+  //             <X />
+  //             <span className="sr-only">Delete</span>
+  //           </Button>
+  //         </FileUploadItemDelete>
+  //       </FileUploadItem>
+  //     ))}
+  //   </FileUploadList>
+  // </FileUpload>
 
   return (
     <>

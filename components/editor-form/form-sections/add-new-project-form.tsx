@@ -16,6 +16,7 @@ const initialValues = {
   description: "",
   url: "",
   associatedWith: "",
+  thumbnail: ""
 };
 
 export default function AddNewProjectForm({

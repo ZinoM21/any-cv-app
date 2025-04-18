@@ -4,7 +4,7 @@ import {
   EditProjectsFormValues,
   EditSkillsFormValues,
   EditSummaryFormValues,
-  EditVolunteeringFormValues,
+  EditVolunteeringFormValues
 } from "@/lib/schemas/editor-forms-schemas";
 import { useProfileStore } from "./use-profile";
 
@@ -27,7 +27,7 @@ export const useEditorFormInitialValues = () => {
     phone: profileData?.phone || "",
     location: profileData?.location || "",
     languages: profileData?.languages || [],
-    profilePictureUrl: profileData?.profilePictureUrl || "",
+    profilePictureUrl: profileData?.profilePictureUrl || ""
   });
 
   /**
@@ -46,9 +46,9 @@ export const useEditorFormInitialValues = () => {
           endDate: edu.endDate && new Date(edu.endDate),
           grade: edu.grade || "",
           activities: edu.activities || "",
-          description: edu.description || "",
+          description: edu.description || ""
         }))) ||
-      [],
+      []
   });
 
   /**
@@ -70,7 +70,7 @@ export const useEditorFormInitialValues = () => {
                   duration: pos.duration,
                   description: pos.description || "",
                   location: pos.location || "",
-                  workSetting: pos.workSetting || "",
+                  workSetting: pos.workSetting || ""
                 }))
               : [
                   {
@@ -79,18 +79,18 @@ export const useEditorFormInitialValues = () => {
                     duration: null,
                     description: "",
                     location: "",
-                    workSetting: "",
-                  },
-                ]) || [],
+                    workSetting: ""
+                  }
+                ]) || []
         }))) ||
-      [],
+      []
   });
 
   /**
    * Get initial values for Skills form
    */
   const getSkillsInitialValues = (): EditSkillsFormValues => ({
-    skills: profileData?.skills || [],
+    skills: profileData?.skills || []
   });
 
   /**
@@ -107,9 +107,9 @@ export const useEditorFormInitialValues = () => {
           description: vol.description || "",
           organizationProfileUrl: vol.organizationProfileUrl || "",
           organizationLogoUrl: vol.organizationLogoUrl || "",
-          cause: vol.cause || "",
+          cause: vol.cause || ""
         }))) ||
-      [],
+      []
   });
 
   /**
@@ -125,8 +125,9 @@ export const useEditorFormInitialValues = () => {
             description: project.description || "",
             url: project.url || "",
             associatedWith: project.associatedWith || "",
+            thumbnail: project.thumbnail || ""
           }))
-        : [],
+        : []
     };
   };
 
@@ -136,6 +137,6 @@ export const useEditorFormInitialValues = () => {
     getExperienceInitialValues,
     getSkillsInitialValues,
     getVolunteeringInitialValues,
-    getProjectsInitialValues,
+    getProjectsInitialValues
   };
 };

@@ -17,11 +17,18 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useProfilePublishMutation } from "@/hooks/use-profile-publish-mutation";
+import { ApiErrorType } from "@/lib/errors";
 import { TemplateId } from "@/lib/types";
-import { getTemplateIdFromParamsOrRedirect } from "@/lib/utils";
+import { cn, getTemplateIdFromParamsOrRedirect } from "@/lib/utils";
 import { Moon, Ship, Sun } from "lucide-react";
+
+import shippingAnimation from "@/public/lotties/shipping.json";
+import Lottie from "lottie-react";
+
 import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 const publishFormSchema = z.object({
   appearance: z.enum(["light", "dark"]),
@@ -44,11 +51,13 @@ const publishFormSchema = z.object({
 export type PublishFormValues = z.infer<typeof publishFormSchema>;
 
 export default function PublishForm({
-  onSubmit
+  onSuccess
 }: {
-  onSubmit: (data: PublishFormValues) => Promise<void>;
+  onSuccess: (slug?: string) => void;
 }) {
   const { resolvedTheme } = useTheme();
+
+  const { mutateAsync, isPending: isPublishing } = useProfilePublishMutation();
 
   const searchParams = useSearchParams();
   const templateId = getTemplateIdFromParamsOrRedirect(
@@ -71,8 +80,27 @@ export default function PublishForm({
     formState: { isValid }
   } = formMethods;
 
+  const publish = async (data: PublishFormValues) => {
+    await mutateAsync(data, {
+      onSuccess: (profileData) => {
+        onSuccess(profileData.publishingOptions?.slug);
+      },
+      onError: (error) => {
+        if (error.message === ApiErrorType.ResourceNotFound) {
+          toast.error("Couldn't find this profile. Please try again.");
+          return;
+        }
+        if (error.message === ApiErrorType.ResourceAlreadyExists) {
+          toast.error("This slug already exists. Please try another one.");
+          return;
+        }
+        toast.error(`Failed to publish website. ${error.message}`);
+      }
+    });
+  };
+
   const onSubmitPublish = (data: PublishFormValues) => {
-    onSubmit(data);
+    publish(data);
     reset();
   };
 
@@ -93,6 +121,7 @@ export default function PublishForm({
                     value={field.value}
                     defaultValue={resolvedTheme}
                     className="grid max-w-md grid-cols-2 gap-8 pt-2"
+                    disabled={isPublishing}
                   >
                     <div>
                       <Label className="[&:has([data-state=checked])>div]:border-primary">
@@ -168,7 +197,11 @@ export default function PublishForm({
             <FormItem>
               <FormLabel>Slug</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="my-slug" />
+                <Input
+                  {...field}
+                  placeholder="my-slug"
+                  disabled={isPublishing}
+                />
               </FormControl>
 
               {formMethods.formState.errors.slug ? (
@@ -184,9 +217,23 @@ export default function PublishForm({
           )}
         />
         <DialogFooter>
-          <Button type="submit" disabled={!isValid}>
-            Ship
-            <Ship />
+          <Button
+            type="submit"
+            disabled={!isValid || isPublishing}
+            className={cn("relative")}
+          >
+            {isPublishing ? (
+              <Lottie
+                animationData={shippingAnimation}
+                className="-ml-2 -mr-1 size-[160%]"
+                loop
+                autoplay
+              />
+            ) : (
+              <Ship className="mr-1" />
+            )}
+
+            {isPublishing ? "Shipping..." : "Ship"}
           </Button>
         </DialogFooter>
       </form>

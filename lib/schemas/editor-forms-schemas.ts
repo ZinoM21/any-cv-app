@@ -120,6 +120,7 @@ const projectSchema = z.object({
   description: z.string().optional(),
   url: z.string().optional(),
   associatedWith: z.string().optional(),
+  thumbnail: z.string().optional(),
 });
 
 export const editProjectsFormSchema = z.object({

@@ -1,3 +1,4 @@
+import { PublicImage } from "@/components/editor-form/form-sections/public-image";
 import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { ProfileData } from "@/lib/types";
 import { formatDateRange } from "@/lib/utils";
@@ -23,31 +24,40 @@ export default function TheCreativeWebsite({
     skills,
     languages,
     volunteering,
-    projects
+    projects,
+    publishingOptions
   } = profileData;
 
   return (
-    <main className="@container @3xl:p-12 @5xl:p-16 min-h-screen bg-background p-8">
-      <div className="@3xl:grid-cols-[1fr_400px] mx-auto grid max-w-7xl gap-12">
+    <main className="min-h-screen bg-background p-8 @container @3xl:p-12 @5xl:p-16">
+      <div className="mx-auto grid max-w-7xl gap-12 @3xl:grid-cols-[1fr_400px]">
         {/* Left Column */}
         <div>
           {/* Header */}
-          <header className="mb-16">
-            {profilePictureUrl && (
-              <SignedImage
-                src={profilePictureUrl}
-                alt={`${firstName} ${lastName}`}
-                width={120}
-                height={120}
-                className="mb-4 rounded-full"
-              />
-            )}
-            <h1 className="mb-2 text-4xl font-bold">{`${firstName} ${lastName}`}</h1>
+          <header className="mb-16 space-y-2">
+            {profilePictureUrl &&
+              (publishingOptions?.slug ? (
+                <PublicImage
+                  slug={publishingOptions.slug}
+                  src={profilePictureUrl}
+                  alt={`${firstName} ${lastName}`}
+                  width={120}
+                  height={120}
+                />
+              ) : (
+                <SignedImage
+                  src={profilePictureUrl}
+                  alt={`${firstName} ${lastName}`}
+                  width={120}
+                  height={120}
+                />
+              ))}
+            <h1 className="text-4xl font-bold">{`${firstName} ${lastName}`}</h1>
             {headline && (
               <p className="text-xl text-muted-foreground">{headline}</p>
             )}
             {location && (
-              <p className="mt-2 text-sm text-muted-foreground">{location}</p>
+              <p className="text-sm text-muted-foreground">{location}</p>
             )}
           </header>
 
@@ -143,13 +153,23 @@ export default function TheCreativeWebsite({
               </h2>
               {education.map((edu, index) => (
                 <div key={index} className="mb-4">
-                  <SignedImage
-                    src={edu.schoolPictureUrl}
-                    alt={edu.school}
-                    width={84}
-                    height={52}
-                    className="mb-4"
-                  />
+                  {edu.schoolPictureUrl && slug ? (
+                    <PublicImage
+                      slug={slug}
+                      src={edu.schoolPictureUrl}
+                      alt={edu.school}
+                      width={84}
+                      height={52}
+                      className="mb-4"
+                    />
+                  ) : (
+                    <SignedImage
+                      src={edu.schoolPictureUrl}
+                      alt={edu.school}
+                      width={84}
+                      height={52}
+                    />
+                  )}
                   <h3 className="mb-1 text-xl font-semibold">{edu.school}</h3>
                   <p className="mb-1">
                     {edu.degree}

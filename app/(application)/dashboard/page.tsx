@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import { getServerApi, getUserProfiles } from "@/lib/api";
 import { buildQueryString, getInitials } from "@/lib/utils";
@@ -95,7 +95,7 @@ export default async function DashboardPage() {
                 <Link
                   href={`/generate/cv/editor?${buildQueryString({
                     username: profile.username,
-                    templateId: profile.publishingOptions?.templateId,
+                    templateId: profile.publishingOptions?.templateId
                   })}`}
                 >
                   <Edit3 />
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
                 <Link
                   href={`/generate/website/editor?${buildQueryString({
                     username: profile.username,
-                    templateId: profile.publishingOptions?.templateId,
+                    templateId: profile.publishingOptions?.templateId
                   })}`}
                 >
                   <Edit3 />

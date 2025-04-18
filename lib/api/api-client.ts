@@ -11,6 +11,7 @@ import {
   ApiErrorType,
   AuthorizationError,
   ForbiddenError,
+  InternalServerError,
   InvalidCredentialsError,
   RateLimitExceededError,
   ServiceUnavailableError
@@ -102,6 +103,9 @@ export async function apiRequest<T>(
       if (error.message.includes(ApiErrorType.RateLimitExceeded)) {
         throw new RateLimitExceededError();
       }
+      if (error.message === ApiErrorType.InternalServerError) {
+        throw new InternalServerError();
+      }
       if (
         error.message === ApiErrorType.ResourceNotFound ||
         error.message === ApiErrorType.ResourceAlreadyExists
@@ -113,10 +117,7 @@ export async function apiRequest<T>(
 
     // Handle unknown errors
     console.error(error);
-    throw new ApiError(
-      "We encountered an error on our end. Please try again later.",
-      500
-    );
+    throw new InternalServerError();
   }
 }
 

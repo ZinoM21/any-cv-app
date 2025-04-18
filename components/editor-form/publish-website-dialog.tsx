@@ -6,16 +6,16 @@ import {
   DialogTitle
 } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction } from "react";
-import PublishForm, { PublishFormValues } from "./form-sections/publish-form";
+import PublishForm from "./form-sections/publish-form";
 
 export default function PublishWebsiteDialog({
   open,
   setOpen,
-  onSubmit
+  onSuccess
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  onSubmit: (data: PublishFormValues) => Promise<void>;
+  onSuccess: (slug?: string) => void;
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -26,7 +26,7 @@ export default function PublishWebsiteDialog({
             This will publish your website to the public.
           </DialogDescription>
         </DialogHeader>
-        <PublishForm onSubmit={onSubmit} />
+        <PublishForm onSuccess={onSuccess} />
       </DialogContent>
     </Dialog>
   );

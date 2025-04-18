@@ -1,8 +1,9 @@
 import { useApi } from "@/hooks/use-api";
 import {
+  getPublicUrl,
   getSignedUploadUrl,
   getSignedUrl,
-  uploadFileToSignedUrl,
+  uploadFileToSignedUrl
 } from "@/lib/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -19,7 +20,7 @@ export function useSignedUrl(filePath: string | undefined | null) {
   return useQuery({
     queryKey: ["imageUrl", filePath],
     queryFn: async () => getSignedUrl(api, filePath!),
-    enabled: !!filePath,
+    enabled: !!filePath
   });
 }
 
@@ -42,6 +43,26 @@ export function useSignedUploadUrl() {
         throw error;
       }
       return signedUrlResponse.path;
-    },
+    }
+  });
+}
+
+/**
+ * Custom hook to get a public URL for a file via a profile slug
+ *
+ * @param slug The profile slug
+ * @param filePath The file path
+ * @returns An object with loading state and the public URL
+ */
+export function usePublicUrl(
+  slug: string,
+  filePath: string | undefined | null
+) {
+  const api = useApi();
+
+  return useQuery({
+    queryKey: ["publicImageUrl", slug, filePath],
+    queryFn: async () => getPublicUrl(api, slug, filePath!),
+    enabled: !!slug && !!filePath
   });
 }

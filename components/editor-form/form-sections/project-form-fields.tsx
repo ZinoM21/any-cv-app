@@ -7,19 +7,23 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageInput } from "./image-input";
+import { SignedImage } from "./signed-image";
 
 export default function ProjectFormFields({
-  fieldNamePrefix,
+  fieldNamePrefix
 }: {
   fieldNamePrefix?: string;
 }) {
-  const { control } = useFormContext();
+  const { control, getValues } = useFormContext();
   const getFieldName = (fieldName: string) =>
     fieldNamePrefix ? `${fieldNamePrefix}.${fieldName}` : fieldName;
+
+  const thumbnail = getValues(getFieldName("thumbnail"));
 
   return (
     <>
@@ -123,6 +127,34 @@ export default function ProjectFormFields({
                 placeholder="Describe the project, its purpose, your role, and key achievements..."
                 rows={3}
               />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name={getFieldName("thumbnail")}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Thumbnail (Optional)</FormLabel>
+            <FormControl>
+              <div className="flex items-center gap-4">
+                <SignedImage
+                  src={field?.value}
+                  alt={thumbnail}
+                  width={80}
+                  height={80}
+                  fallback="Thumbnail"
+                  className="size-fit w-1/2 aspect-video"
+                />
+                <ImageInput
+                  field={field}
+                  label="Change thumbnail"
+                  fileName="thumbnail"
+                />
+              </div>
             </FormControl>
             <FormMessage />
           </FormItem>
