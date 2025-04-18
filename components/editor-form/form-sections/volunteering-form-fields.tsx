@@ -68,7 +68,7 @@ export default function VolunteeringFormFields({
             <FormControl>
               <div className="flex items-center gap-4">
                 <SignedImage
-                  src={field?.value}
+                  path={field?.value}
                   alt={organizationName}
                   width={80}
                   height={80}

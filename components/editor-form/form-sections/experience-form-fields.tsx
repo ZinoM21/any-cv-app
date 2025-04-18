@@ -95,7 +95,7 @@ export default function ExperienceFormFields({
             <FormControl>
               <div className="flex items-center gap-4">
                 <SignedImage
-                  src={field?.value}
+                  path={field?.value}
                   alt={companyName}
                   width={80}
                   height={80}

@@ -100,7 +100,7 @@ const EducationFieldArray = () => {
                             name={`education.${index}.schoolPictureUrl`}
                             render={({ field }) => (
                               <SignedImage
-                                src={field?.value}
+                                path={field?.value}
                                 alt={eduField?.school}
                                 width={80}
                                 height={80}

@@ -20,7 +20,7 @@ export function useSignedUrl(filePath: string | undefined | null) {
   return useQuery({
     queryKey: ["imageUrl", filePath],
     queryFn: async () => getSignedUrl(api, filePath!),
-    enabled: !!filePath
+    enabled: !!filePath && filePath !== ""
   });
 }
 

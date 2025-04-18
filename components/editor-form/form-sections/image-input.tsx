@@ -1,6 +1,7 @@
 import SignInDialog from "@/components/auth/sign-in-dialog";
 import { Button } from "@/components/ui/button";
 import { useSignedUploadUrl, useSignedUrl } from "@/hooks/use-image-url";
+import { useProfileStore } from "@/hooks/use-profile";
 import { useSession } from "@/hooks/use-session";
 import { Loader2 } from "lucide-react";
 import { extension } from "mime-types";
@@ -31,7 +32,13 @@ export function ImageInput({
   big = false
 }: ImageInputProps) {
   const { setValue } = useFormContext();
-  const { isSignedIn } = useSession();
+  const { isSignedIn, data: session } = useSession();
+
+  const profileData = useProfileStore((state) => state.profile);
+
+  const userId = session?.user?.id;
+  const username = profileData?.username;
+  const filePathPrefix = `${userId}/${username}`;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutateAsync: upload, isPending } = useSignedUploadUrl();
@@ -48,7 +55,7 @@ export function ImageInput({
     const [_fileName, _fileExt] = _file.name.split(".");
     const ext = extension(_file.type) || _fileExt;
     const name = fileName || _fileName;
-    const finalFileName = `${name}.${ext}`;
+    const finalFileName = `${filePathPrefix}/${name}.${ext}`;
 
     const file = new File([_file], finalFileName, {
       type: _file.type
@@ -70,7 +77,10 @@ export function ImageInput({
             fileInputRef.current.value = "";
           }
 
-          await refetch();
+          if (field.value) {
+            // only refetch if the file path is not empty, otherwise will be 
+            await refetch();
+          }
         },
         onError: (error) => {
           if (error.message.includes("MB")) {

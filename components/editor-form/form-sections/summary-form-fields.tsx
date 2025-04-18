@@ -107,7 +107,7 @@ export const SummaryFormFields = () => {
             <FormControl>
               <div className="flex items-center gap-4">
                 <SignedImage
-                  src={field?.value}
+                  path={field?.value}
                   alt={fullName}
                   width={100}
                   height={100}

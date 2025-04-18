@@ -81,7 +81,7 @@ const ExperiencesFieldArray = () => {
                             name={`experiences.${expIndex}.companyLogoUrl`}
                             render={({ field }) => (
                               <SignedImage
-                                src={field?.value}
+                                path={field?.value}
                                 alt={experienceField?.company}
                                 width={80}
                                 height={80}

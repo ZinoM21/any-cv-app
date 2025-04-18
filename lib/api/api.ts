@@ -158,7 +158,7 @@ export const updateProfile = async (
 export const publishProfile = async (
   api: ReturnType<typeof createApiClient>,
   username: string,
-  data:PublishingOptions
+  data: PublishingOptions
 ) => {
   return await api.patch<ProfileData>(`/v1/profile/${username}/publish`, data);
 };
@@ -167,9 +167,16 @@ export const getSignedUrl = async (
   api: ReturnType<typeof createApiClient>,
   filePath: string
 ) => {
-  return await api.post<ImageUrl>(`/v1/files/signed-url`, {
-    file_path: filePath
-  });
+  try {
+    const res = await api.post<ImageUrl>(`/v1/files/signed-url`, {
+      file_path: filePath
+    });
+
+    return res;
+  } catch (error) {
+    console.error("Failed to get signed url for file: ", filePath, error);
+    throw error;
+  }
 };
 
 /**
@@ -225,4 +232,18 @@ export const uploadFileToSignedUrl = async (url: string, file: File) => {
   }
 
   return data;
+};
+
+/**
+ * Deletes a profile by username
+ *
+ * @param api The API client to use
+ * @param username The username of the profile to delete
+ * @returns The response from the delete request
+ */
+export const deleteProfile = async (
+  api: ReturnType<typeof createApiClient>,
+  username: string
+) => {
+  return await api.delete<void>(`/v1/profile/${username}`);
 };

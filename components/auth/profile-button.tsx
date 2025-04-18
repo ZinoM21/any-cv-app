@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { dashboardNav, marketingNav } from "@/config/nav";
 import { useAuth } from "@/hooks/use-auth";
@@ -40,7 +40,7 @@ export function HeaderDropdownMenu({
           className={cn(
             "rounded-full",
             isSignedIn ? "lg:flex" : "lg:hidden",
-            className,
+            className
           )}
           {...props}
         >
@@ -65,10 +65,11 @@ export function HeaderDropdownMenu({
                 <DropdownMenuItem
                   key={item.name}
                   className={item.href !== "/account" ? "lg:hidden" : ""}
+                  asChild
                 >
                   <Link
                     href={item.href}
-                    className="flex w-full items-center justify-between gap-2"
+                    className="cursor-pointer justify-between"
                   >
                     {item.name}
                     {item.icon && <item.icon className="size-4" />}
@@ -86,10 +87,10 @@ export function HeaderDropdownMenu({
           <>
             <DropdownMenuGroup className="block lg:hidden">
               {marketingNav.map((item) => (
-                <DropdownMenuItem key={item.name}>
+                <DropdownMenuItem key={item.name} asChild>
                   <Link
                     href={item.href}
-                    className="flex w-full items-center justify-between gap-2"
+                    className="cursor-pointer justify-between"
                   >
                     {item.name}
                   </Link>
@@ -104,11 +105,8 @@ export function HeaderDropdownMenu({
         {pathname !== "/" && (
           <>
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Link
-                  href="/"
-                  className="flex w-full items-center justify-between gap-2"
-                >
+              <DropdownMenuItem asChild>
+                <Link href="/" className="cursor-pointer justify-between">
                   Home Page
                   <FileUser className="size-4" />
                 </Link>
@@ -122,7 +120,7 @@ export function HeaderDropdownMenu({
         {isSignedIn ? (
           <DropdownMenuItem
             onClick={() => signOut({ redirectTo: "/" })}
-            className="justify-between hover:cursor-pointer"
+            className="cursor-pointer justify-between"
           >
             Log out
             <LogOut />

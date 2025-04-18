@@ -8,8 +8,8 @@ type PublicImageProps = Omit<ImageProps, "isFetching"> & {
   slug: string;
 };
 
-export function PublicImage({ slug, src, ...restProps }: PublicImageProps) {
-  const { isFetching, data: publicUrl } = usePublicUrl(slug, src);
+export function PublicImage({ slug, path, ...restProps }: PublicImageProps) {
+  const { isFetching, data: publicUrl } = usePublicUrl(slug, path);
 
   return <Image src={publicUrl?.url} isFetching={isFetching} {...restProps} />;
 }

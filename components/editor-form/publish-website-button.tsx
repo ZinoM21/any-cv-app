@@ -36,8 +36,10 @@ const PublishButton = ({
 };
 
 export default function PublishWebsiteButton({
+  username,
   onSuccess
 }: {
+  username: string;
   onSuccess: (slug?: string) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -57,6 +59,7 @@ export default function PublishWebsiteButton({
         />
       )}
       <PublishWebsiteDialog
+        username={username}
         open={open}
         setOpen={setOpen}
         onSuccess={(slug) => {

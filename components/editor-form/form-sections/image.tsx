@@ -7,6 +7,7 @@ import { useState } from "react";
 
 export interface ImageProps extends React.ComponentProps<typeof AvatarImage> {
   isFetching: boolean;
+  path?: string;
   alt?: string;
   className?: string;
   width?: number;
@@ -15,7 +16,7 @@ export interface ImageProps extends React.ComponentProps<typeof AvatarImage> {
 }
 
 export function Image({
-  src,
+  path,
   alt,
   className,
   width,
@@ -30,7 +31,7 @@ export function Image({
   return (
     <Avatar className={cn("size-16 rounded-md", className)}>
       <AvatarImage
-        src={src}
+        src={path}
         alt={alt || "Image"}
         width={width || 80}
         height={height || 80}

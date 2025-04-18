@@ -20,12 +20,21 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useProfilePublishMutation } from "@/hooks/use-profile-publish-mutation";
 import { ApiErrorType } from "@/lib/errors";
 import { TemplateId } from "@/lib/types";
-import { cn, getTemplateIdFromParamsOrRedirect } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Moon, Ship, Sun } from "lucide-react";
 
 import shippingAnimation from "@/public/lotties/shipping.json";
 import Lottie from "lottie-react";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { websiteTemplates } from "@/config/templates";
+import { getValidTemplateId } from "@/lib/validation";
 import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -51,18 +60,19 @@ const publishFormSchema = z.object({
 export type PublishFormValues = z.infer<typeof publishFormSchema>;
 
 export default function PublishForm({
+  username,
   onSuccess
 }: {
+  username: string;
   onSuccess: (slug?: string) => void;
 }) {
   const { resolvedTheme } = useTheme();
 
-  const { mutateAsync, isPending: isPublishing } = useProfilePublishMutation();
+  const { mutateAsync, isPending: isPublishing } =
+    useProfilePublishMutation(username);
 
   const searchParams = useSearchParams();
-  const templateId = getTemplateIdFromParamsOrRedirect(
-    searchParams.get("templateId")
-  );
+  const templateId = getValidTemplateId(searchParams.get("templateId"));
 
   const formMethods = useForm<PublishFormValues>({
     resolver: zodResolver(publishFormSchema),
@@ -192,6 +202,39 @@ export default function PublishForm({
         </div>
         <FormField
           control={formMethods.control}
+          name="templateId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Template</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={isPublishing}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a template" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {websiteTemplates.map((template) => (
+                      <SelectItem key={template.id} value={template.id}>
+                        {template.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>
+                Choose a template for your published website. Currently viewing{" "}
+                <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
+                  {templateId}
+                </code>
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={formMethods.control}
           name="slug"
           render={({ field }) => (
             <FormItem>
@@ -208,9 +251,11 @@ export default function PublishForm({
                 <FormMessage />
               ) : (
                 <FormDescription>
-                  https://built-any-cv.com/
-                  {field.value.length > 0 ? field.value : "my-slug"} will be
-                  your personal website link
+                  <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
+                    https://built-any-cv.com/
+                    {field.value.length > 0 ? field.value : "my-slug"}
+                  </code>{" "}
+                  will be your personal website link
                 </FormDescription>
               )}
             </FormItem>

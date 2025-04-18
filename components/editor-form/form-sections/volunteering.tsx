@@ -77,7 +77,7 @@ const VolunteeringFieldArray = () => {
                             name={`volunteering.${index}.organizationLogoUrl`}
                             render={({ field }) => (
                               <SignedImage
-                                src={field?.value}
+                                path={field?.value}
                                 alt={volField?.organization}
                                 width={80}
                                 height={80}

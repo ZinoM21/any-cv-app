@@ -98,7 +98,7 @@ export default function EducationFormFields({
             <FormControl>
               <div className="flex items-center gap-4">
                 <SignedImage
-                  src={field?.value}
+                  path={field?.value}
                   alt={school}
                   width={80}
                   height={80}

@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,11 +11,13 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { getServerApi, getUserProfiles } from "@/lib/api";
+import type { PublishingOptions } from "@/lib/types";
 import { buildQueryString, getInitials } from "@/lib/utils";
 import { Edit3, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import AddProfileDialog from "./add-profile-dialog";
+import ProfileActions from "./profile-actions";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -25,6 +28,10 @@ export default async function DashboardPage() {
 
   const api = await getServerApi();
   const profiles = await getUserProfiles(api);
+
+  const isPublished = (publishingOptions: PublishingOptions | undefined) => {
+    return !!(publishingOptions?.slug && publishingOptions?.templateId);
+  };
 
   return (
     <>
@@ -46,14 +53,27 @@ export default async function DashboardPage() {
             <CardHeader className="flex flex-row items-center gap-4 space-y-0">
               <SignedImage
                 className="rounded-full"
-                src={profile.profilePictureUrl}
+                path={profile.profilePictureUrl}
                 alt={`Profile picture of ${profile.firstName} ${profile.lastName}`}
                 fallback={getInitials(profile.firstName, profile.lastName)}
               />
-              <div>
-                <CardTitle className="text-lg">
-                  {profile.firstName} {profile.lastName}
-                </CardTitle>
+              <div className="w-full">
+                <div className="flex w-full flex-row items-center justify-between gap-2">
+                  <CardTitle className="whitespace-nowrap text-lg">
+                    {profile.firstName} {profile.lastName}
+                  </CardTitle>
+                  <Badge
+                    variant={
+                      isPublished(profile.publishingOptions)
+                        ? "success"
+                        : "secondary"
+                    }
+                  >
+                    {isPublished(profile.publishingOptions)
+                      ? "Live"
+                      : "Unpublished"}
+                  </Badge>
+                </div>
                 <CardDescription className="line-clamp-1">
                   {profile.headline || "No headline"}
                 </CardDescription>
@@ -113,6 +133,7 @@ export default async function DashboardPage() {
                   Edit Website
                 </Link>
               </Button>
+              <ProfileActions profile={profile} />
             </CardFooter>
           </Card>
         ))}

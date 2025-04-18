@@ -39,14 +39,14 @@ export default function TheCreativeWebsite({
               (publishingOptions?.slug ? (
                 <PublicImage
                   slug={publishingOptions.slug}
-                  src={profilePictureUrl}
+                  path={profilePictureUrl}
                   alt={`${firstName} ${lastName}`}
                   width={120}
                   height={120}
                 />
               ) : (
                 <SignedImage
-                  src={profilePictureUrl}
+                  path={profilePictureUrl}
                   alt={`${firstName} ${lastName}`}
                   width={120}
                   height={120}
@@ -156,7 +156,7 @@ export default function TheCreativeWebsite({
                   {edu.schoolPictureUrl && publishingOptions?.slug ? (
                     <PublicImage
                       slug={publishingOptions.slug}
-                      src={edu.schoolPictureUrl}
+                      path={edu.schoolPictureUrl}
                       alt={edu.school}
                       width={84}
                       height={52}
@@ -164,7 +164,7 @@ export default function TheCreativeWebsite({
                     />
                   ) : (
                     <SignedImage
-                      src={edu.schoolPictureUrl}
+                      path={edu.schoolPictureUrl}
                       alt={edu.school}
                       width={84}
                       height={52}
