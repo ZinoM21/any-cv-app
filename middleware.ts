@@ -1,26 +1,31 @@
-import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
-import { auth } from "./auth";
+// import NextAuth from "next-auth";
+// import { authConfig } from "./config/auth.config";
 
-export default auth(async (req) => {
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-  const baseUrl = req.nextUrl.origin;
+export { auth as middleware } from "@/auth";
 
-  // Catch all requests to /dashboard and redirect to /
-  if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/signin", baseUrl));
-  }
+// import { getToken } from "next-auth/jwt";
+// import { NextResponse } from "next/server";
+// import { auth } from "./auth";
 
-  // Check if refresh token is present but expired
-  // (all other token cases are handled in auth.config.ts)
-  if (token && Date.now() >= token.data.validity.refresh_until * 1000) {
-    const response = NextResponse.redirect(new URL("/signin", baseUrl));
-    response.cookies.delete("authjs.session-token");
-    response.cookies.delete("authjs.csrf-token");
+// export default auth(async (req) => {
+//   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+//   const baseUrl = req.nextUrl.origin;
 
-    return response;
-  }
+//   // Catch all requests to /dashboard and redirect to /
+//   if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
+//     return NextResponse.redirect(new URL("/signin", baseUrl));
+//   }
 
-  // If authenticated, continue with the request
-  return NextResponse.next();
-});
+// // Check if refresh token is present but expired
+// // (all other token cases are handled in auth.config.ts)
+// if (token && Date.now() >= token.data.validity.refresh_until * 1000) {
+//   const response = NextResponse.redirect(new URL("/signin", baseUrl));
+//   response.cookies.delete("authjs.session-token");
+//   response.cookies.delete("authjs.csrf-token");
+
+//   return response;
+// }
+
+//   // If authenticated, continue with the request
+//   return NextResponse.next();
+// });
