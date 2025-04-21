@@ -113,7 +113,7 @@ export default function SuggestNextActionDialog({
           className="h-fit p-6 group flex flex-col items-center justify-center text-center shadow-sm hover:shadow transition-all"
           asChild
         >
-          <Link href={`/generate/${nextAction}/template${searchParamsString}`}>
+          <Link href={`/generate/${nextAction}/template?${searchParamsString}`}>
             <div
               className={`mb-3 rounded-full bg-${
                 suggestCV ? "blue" : "purple"
