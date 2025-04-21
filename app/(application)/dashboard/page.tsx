@@ -35,7 +35,7 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <div className="mb-4 flex flex-row items-center justify-between sm:mb-6 lg:mb-8">
+      <div className="mb-4 flex flex-row items-center justify-between sm:mb-6">
         <h1 className="text-3xl font-semibold tracking-tight">My Profiles</h1>
         <AddProfileDialog
           trigger={
