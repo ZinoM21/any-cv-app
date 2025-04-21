@@ -106,7 +106,7 @@ export const registerUser = async (
  * @param refreshToken Refresh token to use for fetching a new access token
  * @returns New access token
  */
-export const fetchRefreshToken = async (
+export const getNewAccessToken = async (
   refreshToken: string
 ): Promise<string> => {
   const api = createApiClient();

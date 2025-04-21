@@ -1,5 +1,5 @@
+import { auth, signOut } from "@/auth";
 import BuiltAnyCVLogo from "@/components/logo";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { SignUpForm } from "../../../components/auth/signup-form";
 
@@ -8,6 +8,10 @@ export default async function SignUpPage() {
 
   if (session?.user) {
     redirect("/dashboard");
+  }
+
+  if (session?.error === "RefreshAccessTokenError") {
+    signOut({ redirectTo: "/signin" });
   }
 
   return (

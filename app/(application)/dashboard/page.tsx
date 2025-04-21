@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,10 @@ export default async function DashboardPage() {
 
   if (!session) {
     redirect("/");
+  }
+
+  if (session?.error === "RefreshAccessTokenError") {
+    signOut({ redirectTo: "/signin" });
   }
 
   const api = await getServerApi();

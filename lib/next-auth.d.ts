@@ -1,14 +1,10 @@
-// eslint-disable-next-line
-import NextAuth, {
-  type User as DefaultUser,
-  Session as DefaultSession,
-} from "next-auth";
+import { Session as DefaultSession, type User as DefaultUser } from "next-auth";
 import { type JWT as DefaultJWT } from "next-auth/jwt";
 import {
   AuthValidity,
   SignInOptions,
   Tokens,
-  type User as UserObject,
+  type User as UserObject
 } from "./types";
 
 declare module "next-auth" {
@@ -19,6 +15,7 @@ declare module "next-auth" {
     user: User;
     validity: AuthValidity;
     accessToken: string;
+    error: string | undefined;
   }
 
   /**
@@ -41,6 +38,7 @@ declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
     data: User;
     accessToken: string;
+    error: string | undefined;
   }
 }
 

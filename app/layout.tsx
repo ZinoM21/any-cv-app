@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { geistSans } from "@/styles/fonts";
 import { Analytics } from "@vercel/analytics/react";
@@ -17,6 +17,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+  if (session?.error === "RefreshAccessTokenError") {
+    signOut({ redirectTo: "/signin" });
+  }
 
   return (
     <html lang="en" suppressHydrationWarning>

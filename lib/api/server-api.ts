@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 import { createApiClient } from "@/lib/api";
 
 /**
@@ -9,5 +9,8 @@ import { createApiClient } from "@/lib/api";
  */
 export async function getServerApi() {
   const session = await auth();
+  if (session?.error === "RefreshAccessTokenError") {
+    signOut({ redirectTo: "/signin" });
+  }
   return createApiClient(session?.accessToken);
 }

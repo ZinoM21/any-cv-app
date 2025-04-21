@@ -1,4 +1,4 @@
-import { authenticateUser, fetchRefreshToken } from "@/lib/api";
+import { authenticateUser, getNewAccessToken } from "@/lib/api";
 import { InvalidCredentialsError } from "@/lib/errors";
 import { signInSchema } from "@/lib/schemas/auth-schema";
 import { AuthValidity } from "@/lib/types";
@@ -88,23 +88,26 @@ export const authConfig: NextAuthConfig = {
       if (isValidToken(token.data.validity.refresh_until)) {
         console.debug("Access token is being refreshed");
         try {
-          const access = await fetchRefreshToken(token.data.tokens.refresh);
-          token.data.tokens.access = access;
-
+          const access = await getNewAccessToken(token.data.tokens.refresh);
           const { exp } = await getDecodedToken(access);
-          token.data.validity.access_until = exp;
-
           console.debug(
             "Successfully refreshed token, new expiry:",
             new Date(exp * 1000)
           );
 
-          return { ...token };
+          return {
+            ...token,
+            data: {
+              ...token.data,
+              tokens: { ...token.data.tokens, access },
+              validity: { ...token.data.validity, access_until: exp }
+            }
+          };
         } catch (error) {
           console.error("Error refreshing token:", error);
           return {
             ...token,
-            error: "RefreshAccessTokenError"
+            error: "RefreshAccessTokenError" // Error has to be handled on pages
           };
         }
       }
@@ -114,6 +117,8 @@ export const authConfig: NextAuthConfig = {
       return null;
     },
     async session({ session, token }) {
+      session.error = token.error;
+
       if (token.data) {
         session.user = token.data.user;
         session.accessToken = token.data.tokens.access;

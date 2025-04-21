@@ -1,6 +1,7 @@
 import {
   SessionContextValue,
-  useSession as useNextAuthSession,
+  signOut,
+  useSession as useNextAuthSession
 } from "next-auth/react";
 
 interface UseSessionOptions<R extends boolean> {
@@ -26,6 +27,10 @@ export function useSession<R extends boolean>(
   options?: UseSessionOptions<R>
 ): ExtendedSession<R> {
   const session = useNextAuthSession(options);
+
+  if (session?.data?.error === "RefreshAccessTokenError") {
+    signOut({ redirectTo: "/signin" });
+  }
 
   return {
     ...session,

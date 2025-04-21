@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 import BuiltAnyCVLogo from "@/components/logo";
 import { Card, CardContent } from "@/components/ui/card";
 import { FileUser } from "lucide-react";
@@ -12,6 +12,10 @@ export default async function LoginPage() {
 
   if (session?.user) {
     redirect("/dashboard");
+  }
+
+  if (session?.error === "RefreshAccessTokenError") {
+    signOut({ redirectTo: "/signin" });
   }
 
   return (
