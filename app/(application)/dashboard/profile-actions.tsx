@@ -40,6 +40,14 @@ const ProfileActions = ({ profile }: { profile: ProfileData }) => {
     });
   };
 
+  const onPublishSuccess = (slug?: string) => {
+    setIsPublishOpen(false);
+    toast.success(
+      `Your website is now live at ${window.location.origin}/${slug}`
+    );
+    router.refresh(); // revalidate page -> must be done like this since NextJS's revalidatePath is not client-compatible
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -98,22 +106,20 @@ const ProfileActions = ({ profile }: { profile: ProfileData }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/* We have to mount the dialogs here outside the dropdown menu. Otherwise, the dialogs would not be unmounted on dropdown close.
+      Therefore, we are also controlling the open states manually instead of using the trigger component.
+      */}
       <PublishWebsiteDialog
         username={profile.username}
         open={isPublishOpen}
         setOpen={setIsPublishOpen}
-        onSuccess={(slug) => {
-          setIsPublishOpen(false);
-          router.refresh();
-          toast.success(
-            `Profile published ${slug ? `as ${slug}` : ""} successfully`
-          );
-        }}
+        onSuccess={onPublishSuccess}
       />
       <DeleteProfileDialog
         username={profile.username}
         open={isDeleteOpen}
-        onOpenChange={setIsDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
       />
     </>
   );

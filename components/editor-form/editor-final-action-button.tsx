@@ -22,19 +22,21 @@ export default function EditorFinalActionButton({
 
   const nextAction = isCV ? "website" : "cv";
 
+  const onPublishSuccess = (slug?: string) => {
+    setOpen(true);
+
+    const url = `${window.location.origin}/${slug}`;
+    setWebsiteUrl(url);
+    toast.success(`Your website is now live at ${url}`);
+  };
+
   return (
     <>
       {isCV && <DownloadCVButton onSuccess={() => setOpen(true)} />}
       {isWebsite && (
         <PublishWebsiteButton
           username={username}
-          onSuccess={(slug) => {
-            setOpen(true);
-
-            const url = `${window.location.origin}/${slug}`;
-            setWebsiteUrl(url);
-            toast.success(`Your website is now live at ${url}`);
-          }}
+          onSuccess={onPublishSuccess}
         />
       )}
       <SuggestNextActionDialog

@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -15,7 +15,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useCreateProfileMutation } from "@/hooks/use-create-profile-mutation";
@@ -29,14 +29,14 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const addProfileFormSchema = z.object({
-  username: z.string().min(1, "LinkedIn username is required"),
+  username: z.string().min(1, "LinkedIn username is required")
 });
 
 type AddProfileFormValues = z.infer<typeof addProfileFormSchema>;
 
 export default function AddProfileDialog({
   trigger,
-  onSuccess,
+  onSuccess
 }: {
   trigger: ReactNode;
   onSuccess?: () => Promise<void>;
@@ -47,9 +47,9 @@ export default function AddProfileDialog({
   const form = useForm<AddProfileFormValues>({
     resolver: zodResolver(addProfileFormSchema),
     defaultValues: {
-      username: "",
+      username: ""
     },
-    mode: "all",
+    mode: "all"
   });
 
   const { mutate, isPending } = useCreateProfileMutation();
@@ -60,9 +60,10 @@ export default function AddProfileDialog({
       onSuccess: async () => {
         toast.success("Profile created");
         setIsOpen(false);
-        router.refresh(); // revalidate page -> must be done like this since NextJS's revalidatePath is not client-compatible
+        form.reset();
+        router.refresh(); // revalidate page / query -> must be done like this since NextJS's revalidatePath is not client-compatible
         await onSuccess?.();
-      },
+      }
     });
   }
 

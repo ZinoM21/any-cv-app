@@ -74,19 +74,22 @@ export default function PublishForm({
   const searchParams = useSearchParams();
   const templateId = getValidTemplateId(searchParams.get("templateId"));
 
+  const defaultValues = {
+    appearance: resolvedTheme as "light" | "dark",
+    templateId: templateId,
+    slug: ""
+  };
+
   const formMethods = useForm<PublishFormValues>({
     resolver: zodResolver(publishFormSchema),
-    defaultValues: {
-      appearance: resolvedTheme as "light" | "dark",
-      templateId: templateId,
-      slug: ""
-    },
+    defaultValues,
     mode: "all"
   });
 
   const {
     handleSubmit,
     reset,
+    setError,
     formState: { isValid }
   } = formMethods;
 
@@ -101,6 +104,9 @@ export default function PublishForm({
           return;
         }
         if (error.message === ApiErrorType.ResourceAlreadyExists) {
+          setError("slug", {
+            message: "This slug already exists. Please try another one."
+          });
           toast.error("This slug already exists. Please try another one.");
           return;
         }
@@ -109,9 +115,9 @@ export default function PublishForm({
     });
   };
 
-  const onSubmitPublish = (data: PublishFormValues) => {
-    publish(data);
-    reset();
+  const onSubmitPublish = async (data: PublishFormValues) => {
+    await publish(data);
+    reset(defaultValues);
   };
 
   return (
@@ -225,10 +231,14 @@ export default function PublishForm({
                 </Select>
               </FormControl>
               <FormDescription>
-                Choose a template for your published website. Currently viewing{" "}
-                <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
-                  {templateId}
-                </code>
+                Choose a template for your published website.
+                {templateId &&
+                  "Currently viewing " +
+                  (
+                    <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
+                      {templateId}
+                    </code>
+                  )}
               </FormDescription>
             </FormItem>
           )}

@@ -14,41 +14,37 @@ import { buttonVariants } from "@/components/ui/button";
 import { useDeleteProfile } from "@/hooks/use-delete-profile";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { toast } from "sonner";
 
 interface DeleteProfileDialogProps {
   username: string;
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  setIsOpen: (open: boolean) => void;
 }
 
 export default function DeleteProfileDialog({
   username,
   open,
-  onOpenChange
+  setIsOpen
 }: DeleteProfileDialogProps) {
-  const { mutateAsync } = useDeleteProfile(username);
+  const { mutateAsync, isPending } = useDeleteProfile(username);
   const router = useRouter();
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    setIsDeleting(true);
-    try {
-      await mutateAsync();
-      toast.success("Profile deleted successfully");
-      router.refresh();
-      onOpenChange(false);
-    } catch (error) {
-      toast.error("Failed to delete profile");
-      console.error("Delete profile error:", error);
-    } finally {
-      setIsDeleting(false);
-    }
+    await mutateAsync(void 0, {
+      onSuccess: () => {
+        toast.success("Profile deleted successfully");
+        router.refresh(); // revalidate page / query -> must be done like this since NextJS's revalidatePath is not client-compatible
+        setIsOpen(false);
+      },
+      onError: () => {
+        toast.error("Failed to delete profile");
+      }
+    });
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={open} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -66,9 +62,9 @@ export default function DeleteProfileDialog({
               })
             )}
             onClick={handleDelete}
-            disabled={isDeleting}
+            disabled={isPending}
           >
-            {isDeleting ? "Deleting..." : "Yes, delete profile"}
+            {isPending ? "Deleting..." : "Yes, delete profile"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
