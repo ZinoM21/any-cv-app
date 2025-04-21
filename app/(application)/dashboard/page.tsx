@@ -114,7 +114,7 @@ export default async function DashboardPage() {
                 )}
               </div>
             </CardContent>
-            <CardFooter className="flex w-full flex-row justify-between gap-2">
+            <CardFooter className="flex w-full min-w-0 flex-row justify-between gap-2">
               <Button variant="outline" className="flex-1" asChild>
                 <Link
                   href={`/generate/cv/editor?${buildQueryString({

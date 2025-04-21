@@ -15,28 +15,30 @@ export default function AuthOrDashboardButton({ className }: ButtonProps) {
   const pathname = usePathname();
   const isDashboard = pathname.includes("/dashboard");
 
-  return (
-    <div className="hidden lg:flex">
-      {isSignedIn ? (
-        !isDashboard && (
-          <Button variant="outline" asChild className={className}>
-            <Link href="/dashboard">Dashboard</Link>
-          </Button>
-        )
-      ) : (
-        <div className="inline-flex gap-2">
-          <SignInDialog
-            trigger={
-              <Button variant="outline" className={className}>
-                Sign In
-              </Button>
-            }
-          />
-          <Button onClick={() => signUp()} className={className}>
-            Sign Up
-          </Button>
-        </div>
-      )}
-    </div>
-  );
+  if (isSignedIn) {
+    if (!isDashboard) {
+      return (
+        <Button variant="outline" asChild className={className}>
+          <Link href="/dashboard">Dashboard</Link>
+        </Button>
+      );
+    } else {
+      return null;
+    }
+  } else {
+    return (
+      <div className="inline-flex gap-2">
+        <SignInDialog
+          trigger={
+            <Button variant="outline" className={className}>
+              Sign In
+            </Button>
+          }
+        />
+        <Button onClick={() => signUp()} className={className}>
+          Sign Up
+        </Button>
+      </div>
+    );
+  }
 }

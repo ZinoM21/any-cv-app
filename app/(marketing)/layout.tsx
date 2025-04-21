@@ -1,13 +1,12 @@
+import { HEADER_CHILDREN_CLASS } from "@/styles/shared";
 import { ReactNode } from "react";
-import { Header } from "./components/header";
+import { Header } from "../../components/header";
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Header />
-      <main className="mt-14 h-[calc(100vh-56px)] min-h-0 sm:mt-16 sm:h-[calc(100vh-64px)]">
-        {children}
-      </main>
+      <Header isMarketing />
+      <main className={HEADER_CHILDREN_CLASS}>{children}</main>
     </>
   );
 }

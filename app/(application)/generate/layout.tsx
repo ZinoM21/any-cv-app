@@ -1,15 +1,16 @@
 import { HEADER_CHILDREN_CLASS } from "@/styles/shared";
 import { ReactNode } from "react";
-import { ApplicationHeader } from "../components/application-header";
+import { Header } from "../../../components/header";
+import BreadCrumb from "../breadcrumb";
 
 export default function GeneratingLayout({
-  children,
+  children
 }: {
   children: ReactNode;
 }) {
   return (
     <>
-      <ApplicationHeader />
+      <Header breadcrumb={<BreadCrumb />} />
       <main className={HEADER_CHILDREN_CLASS}>{children}</main>
     </>
   );

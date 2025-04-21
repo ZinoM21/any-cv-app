@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
-import BuiltAnyCVLogo from "@/components/logo";
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import {
   DropdownMenu,
@@ -17,7 +16,7 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserProfiles } from "@/hooks/use-profiles";
@@ -47,12 +46,12 @@ export default function BreadCrumb({
 
   // Get current format mapping from route config
   const formatConfig = routeMappings.find(
-    (route) => route.path === currentFormat,
+    (route) => route.path === currentFormat
   );
 
   // Get current action from format's available actions
   const actionConfig = formatConfig?.children?.find(
-    (child) => child.path === currentAction,
+    (child) => child.path === currentAction
   );
 
   /**
@@ -61,11 +60,11 @@ export default function BreadCrumb({
    * Otherwise, falls back to the first available action in the target format
    */
   const resolveActionForFormat = (
-    targetFormat: RouteMapping,
+    targetFormat: RouteMapping
   ): string | undefined => {
     // Check if target format supports the current action
     const hasMatchingAction = targetFormat.children?.some(
-      (action) => action.path === currentAction,
+      (action) => action.path === currentAction
     );
 
     // If it does, use current action; otherwise use the first available action
@@ -84,18 +83,11 @@ export default function BreadCrumb({
   return (
     <Breadcrumb className={className} {...props}>
       <BreadcrumbList>
-        {/* Logo */}
-        <BreadcrumbItem className="hidden sm:inline-flex">
-          <BreadcrumbLink asChild>
-            <BuiltAnyCVLogo />
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
         {/* Profiles dropdown (only for authenticated users) */}
         {isSignedIn && username && (
           <>
-            <BreadcrumbSeparator className="hidden sm:block [&>svg]:h-5 [&>svg]:w-5" />
-            <BreadcrumbItem>
+            <BreadcrumbSeparator className="hidden md:block [&>svg]:h-5 [&>svg]:w-5" />
+            <BreadcrumbItem className="hidden md:block">
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
                   {username}
@@ -115,7 +107,7 @@ export default function BreadCrumb({
                       <Link
                         key={profile._id}
                         href={`${pathname}?${buildQueryString(searchParams, {
-                          set: { username: profile.username },
+                          set: { username: profile.username }
                         })}`}
                       >
                         <DropdownMenuCheckboxItem
@@ -144,12 +136,15 @@ export default function BreadCrumb({
         {/* Format dropdown (CV, Website) */}
         {formatConfig && (
           <>
-            <BreadcrumbSeparator className="hidden sm:block [&>svg]:h-5 [&>svg]:w-5" />
+            <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
+                <DropdownMenuTrigger className="hidden items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent sm:flex">
                   {formatConfig.label}
                   <ChevronsUpDown className="size-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuTrigger className="sm:hidden">
+                  <BreadcrumbEllipsis />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                   <DropdownMenuLabel>Format</DropdownMenuLabel>
@@ -160,7 +155,7 @@ export default function BreadCrumb({
                         key={formatOption.path}
                         href={createNavigationUrl(
                           formatOption.path,
-                          resolveActionForFormat(formatOption),
+                          resolveActionForFormat(formatOption)
                         )}
                       >
                         <DropdownMenuCheckboxItem
@@ -186,9 +181,12 @@ export default function BreadCrumb({
               <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
               <BreadcrumbItem>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
+                  <DropdownMenuTrigger className="hidden items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent sm:flex">
                     {actionConfig.label}
                     <ChevronsUpDown className="size-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuTrigger className="sm:hidden">
+                    <BreadcrumbEllipsis />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
                     <DropdownMenuLabel>Action</DropdownMenuLabel>
@@ -198,7 +196,7 @@ export default function BreadCrumb({
                         key={actionOption.path}
                         href={createNavigationUrl(
                           currentFormat,
-                          actionOption.path,
+                          actionOption.path
                         )}
                       >
                         <DropdownMenuCheckboxItem

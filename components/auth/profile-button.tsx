@@ -22,14 +22,12 @@ import SignInDialog from "./sign-in-dialog";
 
 export function HeaderDropdownMenu({
   className,
+  isMarketing = false,
   ...props
-}: React.ComponentProps<"button">) {
+}: React.ComponentProps<"button"> & { isMarketing?: boolean }) {
   const { isSignedIn, data: session } = useSession();
   const { signUp } = useAuth();
   const pathname = usePathname();
-
-  const marketingRoutes = marketingNav.map((item) => item.href).concat("/");
-  const isMarketingRoute = marketingRoutes.includes(pathname);
 
   return (
     <DropdownMenu>
@@ -83,7 +81,7 @@ export function HeaderDropdownMenu({
         )}
 
         {/* MARKETING (templates, pricing, guides, ...) */}
-        {isMarketingRoute && (
+        {isMarketing && (
           <>
             <DropdownMenuGroup className="block lg:hidden">
               {marketingNav.map((item) => (
