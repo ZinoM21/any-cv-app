@@ -8,11 +8,11 @@ import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "BuiltAnyCV",
-  description: "CV & Site in seconds",
+  description: "CV & Site in seconds"
 };
 
 export default async function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {

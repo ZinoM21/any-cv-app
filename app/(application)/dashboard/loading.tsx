@@ -11,7 +11,7 @@ export default function DashboardLoading() {
   return (
     <>
       <h1 className="mb-6 text-3xl font-bold">User Profiles</h1>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 6 }).map((_, index) => (
           <Card className="h-full" key={index}>
             <CardHeader className="flex flex-row items-center gap-4 space-y-0">
