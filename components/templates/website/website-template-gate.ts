@@ -16,7 +16,7 @@ export const websiteTemplateComponentMap: {
   [TemplateId.Classic]: TheClassicWebsite,
   [TemplateId.Creative]: TheCreativeWebsite,
   [TemplateId.Modern]: TheModernWebsite,
-  [TemplateId.Minimal]: TheMinimalWebsite,
+  [TemplateId.Minimal]: TheMinimalWebsite
 };
 
 /**

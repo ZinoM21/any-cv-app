@@ -14,6 +14,7 @@ export type ProfileData = {
   about?: string;
   email?: string;
   phone?: string;
+  website?: string;
   location?: string;
   languages?: string[] | [];
   experiences: Experience[] | [];

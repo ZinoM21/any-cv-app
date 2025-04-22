@@ -18,6 +18,7 @@ export default function TheCreativeWebsite({
     headline,
     email,
     phone,
+    website,
     location,
     experiences,
     education,
@@ -284,6 +285,20 @@ export default function TheCreativeWebsite({
                   </a>
                 </li>
               )}
+              {website && (
+                <li className="flex items-center text-muted-foreground">
+                  <a
+                    href={website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-muted-foreground hover:text-blue-600"
+                  >
+                    <ArrowRight className="mr-2 h-4 w-4 text-blue-600" />
+                    {website}
+                  </a>
+                </li>
+              )}
+
               {username && (
                 <li>
                   <a

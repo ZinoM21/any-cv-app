@@ -3,8 +3,11 @@ import {
   getPublicUrl,
   getSignedUploadUrl,
   getSignedUrl,
+  getSignedUrls,
   uploadFileToSignedUrl
 } from "@/lib/api";
+import { ImageUrl, ProfileData } from "@/lib/types";
+import { getFilePaths } from "@/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -21,6 +24,36 @@ export function useSignedUrl(filePath: string | undefined | null) {
     queryKey: ["imageUrl", filePath],
     queryFn: async () => getSignedUrl(api, filePath!),
     enabled: !!filePath && filePath !== ""
+  });
+}
+
+/**
+ * Custom hook to get all file URLs from a profile
+ *
+ * @param profile The profile data to extract file paths from
+ * @returns An object with loading state and a map of file paths to their signed URLs
+ */
+export function useSignedUrlsMap(profile: Partial<ProfileData> | null) {
+  const api = useApi();
+
+  return useQuery({
+    queryKey: ["profileSignedUrls", profile?._id],
+    queryFn: async () => {
+      const filePaths = getFilePaths(profile!); // assert here because we check for null in the enabled clause
+
+      if (filePaths.length === 0) return new Map<string, ImageUrl>();
+
+      const signedUrls = await getSignedUrls(api, filePaths);
+
+      const urlMap = new Map<string, ImageUrl>();
+
+      signedUrls.forEach((url) => {
+        urlMap.set(url.path, url);
+      });
+
+      return urlMap;
+    },
+    enabled: !!profile
   });
 }
 

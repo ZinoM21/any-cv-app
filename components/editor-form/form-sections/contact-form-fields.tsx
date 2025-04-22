@@ -1,13 +1,13 @@
-import { useFormContext } from "react-hook-form";
 import {
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useFormContext } from "react-hook-form";
 
 export const ContactInfoFormFields = () => {
   const { control } = useFormContext();
@@ -44,6 +44,23 @@ export const ContactInfoFormFields = () => {
             </FormControl>
             <FormDescription>
               Include your country code for international calls
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="website"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Website</FormLabel>
+            <FormControl>
+              <Input placeholder="https://www.example.com" {...field} />
+            </FormControl>
+            <FormDescription>
+              Your current personal or professional website
             </FormDescription>
             <FormMessage />
           </FormItem>

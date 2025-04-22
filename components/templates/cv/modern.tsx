@@ -4,9 +4,10 @@ import {
   Position,
   ProfileData,
   Project,
-  VolunteeringExperience
+  VolunteeringExperience,
+  type ImageUrl
 } from "@/lib/types";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getUrlFromMap } from "@/lib/utils";
 import {
   Document,
   Font,
@@ -20,9 +21,24 @@ import React from "react";
 
 Font.register({
   family: "Satoshi",
-  src: "/fonts/satoshi/Satoshi-Variable.ttf",
-  fontStyle: "normal", // Optional: specify font style
-  fontWeight: "light" // Optional: specify font weight
+  fonts: [
+    {
+      fontWeight: 300,
+      src: "/fonts/satoshi/Satoshi-Light.ttf"
+    },
+    {
+      fontWeight: 400,
+      src: "/fonts/satoshi/Satoshi-Regular.ttf"
+    },
+    {
+      fontWeight: 500,
+      src: "/fonts/satoshi/Satoshi-Medium.ttf"
+    },
+    {
+      fontWeight: 600,
+      src: "/fonts/satoshi/Satoshi-Bold.ttf"
+    }
+  ]
 });
 
 // Create styles
@@ -30,6 +46,7 @@ const styles = StyleSheet.create({
   page: {
     padding: 48,
     fontFamily: "Satoshi",
+    fontWeight: "normal",
     backgroundColor: "white",
     width: "100%",
     height: "100%"
@@ -47,14 +64,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 12
   },
-  profileImagePlaceholder: {
-    width: 64,
-    height: 64,
-    backgroundColor: "#D6CFC7" // stone-300
-  },
   profileImage: {
     width: 64,
-    height: 64
+    height: 64,
+    borderRadius: 9999
   },
   nameContainer: {
     flexDirection: "column",
@@ -66,7 +79,6 @@ const styles = StyleSheet.create({
     color: "#262626", // neutral-800
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "Satoshi",
     textTransform: "capitalize"
   },
   title: {
@@ -74,7 +86,6 @@ const styles = StyleSheet.create({
     color: "#0284C7", // sky-600
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "Satoshi",
     textTransform: "capitalize"
   },
   contactInfo: {
@@ -87,8 +98,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#262626", // neutral-800
     fontSize: 12,
-    fontWeight: "medium",
-    fontFamily: "Satoshi"
+    fontWeight: "medium"
   },
   contentContainer: {
     flexDirection: "column",
@@ -108,13 +118,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: "#262626", // neutral-800
     fontSize: 14,
-    fontFamily: "Satoshi",
+    fontWeight: "light",
     textTransform: "capitalize"
   },
   summaryText: {
     color: "black",
     fontSize: 12,
-    fontFamily: "Satoshi",
     lineHeight: 1.5,
     width: "100%"
   },
@@ -133,7 +142,6 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 14,
     fontWeight: "bold",
-    fontFamily: "Satoshi",
     textTransform: "capitalize"
   },
   experienceTitleUnderline: {
@@ -142,13 +150,12 @@ const styles = StyleSheet.create({
   experienceDate: {
     color: "#737373", // neutral-500
     fontSize: 12,
-    fontWeight: "medium",
-    fontFamily: "Satoshi"
+    fontWeight: "medium"
   },
   experienceDescription: {
     color: "#262626", // neutral-800
     fontSize: 12,
-    fontFamily: "Satoshi",
+    fontWeight: "400",
     lineHeight: 1.5,
     width: "100%"
   },
@@ -174,14 +181,12 @@ const styles = StyleSheet.create({
   educationTitle: {
     color: "black",
     fontSize: 14,
-    fontWeight: "bold",
-    fontFamily: "Satoshi"
+    fontWeight: "bold"
   },
   educationDate: {
     color: "#737373", // neutral-500
     fontSize: 12,
-    fontWeight: "medium",
-    fontFamily: "Satoshi"
+    fontWeight: "medium"
   }
 });
 
@@ -191,7 +196,6 @@ interface RichTextProps {
   style: {
     color: string;
     fontSize: number;
-    fontFamily: string;
     lineHeight: number;
     width: string;
   };
@@ -226,10 +230,11 @@ const RichText: React.FC<RichTextProps> = ({ text, style }) => {
 // Interface for TheModern component props
 interface TheModernProps {
   profileData: Partial<ProfileData>;
+  signedUrlsMap: Map<string, ImageUrl>;
 }
 
 // Create Document Component
-const TheModern = ({ profileData }: TheModernProps) => {
+const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
   const {
     firstName,
     lastName,
@@ -237,6 +242,7 @@ const TheModern = ({ profileData }: TheModernProps) => {
     about,
     email,
     phone,
+    website,
     location,
     experiences,
     education,
@@ -254,10 +260,11 @@ const TheModern = ({ profileData }: TheModernProps) => {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             {/* Profile image or placeholder */}
-            {profilePictureUrl ? (
-              <Image src={profilePictureUrl} style={styles.profileImage} />
-            ) : (
-              <View style={styles.profileImagePlaceholder} />
+            {profilePictureUrl && (
+              <Image
+                src={getUrlFromMap(signedUrlsMap, profilePictureUrl)}
+                style={styles.profileImage}
+              />
             )}
 
             <View style={styles.nameContainer}>
@@ -271,6 +278,7 @@ const TheModern = ({ profileData }: TheModernProps) => {
           <View style={styles.contactInfo}>
             {phone && <Text style={styles.contactText}>{phone}</Text>}
             {email && <Text style={styles.contactText}>{email}</Text>}
+            {website && <Text style={styles.contactText}>{website}</Text>}
             {location && <Text style={styles.contactText}>{location}</Text>}
           </View>
         </View>

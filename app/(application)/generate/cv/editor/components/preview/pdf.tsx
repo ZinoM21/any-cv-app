@@ -7,18 +7,25 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
 
 import { getPDFTemplateById } from "@/components/templates/cv/cv-template-gate";
-import { CVTemplate, ProfileData, TemplateId } from "@/lib/types";
+import {
+  CVTemplate,
+  ProfileData,
+  TemplateId,
+  type ImageUrl
+} from "@/lib/types";
 import { pdf } from "@react-pdf/renderer";
 import { PDFLoadingSkeleton } from "./pdf-loading";
 
 export const PDF = ({
   data,
   template,
-  plugins
+  plugins,
+  signedUrlsMap
 }: {
   data: Partial<ProfileData>;
   template: CVTemplate;
   plugins?: Plugin[];
+  signedUrlsMap: Map<string, ImageUrl>;
 }) => {
   const [url, setUrl] = useState<string>();
 
@@ -27,7 +34,11 @@ export const PDF = ({
       data: Partial<ProfileData>,
       templateId: TemplateId
     ) => {
-      const DocComponent = await getPDFTemplateById(templateId, data);
+      const DocComponent = await getPDFTemplateById(
+        templateId,
+        data,
+        signedUrlsMap
+      );
       const blob = await pdf(DocComponent).toBlob();
       return blob;
     };
@@ -42,7 +53,7 @@ export const PDF = ({
     };
 
     generateUrl(data, template.id);
-  }, [data, template.id]);
+  }, [data, template.id, signedUrlsMap]);
 
   if (!url || url === "") {
     return (

@@ -2,7 +2,12 @@ import { clsx, type ClassValue } from "clsx";
 import * as jose from "jose";
 import { redirect } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { DecodedToken, TemplateId } from "./types";
+import {
+  DecodedToken,
+  TemplateId,
+  type ImageUrl,
+  type ProfileData
+} from "./types";
 
 import classicCV from "@/public/cvs/images/classic.jpg";
 import creativeCV from "@/public/cvs/images/creative.jpg";
@@ -254,3 +259,58 @@ export const getSnakeCaseFileName = (str: string): string => {
 
   return `${sanitized}_logo`;
 };
+
+/**
+ * Extracts all file / image paths from the profile
+ *
+ * @param profile The profile to extract file paths from
+ * @returns An array of file paths
+ */
+export const getFilePaths = (profile: Partial<ProfileData>): string[] => {
+  const filePaths: string[] = [];
+
+  if (!!profile.profilePictureUrl) {
+    filePaths.push(profile.profilePictureUrl);
+  }
+
+  profile.experiences?.forEach((experience) => {
+    if (!!experience.companyLogoUrl) {
+      filePaths.push(experience.companyLogoUrl);
+    }
+  });
+
+  profile.education?.forEach((edu) => {
+    if (!!edu.schoolPictureUrl) {
+      filePaths.push(edu.schoolPictureUrl);
+    }
+  });
+
+  profile.volunteering?.forEach((vol) => {
+    if (!!vol.organizationLogoUrl) {
+      filePaths.push(vol.organizationLogoUrl);
+    }
+  });
+
+  profile.projects?.forEach((project) => {
+    if (!!project.thumbnail) {
+      filePaths.push(project.thumbnail);
+    }
+  });
+
+  return filePaths;
+};
+
+/**
+ * Helper function to get a signed URL from the URL map
+ *
+ * @param urlMap The map of file paths to signed URLs
+ * @param path The file path to get the signed URL for
+ * @returns The signed URL or undefined if not found
+ */
+export function getUrlFromMap(
+  urlMap: Map<string, ImageUrl> | undefined,
+  path: string | undefined
+): string | undefined {
+  if (!urlMap || !path) return undefined;
+  return urlMap.get(path)?.url;
+}

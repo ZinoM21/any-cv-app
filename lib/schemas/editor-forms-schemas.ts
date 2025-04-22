@@ -8,9 +8,10 @@ export const editSummaryFormSchema = z.object({
   about: z.string().optional(),
   email: z.string().email("Enter a valid email").optional().or(z.literal("")),
   phone: z.string().optional(),
+  website: z.string().optional(),
   location: z.string().optional(),
   languages: z.array(z.string()),
-  profilePictureUrl: z.string().optional(),
+  profilePictureUrl: z.string().optional()
 });
 
 export type EditSummaryFormValues = z.infer<typeof editSummaryFormSchema>;
@@ -23,7 +24,7 @@ export const positionSchema = z.object({
   duration: z.string().optional().nullable(),
   description: z.string().optional(),
   location: z.string().optional(),
-  workSetting: z.string().optional().nullable(),
+  workSetting: z.string().optional().nullable()
 });
 
 const editPositionSchema = z
@@ -38,11 +39,11 @@ const experienceSchema = z.object({
   company: z.string().min(1, "Enter a company name"),
   companyProfileUrl: z.string().optional(),
   companyLogoUrl: z.string().optional(),
-  positions: editPositionSchema,
+  positions: editPositionSchema
 });
 
 export const editExperiencesFormSchema = z.object({
-  experiences: z.array(experienceSchema),
+  experiences: z.array(experienceSchema)
 });
 
 export type EditExperiencesFormValues = z.infer<
@@ -65,11 +66,11 @@ const educationSchema = z.object({
   activities: z.string().optional(),
   grade: z.string().optional(),
   schoolPictureUrl: z.string().optional(),
-  schoolProfileUrl: z.string().optional(),
+  schoolProfileUrl: z.string().optional()
 });
 
 export const editEducationFormSchema = z.object({
-  education: z.array(educationSchema),
+  education: z.array(educationSchema)
 });
 
 export type EditEducationFormValues = z.infer<typeof editEducationFormSchema>;
@@ -83,7 +84,7 @@ export type AddNewEducationFormValues = z.infer<
 export const skillSchema = z.string().max(80, "Skill is too long");
 
 export const editSkillsFormSchema = z.object({
-  skills: z.array(skillSchema),
+  skills: z.array(skillSchema)
 });
 export type EditSkillsFormValues = z.infer<typeof editSkillsFormSchema>;
 
@@ -96,11 +97,11 @@ const volunteeringSchema = z.object({
   description: z.string().optional(),
   organizationProfileUrl: z.string().optional(),
   organizationLogoUrl: z.string().optional(),
-  cause: z.string().optional(),
+  cause: z.string().optional()
 });
 
 export const editVolunteeringFormSchema = z.object({
-  volunteering: z.array(volunteeringSchema),
+  volunteering: z.array(volunteeringSchema)
 });
 
 export type EditVolunteeringFormValues = z.infer<
@@ -120,11 +121,11 @@ const projectSchema = z.object({
   description: z.string().optional(),
   url: z.string().optional(),
   associatedWith: z.string().optional(),
-  thumbnail: z.string().optional(),
+  thumbnail: z.string().optional()
 });
 
 export const editProjectsFormSchema = z.object({
-  projects: z.array(projectSchema),
+  projects: z.array(projectSchema)
 });
 
 export type EditProjectsFormValues = z.infer<typeof editProjectsFormSchema>;

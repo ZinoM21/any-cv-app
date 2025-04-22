@@ -1,5 +1,10 @@
 import { cvTemplates } from "@/config/templates";
-import { CVTemplate, ProfileData, TemplateId } from "@/lib/types";
+import {
+  CVTemplate,
+  ProfileData,
+  TemplateId,
+  type ImageUrl
+} from "@/lib/types";
 import { DocumentProps } from "@react-pdf/renderer";
 import { ReactElement } from "react";
 import TheClassic from "./classic";
@@ -9,26 +14,28 @@ import { ResumeDocument } from "./resume-two";
 const templateComponentMap: {
   [P in TemplateId]: (props: {
     profileData: Partial<ProfileData>;
+    signedUrlsMap: Map<string, ImageUrl>;
   }) => ReactElement<DocumentProps>;
 } = {
   [TemplateId.Classic]: TheClassic,
   [TemplateId.Modern]: TheModern,
   [TemplateId.Creative]: ResumeDocument,
-  [TemplateId.Minimal]: ResumeDocument,
+  [TemplateId.Minimal]: ResumeDocument
 };
 
 /**
  * Returns the appropriate CV template PDF component based on templateId
  */
-export const getTemplatePDFById = async (
+export const getPDFTemplateById = async (
   templateId: TemplateId,
-  profileData: Partial<ProfileData>
+  profileData: Partial<ProfileData>,
+  signedUrlsMap: Map<string, ImageUrl>
 ) => {
-  const TemplatePDFComponent =
+  const PDFTemplate =
     templateComponentMap[templateId] ||
     templateComponentMap[TemplateId.Classic];
 
-  return TemplatePDFComponent({ profileData });
+  return PDFTemplate({ profileData, signedUrlsMap });
 };
 
 /**

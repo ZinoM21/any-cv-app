@@ -1,19 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ZoomIn as ZoomInIcon, ZoomOut as ZoomOutIcon } from "lucide-react";
 import { useProfileStore } from "@/hooks/use-profile";
+import { ZoomIn as ZoomInIcon, ZoomOut as ZoomOutIcon } from "lucide-react";
 
-import { PDF } from "./preview/pdf";
-import { PDFLoadingSkeleton } from "./preview/pdf-loading";
 import {
   RenderZoomInProps,
   RenderZoomOutProps,
-  RenderZoomProps,
+  RenderZoomProps
 } from "@react-pdf-viewer/zoom";
+import { PDF } from "./preview/pdf";
+import { PDFLoadingSkeleton } from "./preview/pdf-loading";
 
-import { CVTemplate } from "@/lib/types";
+import { useSignedUrlsMap } from "@/hooks/use-image-url";
 import { usePdfPlugins } from "@/hooks/use-pdf-plugins";
+import { CVTemplate } from "@/lib/types";
+import { useEffect } from "react";
 
 export function CVEditorPreview({ template }: { template: CVTemplate }) {
   const profileData = useProfileStore((state) => state.profile);
@@ -21,9 +23,19 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
   const { filePluginInstance, zoomPluginInstance, ZoomIn, ZoomOut, Zoom } =
     usePdfPlugins();
 
+  const {
+    isPending: isSignedUrlsLoading,
+    data: signedUrlsMap,
+    refetch
+  } = useSignedUrlsMap(profileData);
+
+  useEffect(() => {
+    refetch();
+  }, [profileData, refetch]);
+
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="z-10 flex items-center justify-between border-b border-l border-grid bg-background p-3 sm:p-4">
+      <div className="border-grid z-10 flex items-center justify-between border-b border-l bg-background p-3 sm:p-4">
         <h2 className="font-medium">
           Preview for{" "}
           {profileData?.firstName ? `${profileData.firstName}'s` : ""}{" "}
@@ -54,17 +66,18 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
           </ZoomOut>
         </div>
       </div>
-      <div className="flex overflow-y-auto flex-1 justify-center bg-muted">
-        {profileData ? (
+      <div className="flex flex-1 justify-center overflow-y-auto bg-muted">
+        {!profileData || isSignedUrlsLoading ? (
+          <div className="pt-5">
+            <PDFLoadingSkeleton />
+          </div>
+        ) : (
           <PDF
             data={profileData}
             plugins={[zoomPluginInstance, filePluginInstance]}
             template={template}
+            signedUrlsMap={signedUrlsMap!}
           />
-        ) : (
-          <div className="pt-5">
-            <PDFLoadingSkeleton />
-          </div>
         )}
       </div>
     </div>

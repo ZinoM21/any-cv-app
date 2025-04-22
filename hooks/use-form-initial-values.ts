@@ -25,6 +25,7 @@ export const useEditorFormInitialValues = () => {
     about: profileData?.about || "",
     email: profileData?.email || "",
     phone: profileData?.phone || "",
+    website: profileData?.website || "",
     location: profileData?.location || "",
     languages: profileData?.languages || [],
     profilePictureUrl: profileData?.profilePictureUrl || ""

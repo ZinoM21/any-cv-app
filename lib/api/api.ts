@@ -186,6 +186,15 @@ export const getSignedUrl = async (
   }
 };
 
+export const getSignedUrls = async (
+  api: ReturnType<typeof createApiClient>,
+  filePaths: string[]
+) => {
+  return await api.post<ImageUrl[]>(`/v1/files/signed-urls`, {
+    file_paths: filePaths
+  });
+};
+
 /**
  * Gets a public URL for a file associated with a published profile
  *

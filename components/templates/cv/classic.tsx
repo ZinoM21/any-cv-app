@@ -1,7 +1,6 @@
-import React from "react";
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import { ProfileData } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
+import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -9,60 +8,60 @@ const styles = StyleSheet.create({
     padding: 30,
     fontFamily: "Helvetica",
     fontSize: 10,
-    lineHeight: 1.5,
+    lineHeight: 1.5
   },
   header: {
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 10
   },
   name: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 8
   },
   aboutSection: {
     marginBottom: 10,
     borderTop: "2px solid #000",
-    paddingTop: 10,
+    paddingTop: 10
   },
   aboutTitle: {
     marginBottom: 6,
-    textAlign: "center",
+    textAlign: "center"
   },
   section: {
-    marginBottom: 6,
+    marginBottom: 6
   },
   sectionTitle: {
     marginTop: 10,
     marginBottom: 1,
     borderBottom: "2px solid #000",
-    paddingBottom: 5,
+    paddingBottom: 5
   },
   text: {
-    fontSize: 8,
+    fontSize: 8
   },
   description: {
     fontSize: 8,
-    marginBottom: 3,
+    marginBottom: 3
   },
   subSection: {
     paddingTop: 5,
     borderTop: "1px solid #000",
-    marginBottom: 2,
+    marginBottom: 2
   },
   subSectionHeader: {
     display: "flex",
     justifyContent: "space-between",
     flexDirection: "row",
     width: "100%",
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   skills: {
     display: "flex",
     justifyContent: "space-between",
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 5,
+    gap: 5
   },
   skill: {
     flex: 1,
@@ -70,10 +69,10 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     borderBottom: "1.5px solid #000",
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   skillItem: {
-    marginRight: 10,
+    marginRight: 10
   },
   contactInfo: {
     marginTop: 2,
@@ -83,8 +82,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     textAlign: "center",
-    gap: 10,
-  },
+    gap: 10
+  }
 });
 
 const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
@@ -101,7 +100,7 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
     skills,
     languages,
     volunteering,
-    projects,
+    projects
   } = profileData;
 
   return (
