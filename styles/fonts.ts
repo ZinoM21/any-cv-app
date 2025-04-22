@@ -1,5 +1,5 @@
 import {
-  Geist,
+  Geist
   // Geist_Mono,
   // Inter,
   // Manrope,
@@ -8,7 +8,7 @@ import {
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  subsets: ["latin"]
 });
 
 // const geistMono = Geist_Mono({
@@ -29,6 +29,6 @@ const geistSans = Geist({
 // const manrope = Manrope({ subsets: ["latin"], display: "swap" });
 
 export {
-  geistSans,
+  geistSans
   // geistMono, inter, roboto, manrope
 };

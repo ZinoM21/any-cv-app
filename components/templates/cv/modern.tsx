@@ -4,90 +4,98 @@ import {
   Position,
   ProfileData,
   Project,
-  VolunteeringExperience,
+  VolunteeringExperience
 } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import {
   Document,
+  Font,
   Image,
   Page,
   StyleSheet,
   Text,
-  View,
+  View
 } from "@react-pdf/renderer";
 import React from "react";
+
+Font.register({
+  family: "Satoshi",
+  src: "/fonts/satoshi/Satoshi-Variable.ttf",
+  fontStyle: "normal", // Optional: specify font style
+  fontWeight: "light" // Optional: specify font weight
+});
 
 // Create styles
 const styles = StyleSheet.create({
   page: {
     padding: 48,
-    fontFamily: "Helvetica",
+    fontFamily: "Satoshi",
     backgroundColor: "white",
     width: "100%",
-    height: "100%",
+    height: "100%"
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
     width: "100%",
-    marginBottom: 28,
+    marginBottom: 28
   },
   headerLeft: {
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "flex-start",
-    gap: 12,
+    gap: 12
   },
   profileImagePlaceholder: {
     width: 64,
     height: 64,
-    backgroundColor: "#D6CFC7", // stone-300
+    backgroundColor: "#D6CFC7" // stone-300
   },
   profileImage: {
     width: 64,
-    height: 64,
+    height: 64
   },
   nameContainer: {
     flexDirection: "column",
     justifyContent: "flex-start",
-    alignItems: "flex-start",
+    alignItems: "flex-start"
   },
   name: {
     textAlign: "center",
     color: "#262626", // neutral-800
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "Helvetica",
-    textTransform: "capitalize",
+    fontFamily: "Satoshi",
+    textTransform: "capitalize"
   },
   title: {
     textAlign: "center",
     color: "#0284C7", // sky-600
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "Helvetica",
-    textTransform: "capitalize",
+    fontFamily: "Satoshi",
+    textTransform: "capitalize"
   },
   contactInfo: {
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start",
-    gap: 2.5,
+    gap: 2.5
   },
   contactText: {
     textAlign: "center",
     color: "#262626", // neutral-800
     fontSize: 12,
     fontWeight: "medium",
-    fontFamily: "Helvetica",
+    fontFamily: "Satoshi"
   },
   contentContainer: {
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 24,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   sectionContainer: {
     width: "100%",
@@ -95,23 +103,23 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 12,
-    marginBottom: 12,
+    marginBottom: 12
   },
   sectionTitle: {
     color: "#262626", // neutral-800
     fontSize: 14,
-    fontFamily: "Helvetica",
-    textTransform: "capitalize",
+    fontFamily: "Satoshi",
+    textTransform: "capitalize"
   },
   summaryText: {
     color: "black",
     fontSize: 12,
-    fontFamily: "Helvetica",
+    fontFamily: "Satoshi",
     lineHeight: 1.5,
-    width: "100%",
+    width: "100%"
   },
   summaryTextUnderline: {
-    textDecoration: "underline",
+    textDecoration: "underline"
   },
   experienceItem: {
     width: "100%",
@@ -119,33 +127,33 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 3.5,
-    marginBottom: 10,
+    marginBottom: 10
   },
   experienceTitle: {
     color: "black",
     fontSize: 14,
     fontWeight: "bold",
-    fontFamily: "Helvetica",
-    textTransform: "capitalize",
+    fontFamily: "Satoshi",
+    textTransform: "capitalize"
   },
   experienceTitleUnderline: {
-    textDecoration: "underline",
+    textDecoration: "underline"
   },
   experienceDate: {
     color: "#737373", // neutral-500
     fontSize: 12,
     fontWeight: "medium",
-    fontFamily: "Helvetica",
+    fontFamily: "Satoshi"
   },
   experienceDescription: {
     color: "#262626", // neutral-800
     fontSize: 12,
-    fontFamily: "Helvetica",
+    fontFamily: "Satoshi",
     lineHeight: 1.5,
-    width: "100%",
+    width: "100%"
   },
   experienceDescriptionBold: {
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   volunteeringItem: {
     width: "100%",
@@ -153,7 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 3.5,
-    marginBottom: 10,
+    marginBottom: 10
   },
   educationItem: {
     width: "100%",
@@ -161,20 +169,20 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 3.5,
-    marginBottom: 10,
+    marginBottom: 10
   },
   educationTitle: {
     color: "black",
     fontSize: 14,
     fontWeight: "bold",
-    fontFamily: "Helvetica",
+    fontFamily: "Satoshi"
   },
   educationDate: {
     color: "#737373", // neutral-500
     fontSize: 12,
     fontWeight: "medium",
-    fontFamily: "Helvetica",
-  },
+    fontFamily: "Satoshi"
+  }
 });
 
 // Interface for RichText component props
@@ -236,7 +244,7 @@ const TheModern = ({ profileData }: TheModernProps) => {
     languages,
     volunteering,
     projects,
-    profilePictureUrl,
+    profilePictureUrl
   } = profileData;
 
   return (
@@ -290,7 +298,7 @@ const TheModern = ({ profileData }: TheModernProps) => {
                           key={posIndex}
                           style={{
                             marginBottom:
-                              posIndex < exp.positions.length - 1 ? 8 : 0,
+                              posIndex < exp.positions.length - 1 ? 8 : 0
                           }}
                         >
                           <Text>
@@ -300,7 +308,7 @@ const TheModern = ({ profileData }: TheModernProps) => {
                             <Text
                               style={[
                                 styles.experienceTitle,
-                                styles.experienceTitleUnderline,
+                                styles.experienceTitleUnderline
                               ]}
                             >
                               {" "}
@@ -369,7 +377,7 @@ const TheModern = ({ profileData }: TheModernProps) => {
                       <Text
                         style={[
                           styles.experienceTitle,
-                          styles.experienceTitleUnderline,
+                          styles.experienceTitleUnderline
                         ]}
                       >
                         {" "}
