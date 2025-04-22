@@ -25,6 +25,7 @@ import { buildQueryString } from "@/lib/utils";
 import { ChevronsUpDown } from "lucide-react";
 
 import { RouteMapping, routeMappings } from "@/config/breadcrumb-routes";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function BreadCrumb({
   className,
@@ -32,6 +33,7 @@ export default function BreadCrumb({
 }: React.ComponentProps<"nav">) {
   const pathname = usePathname();
   const { isSignedIn } = useSession();
+  const isMobile = useIsMobile();
   const { data: profiles, isLoading: isLoadingProfiles } = useUserProfiles();
   const searchParams = useSearchParams();
   const username = searchParams.get("username");
@@ -139,13 +141,16 @@ export default function BreadCrumb({
             <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger className="hidden items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent sm:flex">
-                  {formatConfig.label}
-                  <ChevronsUpDown className="size-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuTrigger className="sm:hidden">
-                  <BreadcrumbEllipsis />
-                </DropdownMenuTrigger>
+                {isMobile ? (
+                  <DropdownMenuTrigger>
+                    <BreadcrumbEllipsis />
+                  </DropdownMenuTrigger>
+                ) : (
+                  <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
+                    {formatConfig.label}
+                    <ChevronsUpDown className="size-4" />
+                  </DropdownMenuTrigger>
+                )}
                 <DropdownMenuContent align="start">
                   <DropdownMenuLabel>Format</DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -181,13 +186,16 @@ export default function BreadCrumb({
               <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
               <BreadcrumbItem>
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="hidden items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent sm:flex">
-                    {actionConfig.label}
-                    <ChevronsUpDown className="size-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuTrigger className="sm:hidden">
-                    <BreadcrumbEllipsis />
-                  </DropdownMenuTrigger>
+                  {isMobile ? (
+                    <DropdownMenuTrigger>
+                      <BreadcrumbEllipsis />
+                    </DropdownMenuTrigger>
+                  ) : (
+                    <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
+                      {actionConfig.label}
+                      <ChevronsUpDown className="size-4" />
+                    </DropdownMenuTrigger>
+                  )}
                   <DropdownMenuContent align="start">
                     <DropdownMenuLabel>Action</DropdownMenuLabel>
                     <DropdownMenuSeparator />
