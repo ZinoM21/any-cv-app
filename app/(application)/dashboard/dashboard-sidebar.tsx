@@ -10,7 +10,6 @@ import {
   SidebarProvider
 } from "@/components/ui/sidebar";
 import { sidebarNav } from "@/config/nav";
-import { HEADER_CHILDREN_CLASS } from "@/styles/shared";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -35,7 +34,7 @@ export default function DashboardSidebar({
     >
       <Sidebar
         widthMobile={MOBILE_SIDEBAR_WIDTH}
-        className={HEADER_CHILDREN_CLASS}
+        className="mt-14 h-[calc(100vh-56px)] min-h-0 sm:mt-16 sm:h-[calc(100vh-64px)]"
       >
         <SidebarContent>
           <SidebarGroup>
