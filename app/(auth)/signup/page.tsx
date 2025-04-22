@@ -1,5 +1,5 @@
 import { auth, signOut } from "@/auth";
-import BuiltAnyCVLogo from "@/components/logo";
+import BuildAnyCVLogo from "@/components/logo";
 import { redirect } from "next/navigation";
 import { SignUpForm } from "../../../components/auth/signup-form";
 
@@ -19,7 +19,7 @@ export default async function SignUpPage() {
       <div className="relative hidden h-full flex-col bg-muted p-10 text-foreground dark:border-r lg:flex">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex items-center text-lg font-medium">
-          <BuiltAnyCVLogo className="text-white" />
+          <BuildAnyCVLogo className="text-white" />
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2 text-white">
@@ -35,12 +35,12 @@ export default async function SignUpPage() {
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
-            <BuiltAnyCVLogo className="text-foreground lg:hidden" />
+            <BuildAnyCVLogo className="text-foreground lg:hidden" />
             <h1 className="text-2xl font-semibold tracking-tight">
               Create an account
             </h1>
             <p className="text-sm text-muted-foreground">
-              Enter your details below to create your account with BuiltAnyCV
+              Enter your details below to create your account with BuildAnyCV
             </p>
           </div>
           <SignUpForm />

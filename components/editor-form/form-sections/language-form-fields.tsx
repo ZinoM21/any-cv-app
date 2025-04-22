@@ -21,7 +21,7 @@ export default function LanguageFormFields() {
   const { control } = useFormContext<EditSummaryFormValues>();
   const { fields, append, remove } = useFieldArray({
     control,
-    // @ts-expect-error: useFieldArray is not built for string arrays and returns type never
+    // @ts-expect-error: useFieldArray is not build for string arrays and returns type never
     name: "languages",
   });
 

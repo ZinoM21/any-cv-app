@@ -11,7 +11,7 @@ export default function MadeWithBadge() {
         <div className="flex h-6 w-6 items-center justify-center mr-2 rounded-md bg-primary text-primary-foreground">
           <FileUser className="size-4" />
         </div>
-        Made with BuiltAnyCV
+        Made with BuildAnyCV
       </Badge>
     </div>
   );

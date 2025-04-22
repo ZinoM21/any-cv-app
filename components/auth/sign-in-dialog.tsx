@@ -15,7 +15,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useState } from "react";
-import BuiltAnyCVLogo from "../logo";
+import BuildAnyCVLogo from "../logo";
 import {
   Drawer,
   DrawerContent,
@@ -41,7 +41,7 @@ export default function SignInDialog({
   const [isOpen, setOpen] = useState(false);
   const [isOpenMobile, setOpenMobile] = useState(false);
 
-  const title = customTitle || "Log in to BuiltAnyCV";
+  const title = customTitle || "Log in to BuildAnyCV";
   const description =
     customDescription || "Generate beautiful resumes and websites in seconds.";
 
@@ -103,7 +103,7 @@ export default function SignInDialog({
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <FileUser className="size-4" />
             </div>
-            <BuiltAnyCVLogo className="text-foreground" />
+            <BuildAnyCVLogo className="text-foreground" />
           </div>
           <div className="absolute -bottom-12 text-balance text-center text-xs text-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
             By clicking continue, you agree to our{" "}

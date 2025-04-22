@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
 import Link from "next/link";
 
-export default function BuiltAnyCVLogo({
+export default function BuildAnyCVLogo({
   className,
   ...props
 }: React.ComponentProps<"a"> & {
@@ -17,7 +17,7 @@ export default function BuiltAnyCVLogo({
       )}
       {...props}
     >
-      built<span className="text-primary">any</span>cv
+      build<span className="text-primary">any</span>cv
     </Link>
   );
 }

@@ -262,7 +262,7 @@ export default function PublishForm({
               ) : (
                 <FormDescription>
                   <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
-                    https://built-any-cv.com/
+                    https://buildanycv.com/
                     {field.value.length > 0 ? field.value : "my-slug"}
                   </code>{" "}
                   will be your personal website link

@@ -7,7 +7,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "BuiltAnyCV",
+  title: "BuildAnyCV",
   description: "CV & Site in seconds"
 };
 

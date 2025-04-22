@@ -1,6 +1,6 @@
 import AuthOrDashboardButton from "@/components/auth/auth-dashboard-button";
 import { HeaderDropdownMenu } from "@/components/auth/profile-button";
-import BuiltAnyCVLogo from "@/components/logo";
+import BuildAnyCVLogo from "@/components/logo";
 import ThemeToggle from "@/components/theme-toggle";
 import { marketingNav } from "@/config/nav";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ export function Header({
           "mx-auto flex flex-1 items-center justify-between gap-4 px-3 sm:px-6 lg:px-8"
         )}
       >
-        <BuiltAnyCVLogo />
+        <BuildAnyCVLogo />
 
         {breadcrumb}
 

@@ -1,5 +1,5 @@
 import { auth, signOut } from "@/auth";
-import BuiltAnyCVLogo from "@/components/logo";
+import BuildAnyCVLogo from "@/components/logo";
 import { Card, CardContent } from "@/components/ui/card";
 import { FileUser } from "lucide-react";
 import Image from "next/image";
@@ -25,7 +25,7 @@ export default async function LoginPage() {
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <FileUser className="size-4" />
           </div>
-          <BuiltAnyCVLogo />
+          <BuildAnyCVLogo />
         </div>
         <div className="flex flex-col gap-6">
           <Card className="overflow-hidden">
@@ -34,7 +34,7 @@ export default async function LoginPage() {
                 <div className="flex flex-col items-center text-center">
                   <h1 className="text-2xl font-bold">Welcome back</h1>
                   <p className="text-balance text-muted-foreground">
-                    Login to your builtanycv account
+                    Login to your buildanycv account
                   </p>
                 </div>
 
