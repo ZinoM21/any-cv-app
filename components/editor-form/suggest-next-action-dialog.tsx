@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { buildQueryString } from "@/lib/utils";
 import {
@@ -14,7 +14,7 @@ import {
   Copy,
   ExternalLink,
   FileText,
-  Globe,
+  Globe
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -27,7 +27,7 @@ export default function SuggestNextActionDialog({
   nextAction,
   isOpen,
   setOpen,
-  websiteUrl,
+  websiteUrl
 }: {
   nextAction?: "cv" | "website";
   isOpen: boolean;
@@ -57,8 +57,8 @@ export default function SuggestNextActionDialog({
         <DialogHeader>
           <DialogTitle>
             {suggestCV
-              ? "Website published successfully!"
-              : "CV downloaded successfully!"}
+              ? "Website published successfully! 🎉"
+              : "CV downloaded successfully! 🎉"}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
             {suggestCV
@@ -110,7 +110,7 @@ export default function SuggestNextActionDialog({
         )}
         <Button
           variant="outline"
-          className="h-fit p-6 group flex flex-col items-center justify-center text-center shadow-sm hover:shadow transition-all"
+          className="group flex h-fit flex-col items-center justify-center p-6 text-center shadow-sm transition-all hover:shadow"
           asChild
         >
           <Link href={`/generate/${nextAction}/template?${searchParamsString}`}>
@@ -125,10 +125,10 @@ export default function SuggestNextActionDialog({
                 <Globe className="h-6 w-6 text-purple-600" />
               )}
             </div>
-            <h3 className="mb-1 font-medium  ">
+            <h3 className="mb-1 font-medium">
               Complete your professional presence
             </h3>
-            <p className="mb-3 text-sm text-muted-foreground text-balance">
+            <p className="mb-3 text-balance text-sm text-muted-foreground">
               {suggestCV
                 ? "Now that your website is live, why not create a professional CV to complement it? Our CV builder makes it easy to create a polished resume in seconds."
                 : "Now that you downloaded your CV, why not create a personal website to complement it? Our website builder makes it easy to create a polished website in seconds."}
