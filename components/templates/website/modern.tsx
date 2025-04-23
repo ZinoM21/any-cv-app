@@ -26,18 +26,18 @@ export default function TheModernWebsite({
   } = profileData;
 
   return (
-    <main className="mt-16 min-h-screen bg-white">
+    <main className="mt-16 min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="flex min-h-screen flex-col bg-white">
+      <section className="flex min-h-screen flex-col bg-background">
         <div className="container relative mx-auto flex flex-1 flex-col px-4 pb-16 pt-28 text-center">
           <div>
             <h3 className="mb-2 text-2xl font-bold text-violet-600">
               {`${firstName} ${lastName}`}
             </h3>
-            <h1 className="mb-4 text-5xl font-extrabold text-slate-800">
+            <h1 className="mb-4 text-5xl font-extrabold text-foreground">
               {headline || `${firstName} ${lastName}, Developer`}
             </h1>
-            <p className="mx-auto max-w-3xl text-base text-slate-500">
+            <p className="mx-auto max-w-3xl text-base text-muted-foreground">
               {location ||
                 "Mission-driven full stack developer with a passion for thoughtful UI design, collaboration, and teaching."}
             </p>
@@ -70,47 +70,47 @@ export default function TheModernWebsite({
             {/* Contact Info with Separator */}
             <div className="mt-12 flex items-center justify-center">
               <div className="text-center">
-                <h3 className="mb-1 text-xl text-slate-800">Phone</h3>
-                <p className="text-slate-500">{phone || "Not provided"}</p>
+                <h3 className="mb-1 text-xl text-foreground">Phone</h3>
+                <p className="text-muted-foreground">{phone || "Not provided"}</p>
               </div>
 
-              <div className="mx-8 h-7 w-px bg-zinc-300"></div>
+              <div className="mx-8 h-7 w-px bg-muted"></div>
 
               <div className="text-center">
-                <h3 className="mb-1 text-xl text-slate-800">Email</h3>
-                <p className="text-slate-500">{email || "Not provided"}</p>
+                <h3 className="mb-1 text-xl text-foreground">Email</h3>
+                <p className="text-muted-foreground">{email || "Not provided"}</p>
               </div>
             </div>
           </div>
 
           {/* "Scroll to see experience" text at bottom */}
-          <h2 className="absolute bottom-48 left-0 right-0 text-center text-2xl font-extrabold text-slate-800">
+          <h2 className="absolute bottom-48 left-0 right-0 text-center text-2xl font-extrabold text-foreground">
             &quot;SCROLL TO SEE EXPERIENCE&quot;
           </h2>
         </div>
       </section>
 
       {/* About Section */}
-      <section className="bg-white py-12">
+      <section className="bg-background py-12">
         <div className="container mx-auto px-4 text-center">
           <h2 className="mb-4 text-2xl font-extrabold">
-            <span className="text-slate-800">Hi, </span>
+            <span className="text-foreground">Hi, </span>
             <span className="text-violet-600">I&apos;m {firstName}</span>
-            <span className="text-slate-800">. Nice to meet you.</span>
+            <span className="text-foreground">. Nice to meet you.</span>
           </h2>
-          <p className="mx-auto max-w-xl text-base leading-loose text-slate-500">
+          <p className="mx-auto max-w-xl text-base leading-loose text-muted-foreground">
             {about || "No information provided."}
           </p>
         </div>
       </section>
 
       {/* Experience Section */}
-      <section className="bg-white py-16">
+      <section className="bg-background py-16">
         <div className="container mx-auto px-4">
-          <h2 className="mb-6 text-center text-2xl font-extrabold text-slate-800">
+          <h2 className="mb-6 text-center text-2xl font-extrabold text-foreground">
             EXPERIENCE
           </h2>
-          <div className="mb-16 h-px bg-slate-200"></div>
+          <div className="mb-16 h-px bg-muted"></div>
 
           {experiences && experiences.length > 0 ? (
             <div className="mx-auto max-w-5xl">
@@ -121,24 +121,24 @@ export default function TheModernWebsite({
                     className="relative mb-16 flex"
                   >
                     <div className="w-1/3 pr-8 text-right">
-                      <h3 className="text-xl leading-loose text-slate-800">
+                      <h3 className="text-xl leading-loose text-foreground">
                         {formatDateRange(position.startDate, position.endDate)}
                       </h3>
-                      <p className="text-base leading-loose text-slate-500">
+                      <p className="text-base leading-loose text-muted-foreground">
                         {position.title}
                       </p>
                     </div>
 
                     <div className="relative">
                       <div className="absolute -left-1 top-3 h-2 w-2 rounded-full bg-violet-600"></div>
-                      <div className="absolute left-0 top-5 h-32 w-px bg-zinc-300"></div>
+                      <div className="absolute left-0 top-5 h-32 w-px bg-muted"></div>
                     </div>
 
                     <div className="w-2/3 pl-8">
-                      <h3 className="text-xl leading-loose text-slate-800">
+                      <h3 className="text-xl leading-loose text-foreground">
                         {experience.company}
                       </h3>
-                      <p className="text-base leading-loose text-slate-500">
+                      <p className="text-base leading-loose text-muted-foreground">
                         {position.description || "No description provided."}
                       </p>
                     </div>
@@ -147,7 +147,7 @@ export default function TheModernWebsite({
               )}
             </div>
           ) : (
-            <p className="text-center text-slate-500">
+            <p className="text-center text-muted-foreground">
               No experience information provided.
             </p>
           )}
@@ -155,21 +155,21 @@ export default function TheModernWebsite({
       </section>
 
       {/* Skills Section */}
-      <section className="bg-white py-16">
+      <section className="bg-background py-16">
         <div className="container mx-auto px-4">
-          <h2 className="mb-6 text-center text-2xl font-extrabold text-slate-800">
+          <h2 className="mb-6 text-center text-2xl font-extrabold text-foreground">
             SKILLS
           </h2>
-          <div className="mb-16 h-px bg-slate-200"></div>
+          <div className="mb-16 h-px bg-muted"></div>
 
           {skills && skills.length > 0 ? (
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-2">
               {skills.map((skill, index) => (
                 <div key={index} className="h-16">
-                  <div className="text-base leading-loose text-slate-800">
+                  <div className="text-base leading-loose text-foreground">
                     {skill}
                   </div>
-                  <div className="relative mt-2 h-1.5 w-full rounded-full bg-gray-200">
+                  <div className="relative mt-2 h-1.5 w-full rounded-full bg-muted">
                     <div
                       className="absolute left-0 top-0 h-1.5 rounded-full bg-violet-600"
                       style={{
@@ -177,14 +177,14 @@ export default function TheModernWebsite({
                       }}
                     ></div>
                   </div>
-                  <div className="mt-1 text-right text-base text-slate-500">
+                  <div className="mt-1 text-right text-base text-muted-foreground">
                     {Math.floor(80 + Math.random() * 20)}%
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-center text-slate-500">
+            <p className="text-center text-muted-foreground">
               No skills information provided.
             </p>
           )}
@@ -192,21 +192,21 @@ export default function TheModernWebsite({
       </section>
 
       {/* Education Section */}
-      <section className="bg-slate-50 py-16">
+      <section className="bg-muted py-16">
         <div className="container mx-auto px-4">
-          <h2 className="mb-6 text-center text-2xl font-extrabold text-slate-800">
+          <h2 className="mb-6 text-center text-2xl font-extrabold text-foreground">
             EDUCATION
           </h2>
-          <div className="mb-16 h-px bg-slate-200"></div>
+          <div className="mb-16 h-px bg-muted"></div>
 
           {education && education.length > 0 ? (
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-3">
               {education.map((edu, index) => (
                 <div key={index} className="relative">
-                  <div className="text-xl leading-loose text-slate-800">
+                  <div className="text-xl leading-loose text-foreground">
                     {formatDateRange(edu.startDate, edu.endDate)}
                   </div>
-                  <div className="h-14 text-base leading-loose text-slate-500">
+                  <div className="h-14 text-base leading-loose text-muted-foreground">
                     {edu.degree}
                     {edu.fieldOfStudy ? ` in ${edu.fieldOfStudy}` : ""}
                   </div>
@@ -215,28 +215,28 @@ export default function TheModernWebsite({
                   <div className="h-2 w-full">
                     <div className="relative">
                       <div className="absolute left-0 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-violet-600"></div>
-                      <div className="absolute left-4 top-1/2 h-px w-full -translate-y-1/2 bg-zinc-300"></div>
+                      <div className="absolute left-4 top-1/2 h-px w-full -translate-y-1/2 bg-muted-foreground"></div>
                     </div>
                   </div>
 
-                  <div className="mt-4 text-xl leading-loose text-slate-800">
+                  <div className="mt-4 text-xl leading-loose text-foreground">
                     {edu.school}
                   </div>
 
                   {edu.description && (
-                    <p className="mt-4 text-base leading-loose text-slate-500">
+                    <p className="mt-4 text-base leading-loose text-muted-foreground">
                       {edu.description}
                     </p>
                   )}
 
                   {edu.activities && (
-                    <p className="mt-4 text-base leading-loose text-slate-500">
+                    <p className="mt-4 text-base leading-loose text-muted-foreground">
                       {edu.activities}
                     </p>
                   )}
 
                   {edu.grade && (
-                    <p className="mt-4 text-base leading-loose text-slate-500">
+                    <p className="mt-4 text-base leading-loose text-muted-foreground">
                       {edu.grade}
                     </p>
                   )}
@@ -244,7 +244,7 @@ export default function TheModernWebsite({
               ))}
             </div>
           ) : (
-            <p className="text-center text-slate-500">
+            <p className="text-center text-muted-foreground">
               No education information provided.
             </p>
           )}
@@ -252,25 +252,25 @@ export default function TheModernWebsite({
       </section>
 
       {/* Projects Section */}
-      <section className="bg-white py-16">
+      <section className="bg-background py-16">
         <div className="container mx-auto px-4">
-          <h2 className="mb-6 text-center text-2xl font-extrabold text-slate-800">
+          <h2 className="mb-6 text-center text-2xl font-extrabold text-foreground">
             PROJECTS
           </h2>
-          <div className="mb-16 h-px bg-slate-200"></div>
+          <div className="mb-16 h-px bg-muted"></div>
 
           {projects && projects.length > 0 ? (
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-3">
               {projects.map((project, index) => (
                 <div key={index} className="flex flex-col">
                   {/* Project Title */}
-                  <h3 className="mb-3 text-xl font-semibold text-slate-800">
+                  <h3 className="mb-3 text-xl font-semibold text-foreground">
                     {project.title}
                   </h3>
 
                   {/* Project Thumbnail */}
                   <div className="relative overflow-hidden rounded-xl">
-                    <div className="aspect-video bg-slate-200">
+                    <div className="aspect-video bg-muted">
                       {project.thumbnail &&
                         (publishingOptions?.slug ? (
                           <PublicImage
@@ -294,22 +294,22 @@ export default function TheModernWebsite({
                   </div>
 
                   {/* Project Details - Always Visible */}
-                  <div className="mt-4 rounded-xl bg-slate-50 p-6">
+                  <div className="mt-4 rounded-xl bg-muted p-6">
                     <div className="mb-3 flex items-center">
                       <Calendar className="mr-2 h-4 w-4 text-violet-600" />
-                      <span className="text-sm text-slate-500">
+                      <span className="text-sm text-muted-foreground">
                         {formatDateRange(project.startDate, project.endDate)}
                       </span>
                     </div>
 
                     {project.associatedWith && (
-                      <div className="mb-3 text-sm text-slate-700">
+                      <div className="mb-3 text-sm text-muted-foreground">
                         Associated with: {project.associatedWith}
                       </div>
                     )}
 
                     {project.description && (
-                      <p className="mb-4 text-base leading-relaxed text-slate-600">
+                      <p className="mb-4 text-base leading-relaxed text-muted-foreground">
                         {project.description}
                       </p>
                     )}
@@ -330,7 +330,7 @@ export default function TheModernWebsite({
               ))}
             </div>
           ) : (
-            <p className="text-center text-slate-500">
+            <p className="text-center text-muted-foreground">
               No projects information provided.
             </p>
           )}
