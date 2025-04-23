@@ -42,8 +42,8 @@ import { toast } from "sonner";
 const publishFormSchema = z.object({
   appearance: z.enum(["light", "dark"]),
   templateId: z.enum([
-    TemplateId.Minimal,
-    TemplateId.Creative,
+    // TemplateId.Minimal,
+    // TemplateId.Creative,
     TemplateId.Classic,
     TemplateId.Modern
   ]),

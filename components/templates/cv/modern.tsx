@@ -223,7 +223,7 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
                     textTransform: "capitalize"
                   }}
                 >
-                  {headline}
+                  {headline.split(' ').slice(0, 3).join(' ')}
                 </Text>
               )}
             </View>

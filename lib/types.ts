@@ -91,8 +91,8 @@ export type NavItem = {
 };
 
 export enum TemplateId {
-  Minimal = "minimal",
-  Creative = "creative",
+  // Minimal = "minimal",
+  // Creative = "creative",
   Classic = "classic",
   Modern = "modern"
 }

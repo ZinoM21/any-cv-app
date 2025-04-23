@@ -10,13 +10,14 @@ import {
 } from "./types";
 
 import classicCV from "@/public/cvs/images/classic.jpg";
-import creativeCV from "@/public/cvs/images/creative.jpg";
-import minimalCV from "@/public/cvs/images/minimal.jpg";
+// import creativeCV from "@/public/cvs/images/creative.jpg";
 import modernCV from "@/public/cvs/images/modern.jpg";
+// import minimalCV from "@/public/cvs/images/minimal.jpg";
 
 import classicWebsite from "@/public/websites/images/classic.jpg";
-import creativeWebsite from "@/public/websites/images/creative.jpg";
-import minimalWebsite from "@/public/websites/images/minimal.jpg";
+// import creativeWebsite from "@/public/websites/images/creative.jpg";
+import modernWebsite from "@/public/websites/images/modern.jpg";
+// import minimalWebsite from "@/public/websites/images/minimal.jpg";
 
 import { format } from "date-fns";
 import type { SearchParams } from "next/dist/server/request/search-params";
@@ -67,14 +68,14 @@ export const capitalize = (str: string): string => {
 
 export const getCVImage = (templateId: TemplateId): StaticImageData => {
   switch (templateId) {
-    case TemplateId.Creative:
-      return creativeCV;
+    // case TemplateId.Creative:
+    //   return creativeCV;
     case TemplateId.Classic:
       return classicCV;
-    case TemplateId.Minimal:
-      return minimalCV;
     case TemplateId.Modern:
       return modernCV;
+    // case TemplateId.Minimal:
+    //   return minimalCV;
     default:
       return classicCV;
   }
@@ -84,12 +85,14 @@ export const getWebsitePreviewImage = (
   templateId: TemplateId
 ): StaticImageData => {
   switch (templateId) {
-    case TemplateId.Creative:
-      return creativeWebsite;
+    // case TemplateId.Creative:
+    //   return creativeWebsite;
     case TemplateId.Classic:
       return classicWebsite;
-    case TemplateId.Minimal:
-      return minimalWebsite;
+    case TemplateId.Modern:
+      return modernWebsite;
+    // case TemplateId.Minimal:
+    //   return minimalWebsite;
     default:
       return classicWebsite;
   }

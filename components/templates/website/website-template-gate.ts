@@ -3,9 +3,8 @@ import { ReactElement } from "react";
 
 import { websiteTemplates } from "@/config/templates";
 import { DocumentProps } from "@react-pdf/renderer";
-import TheClassicWebsite from "./classic";
 import TheCreativeWebsite from "./creative";
-import TheMinimalWebsite from "./minimal";
+// import TheMinimalWebsite from "./minimal";
 import TheModernWebsite from "./modern";
 
 export const websiteTemplateComponentMap: {
@@ -13,10 +12,10 @@ export const websiteTemplateComponentMap: {
     profileData: Partial<ProfileData>;
   }) => ReactElement<DocumentProps>;
 } = {
-  [TemplateId.Classic]: TheClassicWebsite,
-  [TemplateId.Creative]: TheCreativeWebsite,
-  [TemplateId.Modern]: TheModernWebsite,
-  [TemplateId.Minimal]: TheMinimalWebsite
+  [TemplateId.Classic]: TheCreativeWebsite,
+  // [TemplateId.Creative]: TheCreativeWebsite,
+  [TemplateId.Modern]: TheModernWebsite // TODO: correct order
+  // [TemplateId.Minimal]: TheMinimalWebsite
 };
 
 /**
