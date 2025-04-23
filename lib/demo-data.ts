@@ -7,6 +7,10 @@ export const demoData: ProfileData = {
   lastName: "Doe",
   profilePictureUrl: "",
   headline: "Software Engineer",
+  email: "john.doe@example.com",
+  phone: "+1234567890",
+  website: "https://www.johndoe.com",
+  location: "San Francisco, CA",
   about:
     "Passionate software engineer with 5+ years of experience building web and mobile applications. Currently focusing on AI-driven solutions.",
   experiences: [

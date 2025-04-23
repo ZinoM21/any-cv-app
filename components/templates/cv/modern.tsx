@@ -1,7 +1,5 @@
 import {
   Education,
-  Experience,
-  Position,
   ProfileData,
   Project,
   VolunteeringExperience,
@@ -12,10 +10,12 @@ import {
   Document,
   Font,
   Image,
+  Link,
   Page,
   StyleSheet,
   Text,
-  View
+  View,
+  type TextProps
 } from "@react-pdf/renderer";
 import React from "react";
 
@@ -23,190 +23,84 @@ Font.register({
   family: "Satoshi",
   fonts: [
     {
-      fontWeight: 300,
-      src: "/fonts/satoshi/Satoshi-Light.ttf"
+      src: "/fonts/satoshi/Satoshi-Light.ttf",
+      fontWeight: "light"
     },
     {
-      fontWeight: 400,
-      src: "/fonts/satoshi/Satoshi-Regular.ttf"
+      src: "/fonts/satoshi/Satoshi-Regular.ttf",
+      fontWeight: "normal"
     },
     {
-      fontWeight: 500,
-      src: "/fonts/satoshi/Satoshi-Medium.ttf"
+      src: "/fonts/satoshi/Satoshi-Medium.ttf",
+      fontWeight: "medium"
     },
     {
-      fontWeight: 600,
-      src: "/fonts/satoshi/Satoshi-Bold.ttf"
+      src: "/fonts/satoshi/Satoshi-Bold.ttf",
+      fontWeight: "bold"
     }
   ]
 });
 
-// Create styles
-const styles = StyleSheet.create({
-  page: {
-    padding: 48,
-    fontFamily: "Satoshi",
-    fontWeight: "normal",
-    backgroundColor: "white",
-    width: "100%",
-    height: "100%"
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    width: "100%",
-    marginBottom: 28
-  },
-  headerLeft: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    gap: 12
-  },
-  profileImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 9999
-  },
-  nameContainer: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start"
-  },
-  name: {
-    textAlign: "center",
-    color: "#262626", // neutral-800
-    fontSize: 24,
-    fontWeight: "bold",
-    textTransform: "capitalize"
-  },
-  title: {
-    textAlign: "center",
-    color: "#0284C7", // sky-600
-    fontSize: 24,
-    fontWeight: "bold",
-    textTransform: "capitalize"
-  },
-  contactInfo: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    gap: 2.5
-  },
+const sharedStyles = StyleSheet.create({
   contactText: {
     textAlign: "center",
     color: "#262626", // neutral-800
-    fontSize: 12,
-    fontWeight: "medium"
-  },
-  contentContainer: {
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    gap: 24,
-    backgroundColor: "white"
+    fontSize: 10,
+    textDecoration: "none"
   },
   sectionContainer: {
     width: "100%",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start",
-    gap: 12,
+    gap: 10,
     marginBottom: 12
   },
   sectionTitle: {
     color: "#262626", // neutral-800
-    fontSize: 14,
     fontWeight: "light",
+    fontSize: 12,
     textTransform: "capitalize"
   },
-  summaryText: {
-    color: "black",
-    fontSize: 12,
-    lineHeight: 1.5,
-    width: "100%"
-  },
-  summaryTextUnderline: {
-    textDecoration: "underline"
-  },
-  experienceItem: {
+  sectionItem: {
     width: "100%",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: 3.5,
-    marginBottom: 10
+    marginBottom: 8
   },
-  experienceTitle: {
-    color: "black",
-    fontSize: 14,
+  sectionItemTitle: {
+    fontSize: 11,
     fontWeight: "bold",
     textTransform: "capitalize"
   },
-  experienceTitleUnderline: {
+  link: {
+    color: "black",
     textDecoration: "underline"
   },
-  experienceDate: {
+  sectionItemDate: {
     color: "#737373", // neutral-500
-    fontSize: 12,
-    fontWeight: "medium"
+    marginTop: 4,
+    fontSize: 10
   },
-  experienceDescription: {
+  sectionItemDescription: {
     color: "#262626", // neutral-800
-    fontSize: 12,
-    fontWeight: "400",
+    fontSize: 10,
+    marginTop: 4,
     lineHeight: 1.5,
     width: "100%"
-  },
-  experienceDescriptionBold: {
-    fontWeight: "bold"
-  },
-  volunteeringItem: {
-    width: "100%",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    gap: 3.5,
-    marginBottom: 10
-  },
-  educationItem: {
-    width: "100%",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    gap: 3.5,
-    marginBottom: 10
-  },
-  educationTitle: {
-    color: "black",
-    fontSize: 14,
-    fontWeight: "bold"
-  },
-  educationDate: {
-    color: "#737373", // neutral-500
-    fontSize: 12,
-    fontWeight: "medium"
   }
 });
 
-// Interface for RichText component props
-interface RichTextProps {
-  text: string;
-  style: {
-    color: string;
-    fontSize: number;
-    lineHeight: number;
-    width: string;
-  };
+interface RichTextProps extends TextProps {
+  children: string;
 }
 
-// Helper function to render rich text with bold parts
-const RichText: React.FC<RichTextProps> = ({ text, style }) => {
-  // Split text by bold markers (assuming bold text is wrapped in ** or similar)
-  if (!text) return null;
+const RichText: React.FC<RichTextProps> = ({ children, style }) => {
+  if (!children) return null;
 
-  const parts: string[] = text.split(/(\*\*.*?\*\*)/g);
+  const parts: string[] = children.split(/(\*\*.*?\*\*)/g);
 
   return (
     <Text style={style}>
@@ -214,7 +108,7 @@ const RichText: React.FC<RichTextProps> = ({ text, style }) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           // Bold text
           return (
-            <Text key={index} style={styles.experienceDescriptionBold}>
+            <Text key={index} style={{ fontWeight: "bold" }}>
               {part.slice(2, -2)}
             </Text>
           );
@@ -255,92 +149,182 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
 
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page
+        size="A4"
+        style={{
+          padding: 48,
+          backgroundColor: "white",
+          width: "100%",
+          height: "100%"
+        }}
+      >
         {/* Header Section */}
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            {/* Profile image or placeholder */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            width: "100%",
+            marginBottom: 28
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              gap: 12
+            }}
+          >
             {profilePictureUrl && (
-              <Image
-                src={getUrlFromMap(signedUrlsMap, profilePictureUrl)}
-                style={styles.profileImage}
-              />
+              <View
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: 9999,
+                  overflow: "hidden"
+                }}
+              >
+                {/* eslint-disable-next-line */}
+                <Image
+                  src={getUrlFromMap(signedUrlsMap, profilePictureUrl)}
+                  cache={false}
+                />
+              </View>
             )}
 
-            <View style={styles.nameContainer}>
-              <Text style={styles.name}>
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "flex-start"
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "#262626", // neutral-800
+                  fontSize: 24,
+                  fontWeight: "bold",
+                  marginTop: 4,
+                  textTransform: "capitalize"
+                }}
+              >
                 {firstName} {lastName}
               </Text>
-              {headline && <Text style={styles.title}>{headline}</Text>}
+              {headline && (
+                <Text
+                  style={{
+                    textAlign: "center",
+                    color: "#0284C7", // sky-600
+                    fontSize: 24,
+                    fontWeight: "bold",
+                    marginTop: 6,
+                    textTransform: "capitalize"
+                  }}
+                >
+                  {headline}
+                </Text>
+              )}
             </View>
           </View>
 
-          <View style={styles.contactInfo}>
-            {phone && <Text style={styles.contactText}>{phone}</Text>}
-            {email && <Text style={styles.contactText}>{email}</Text>}
-            {website && <Text style={styles.contactText}>{website}</Text>}
-            {location && <Text style={styles.contactText}>{location}</Text>}
+          <View
+            style={{
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              gap: 5
+            }}
+          >
+            {phone && (
+              <Link href={`tel:${phone}`} style={sharedStyles.contactText}>
+                {phone}
+              </Link>
+            )}
+            {email && (
+              <Link href={`mailto:${email}`} style={sharedStyles.contactText}>
+                {email}
+              </Link>
+            )}
+            {website && (
+              <Link href={website} style={sharedStyles.contactText}>
+                {website}
+              </Link>
+            )}
+            {location && (
+              <Text style={sharedStyles.contactText}>{location}</Text>
+            )}
           </View>
         </View>
 
         {/* Content Container */}
-        <View style={styles.contentContainer}>
+        <View
+          style={{
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            gap: 10,
+            backgroundColor: "white"
+          }}
+        >
           {/* Summary Section */}
           {about && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Summary</Text>
-              <Text style={styles.summaryText}>{about}</Text>
+            <View style={sharedStyles.sectionContainer} wrap={false}>
+              <Text style={sharedStyles.sectionTitle}>Summary</Text>
+              <RichText
+                style={{
+                  color: "black",
+                  fontSize: 10,
+                  lineHeight: 1.5,
+                  width: "100%"
+                }}
+              >
+                {about}
+              </RichText>
             </View>
           )}
 
           {/* Work Experience Section */}
           {experiences && experiences.length > 0 && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Work Experience</Text>
-              {experiences.map((exp: Experience, index: number) => (
-                <View key={index} style={styles.experienceItem}>
+            <View style={sharedStyles.sectionContainer}>
+              <Text style={sharedStyles.sectionTitle}>Work Experience</Text>
+              {experiences.map((exp, index) => (
+                <View key={index} style={sharedStyles.sectionItem} wrap={false}>
                   {exp.positions &&
-                    exp.positions.map(
-                      (position: Position, posIndex: number) => (
-                        <View
-                          key={posIndex}
-                          style={{
-                            marginBottom:
-                              posIndex < exp.positions.length - 1 ? 8 : 0
-                          }}
-                        >
-                          <Text>
-                            <Text style={styles.experienceTitle}>
-                              {position.title} -
-                            </Text>
-                            <Text
-                              style={[
-                                styles.experienceTitle,
-                                styles.experienceTitleUnderline
-                              ]}
-                            >
-                              {" "}
-                              {exp.company}
-                            </Text>
-                          </Text>
+                    exp.positions.map((position, posIndex) => (
+                      <View
+                        key={posIndex}
+                        style={{
+                          marginBottom:
+                            posIndex < exp.positions.length - 1 ? 8 : 0
+                        }}
+                      >
+                        <Text style={sharedStyles.sectionItemTitle}>
+                          <Text>{`${position.title} - `}</Text>
+                          <Link
+                            src={exp.companyProfileUrl}
+                            style={sharedStyles.link}
+                          >
+                            {exp.company}
+                          </Link>
+                        </Text>
 
-                          <Text style={styles.experienceDate}>
-                            {formatDate(position.startDate)} -{" "}
-                            {position.endDate
-                              ? formatDate(position.endDate)
-                              : "Present"}
-                            {position.location ? ` | ${position.location}` : ""}
-                          </Text>
+                        <Text style={sharedStyles.sectionItemDate}>
+                          {formatDate(position.startDate)} -{" "}
+                          {position.endDate
+                            ? formatDate(position.endDate)
+                            : "Present"}
+                          {position.location ? ` | ${position.location}` : ""}
+                        </Text>
 
-                          {position.description && (
-                            <RichText
-                              text={position.description}
-                              style={styles.experienceDescription}
-                            />
-                          )}
-                        </View>
-                      )
-                    )}
+                        {position.description && (
+                          <RichText style={sharedStyles.sectionItemDescription}>
+                            {position.description}
+                          </RichText>
+                        )}
+                      </View>
+                    ))}
                 </View>
               ))}
             </View>
@@ -348,25 +332,24 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
 
           {/* Projects Section */}
           {projects && projects.length > 0 && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Projects</Text>
+            <View style={sharedStyles.sectionContainer}>
+              <Text style={sharedStyles.sectionTitle}>Projects</Text>
               {projects.map((project: Project, index: number) => (
-                <View key={index} style={styles.experienceItem}>
-                  <Text style={styles.experienceTitle}>
+                <View key={index} style={sharedStyles.sectionItem} wrap={false}>
+                  <Text style={sharedStyles.sectionItemTitle}>
                     {project.title}
                     {project.associatedWith && ` - ${project.associatedWith}`}
                   </Text>
 
-                  <Text style={styles.experienceDate}>
+                  <Text style={sharedStyles.sectionItemDate}>
                     {formatDate(project.startDate)} -{" "}
                     {project.endDate ? formatDate(project.endDate) : "Present"}
                   </Text>
 
                   {project.description && (
-                    <RichText
-                      text={project.description}
-                      style={styles.experienceDescription}
-                    />
+                    <RichText style={sharedStyles.sectionItemDescription}>
+                      {project.description}
+                    </RichText>
                   )}
                 </View>
               ))}
@@ -375,17 +358,23 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
 
           {/* Volunteering Section */}
           {volunteering && volunteering.length > 0 && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Volunteering</Text>
+            <View style={sharedStyles.sectionContainer}>
+              <Text style={sharedStyles.sectionTitle}>Volunteering</Text>
               {volunteering.map(
                 (vol: VolunteeringExperience, index: number) => (
-                  <View key={index} style={styles.volunteeringItem}>
+                  <View
+                    key={index}
+                    style={sharedStyles.sectionItem}
+                    wrap={false}
+                  >
                     <Text>
-                      <Text style={styles.experienceTitle}>{vol.role} -</Text>
+                      <Text style={sharedStyles.sectionItemTitle}>
+                        {vol.role} -
+                      </Text>
                       <Text
                         style={[
-                          styles.experienceTitle,
-                          styles.experienceTitleUnderline
+                          sharedStyles.sectionItemTitle,
+                          sharedStyles.link
                         ]}
                       >
                         {" "}
@@ -393,16 +382,15 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
                       </Text>
                     </Text>
 
-                    <Text style={styles.experienceDate}>
+                    <Text style={sharedStyles.sectionItemDate}>
                       {formatDate(vol.startDate)} -{" "}
                       {vol.endDate ? formatDate(vol.endDate) : "Present"}
                     </Text>
 
                     {vol.description && (
-                      <RichText
-                        text={vol.description}
-                        style={styles.experienceDescription}
-                      />
+                      <RichText style={sharedStyles.sectionItemDescription}>
+                        {vol.description}
+                      </RichText>
                     )}
                   </View>
                 )
@@ -412,17 +400,17 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
 
           {/* Education Section */}
           {education && education.length > 0 && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Education</Text>
+            <View style={sharedStyles.sectionContainer}>
+              <Text style={sharedStyles.sectionTitle}>Education</Text>
               {education.map((edu: Education, index: number) => (
-                <View key={index} style={styles.educationItem}>
-                  <Text style={styles.educationTitle}>
+                <View key={index} style={sharedStyles.sectionItem} wrap={false}>
+                  <Text style={sharedStyles.sectionItemTitle}>
                     {edu.degree}{" "}
                     {edu.fieldOfStudy ? `- ${edu.fieldOfStudy}` : ""}
                     {edu.grade ? ` - ${edu.grade}` : ""}
                   </Text>
 
-                  <Text style={styles.educationDate}>
+                  <Text style={sharedStyles.sectionItemDate}>
                     {formatDate(edu.startDate)} -{" "}
                     {edu.endDate ? formatDate(edu.endDate) : "present"}
                     {edu.school ? ` | ${edu.school}` : ""}
@@ -435,9 +423,9 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
 
           {/* Skills Section */}
           {skills && skills.length > 0 && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Skills</Text>
-              <Text style={styles.experienceDescription}>
+            <View style={sharedStyles.sectionContainer}>
+              <Text style={sharedStyles.sectionTitle}>Skills</Text>
+              <Text style={sharedStyles.sectionItemDescription}>
                 {skills.join(", ")}
               </Text>
             </View>
@@ -445,9 +433,9 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
 
           {/* Languages Section */}
           {languages && languages.length > 0 && (
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Languages</Text>
-              <Text style={styles.experienceDescription}>
+            <View style={sharedStyles.sectionContainer}>
+              <Text style={sharedStyles.sectionTitle}>Languages</Text>
+              <Text style={sharedStyles.sectionItemDescription}>
                 {languages.join(", ")}
               </Text>
             </View>
