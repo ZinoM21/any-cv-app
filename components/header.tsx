@@ -2,7 +2,7 @@ import AuthOrDashboardButton from "@/components/auth/auth-dashboard-button";
 import { HeaderDropdownMenu } from "@/components/auth/profile-button";
 import BuildAnyCVLogo from "@/components/logo";
 import ThemeToggle from "@/components/theme-toggle";
-import { marketingNav } from "@/config/nav";
+// import { marketingNav } from "@/config/nav";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -28,11 +28,11 @@ export function Header({
         <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:gap-x-8">
           {isMarketing ? (
             <>
-              {marketingNav.map((item) => (
+              {/* {marketingNav.map((item) => (
                 <Link key={item.name} href={item.href}>
                   {item.name}
                 </Link>
-              ))}
+              ))} */}
             </>
           ) : (
             <Link href="https://builtanycv.userjot.com/">Feedback</Link>
@@ -41,7 +41,7 @@ export function Header({
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-4 lg:flex-initial">
-          <HeaderDropdownMenu />
+          <HeaderDropdownMenu isMarketing={isMarketing} />
           <ThemeToggle />
         </div>
       </div>

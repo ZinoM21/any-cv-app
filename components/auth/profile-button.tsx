@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { dashboardNav, marketingNav } from "@/config/nav";
+import { dashboardNav } from "@/config/nav";
 import { useAuth } from "@/hooks/use-auth";
 import useSession from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
@@ -83,7 +83,7 @@ export function HeaderDropdownMenu({
         {/* MARKETING (templates, pricing, guides, ...) */}
         {isMarketing && (
           <>
-            <DropdownMenuGroup className="block lg:hidden">
+            {/* <DropdownMenuGroup className="block lg:hidden">
               {marketingNav.map((item) => (
                 <DropdownMenuItem key={item.name} asChild>
                   <Link
@@ -95,7 +95,7 @@ export function HeaderDropdownMenu({
                 </DropdownMenuItem>
               ))}
             </DropdownMenuGroup>
-            <DropdownMenuSeparator className="block lg:hidden" />
+            <DropdownMenuSeparator className="block lg:hidden" /> */}
           </>
         )}
 
