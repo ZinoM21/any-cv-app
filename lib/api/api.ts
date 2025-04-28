@@ -174,16 +174,9 @@ export const getSignedUrl = async (
   api: ReturnType<typeof createApiClient>,
   filePath: string
 ) => {
-  try {
-    const res = await api.post<ImageUrl>(`/v1/files/signed-url`, {
-      file_path: filePath
-    });
-
-    return res;
-  } catch (error) {
-    console.error("Failed to get signed url for file: ", filePath, error);
-    throw error;
-  }
+  return await api.post<ImageUrl>(`/v1/files/signed-url`, {
+    file_path: filePath
+  });
 };
 
 export const getSignedUrls = async (

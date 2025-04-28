@@ -1,5 +1,5 @@
 import { auth, signOut } from "@/auth";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { Image } from "@/components/editor-form/form-sections/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,9 +55,9 @@ export default async function DashboardPage() {
         {profiles.map((profile) => (
           <Card key={profile._id} className="h-full">
             <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-              <SignedImage
+              <Image
                 className="rounded-full"
-                path={profile.profilePictureUrl}
+                src={profile.profilePictureUrl}
                 alt={`Profile picture of ${profile.firstName} ${profile.lastName}`}
                 fallback={getInitials(profile.firstName, profile.lastName)}
               />

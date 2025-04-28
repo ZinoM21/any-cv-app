@@ -19,6 +19,7 @@ export const useSigninCredentialsMutation = () => {
   );
 
   const { mutateAsync: mutateProfileTransfer } = useProfileTransfer();
+
   const transferProfileIfPresent = async () => {
     // If a guest profile username was provided, call the transfer endpoint & update state
     if (profileData?.username) {
@@ -29,6 +30,7 @@ export const useSigninCredentialsMutation = () => {
       });
     }
   };
+
   return useMutation({
     mutationFn: async ({
       credentials

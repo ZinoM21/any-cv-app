@@ -24,14 +24,15 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
     usePdfPlugins();
 
   const {
-    isPending: isSignedUrlsLoading,
-    data: signedUrlsMap,
-    refetch
+    isLoading: isLoadingImages,
+    data: imageUrls,
+    refetch: refetchImages
   } = useSignedUrlsMap(profileData);
 
   useEffect(() => {
-    refetch();
-  }, [profileData, refetch]);
+    // Explicitly refetch here to update the PDF when the profile state changes
+    refetchImages?.();
+  }, [profileData, refetchImages]);
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -67,7 +68,7 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
         </div>
       </div>
       <div className="flex flex-1 justify-center overflow-y-auto bg-muted">
-        {!profileData || isSignedUrlsLoading ? (
+        {!profileData || isLoadingImages ? (
           <div className="pt-5">
             <PDFLoadingSkeleton />
           </div>
@@ -76,7 +77,7 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
             data={profileData}
             plugins={[zoomPluginInstance, filePluginInstance]}
             template={template}
-            signedUrlsMap={signedUrlsMap!}
+            imageUrls={imageUrls}
           />
         )}
       </div>

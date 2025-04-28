@@ -6,24 +6,24 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
+  AccordionTrigger
 } from "@/components/ui/accordion";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 
 import { FormField } from "@/components/ui/form";
 
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { Image } from "@/components/editor-form/form-sections/image";
 import { EditorTabName } from "@/config/editor-tab-names";
 import { useEditorFormInitialValues } from "@/hooks/use-form-initial-values";
 import {
   editExperiencesFormSchema,
-  EditExperiencesFormValues,
+  EditExperiencesFormValues
 } from "@/lib/schemas/editor-forms-schemas";
 import AddNewPopover from "../add-new-popover";
 import { EditorForm } from "../editor-form";
@@ -51,11 +51,11 @@ const ExperiencesFieldArray = () => {
 
   const { fields, remove, prepend } = useFieldArray({
     control,
-    name: "experiences",
+    name: "experiences"
   });
 
   return (
-    <div className="flex flex-col gap-6 mb-60">
+    <div className="mb-60 flex flex-col gap-6">
       {fields.length > 0 && (
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-muted-foreground">
@@ -71,20 +71,18 @@ const ExperiencesFieldArray = () => {
               >
                 <Card
                   key={experienceField.id}
-                  className="mx-0.5 shadow-sm rounded-lg"
+                  className="mx-0.5 rounded-lg shadow-sm"
                 >
                   <CardHeader className="p-0">
-                    <AccordionTrigger className="p-4 min-w-0 rounded-lg hover:no-underline hover:bg-accent data-[state=open]:hover:bg-background">
-                      <div className="flex flex-1 items-start justify-between min-w-0">
-                        <div className="flex items-center gap-3 min-w-0">
+                    <AccordionTrigger className="min-w-0 rounded-lg p-4 hover:bg-accent hover:no-underline data-[state=open]:hover:bg-background">
+                      <div className="flex min-w-0 flex-1 items-start justify-between">
+                        <div className="flex min-w-0 items-center gap-3">
                           <FormField
                             name={`experiences.${expIndex}.companyLogoUrl`}
                             render={({ field }) => (
-                              <SignedImage
-                                path={field?.value}
+                              <Image
+                                src={field?.value}
                                 alt={experienceField?.company}
-                                width={80}
-                                height={80}
                                 className="size-10 min-w-10"
                               />
                             )}

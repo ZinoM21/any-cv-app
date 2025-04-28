@@ -20,40 +20,29 @@ export const PDF = ({
   data,
   template,
   plugins,
-  signedUrlsMap
+  imageUrls
 }: {
   data: Partial<ProfileData>;
   template: CVTemplate;
   plugins?: Plugin[];
-  signedUrlsMap: Map<string, ImageUrl>;
+  imageUrls?: Map<string, ImageUrl>;
 }) => {
   const [url, setUrl] = useState<string>();
 
+  const generateUrl = async (
+    data: Partial<ProfileData>,
+    templateId: TemplateId,
+    imageUrls?: Map<string, ImageUrl>
+  ) => {
+    const PDFComponent = await getPDFTemplateById(templateId, data, imageUrls);
+    const PDFBlob = await pdf(PDFComponent).toBlob();
+    const pdfUrl = URL.createObjectURL(PDFBlob);
+    setUrl(pdfUrl);
+  };
+
   useEffect(() => {
-    const getBlob = async (
-      data: Partial<ProfileData>,
-      templateId: TemplateId
-    ) => {
-      const DocComponent = await getPDFTemplateById(
-        templateId,
-        data,
-        signedUrlsMap
-      );
-      const blob = await pdf(DocComponent).toBlob();
-      return blob;
-    };
-
-    const generateUrl = async (
-      data: Partial<ProfileData>,
-      templateId: TemplateId
-    ) => {
-      const blob = await getBlob(data, templateId);
-      const url = URL.createObjectURL(blob);
-      setUrl(url);
-    };
-
-    generateUrl(data, template.id);
-  }, [data, template.id, signedUrlsMap]);
+    generateUrl(data, template.id, imageUrls);
+  }, [data, template.id, imageUrls]);
 
   if (!url || url === "") {
     return (

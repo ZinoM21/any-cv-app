@@ -12,8 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFormContext } from "react-hook-form";
 
+import { Image } from "@/components/editor-form/form-sections/image";
 import { ImageInput } from "@/components/editor-form/form-sections/image-input";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { Separator } from "@/components/ui/separator";
 import LanguageFormFields from "./language-form-fields";
 
@@ -106,8 +106,8 @@ export const SummaryFormFields = () => {
             <FormLabel>Profile Picture</FormLabel>
             <FormControl>
               <div className="flex items-center gap-4">
-                <SignedImage
-                  path={field?.value}
+                <Image
+                  src={field?.value}
                   alt={fullName}
                   width={100}
                   height={100}

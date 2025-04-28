@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getSnakeCaseFileName } from "@/lib/utils";
 import { ImageInput } from "./image-input";
-import { SignedImage } from "./signed-image";
+import { Image } from "./image";
 
 export default function ProjectFormFields({
   fieldNamePrefix
@@ -143,11 +143,9 @@ export default function ProjectFormFields({
             <FormLabel>Thumbnail (Optional)</FormLabel>
             <FormControl>
               <div className="flex items-center gap-4">
-                <SignedImage
-                  path={field?.value}
+                <Image
+                  src={field?.value}
                   alt={thumbnail}
-                  width={80}
-                  height={80}
                   fallback="Thumbnail"
                   className="aspect-video size-fit w-1/2"
                 />

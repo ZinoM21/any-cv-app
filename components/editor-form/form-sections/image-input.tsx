@@ -42,7 +42,7 @@ export function ImageInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutateAsync: upload, isPending } = useSignedUploadUrl();
-  const { refetch } = useSignedUrl(field.value);
+  const { refetch: refetchSignedImage } = useSignedUrl(field.value);
 
   const selectFile = async () => {
     fileInputRef.current?.click();
@@ -77,10 +77,7 @@ export function ImageInput({
             fileInputRef.current.value = "";
           }
 
-          if (field.value) {
-            // only refetch if the file path is not empty, otherwise will be 
-            await refetch();
-          }
+          await refetchSignedImage?.();
         },
         onError: (error) => {
           if (error.message.includes("MB")) {

@@ -1,5 +1,4 @@
-import { PublicImage } from "@/components/editor-form/form-sections/public-image";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { Image } from "@/components/editor-form/form-sections/image";
 import { ProfileData } from "@/lib/types";
 import { formatDateRange } from "@/lib/utils";
 import { Calendar, ExternalLink } from "lucide-react";
@@ -45,25 +44,14 @@ export default function TheModernWebsite({
             {/* Profile Image */}
             <div className="mb-8 mt-10 md:mt-16">
               <div className="mx-auto h-48 w-48 overflow-hidden rounded-full bg-violet-600 md:h-60 md:w-60">
-                {profilePictureUrl &&
-                  (publishingOptions?.slug ? (
-                    <PublicImage
-                      slug={publishingOptions.slug}
-                      path={profilePictureUrl}
-                      alt={`${firstName} ${lastName}`}
-                      width={240}
-                      height={240}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <SignedImage
-                      path={profilePictureUrl}
-                      alt={`${firstName} ${lastName}`}
-                      width={240}
-                      height={240}
-                      className="h-full w-full object-cover"
-                    />
-                  ))}
+                {profilePictureUrl && (
+                  <Image
+                    slug={publishingOptions?.slug}
+                    src={profilePictureUrl}
+                    alt={`${firstName} ${lastName}`}
+                    className="h-full w-full object-cover"
+                  />
+                )}
               </div>
             </div>
 
@@ -282,25 +270,16 @@ export default function TheModernWebsite({
                   {/* Project Thumbnail */}
                   <div className="relative overflow-hidden rounded-xl">
                     <div className="aspect-video bg-muted">
-                      {project.thumbnail &&
-                        (publishingOptions?.slug ? (
-                          <PublicImage
-                            slug={publishingOptions.slug}
-                            path={project.thumbnail}
-                            alt={project.title}
-                            width={356}
-                            height={241}
-                            className="h-full w-full"
-                          />
-                        ) : (
-                          <SignedImage
-                            path={project.thumbnail}
-                            alt={project.title}
-                            width={356}
-                            height={241}
-                            className="h-full w-full"
-                          />
-                        ))}
+                      {project.thumbnail && (
+                        <Image
+                          slug={publishingOptions?.slug}
+                          src={project.thumbnail}
+                          alt={project.title}
+                          width={356}
+                          height={241}
+                          className="h-full w-full"
+                        />
+                      )}
                     </div>
                   </div>
 

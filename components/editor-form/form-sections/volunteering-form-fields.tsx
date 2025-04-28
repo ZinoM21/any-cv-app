@@ -1,4 +1,4 @@
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { Image } from "@/components/editor-form/form-sections/image";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
   FormControl,
@@ -68,12 +68,7 @@ export default function VolunteeringFormFields({
             </FormLabel>
             <FormControl>
               <div className="flex items-center gap-4">
-                <SignedImage
-                  path={field?.value}
-                  alt={organizationName}
-                  width={80}
-                  height={80}
-                />
+                <Image src={field?.value} alt={organizationName} />
                 <ImageInput
                   field={field}
                   fileName={getSnakeCaseFileName(organizationName)}
