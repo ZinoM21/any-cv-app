@@ -7,7 +7,7 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useCreateProfileMutation } from "@/hooks/use-create-profile-mutation";
@@ -34,9 +34,9 @@ const submitLinkFormSchema = z.object({
         return urlPattern.test(value) || usernamePattern.test(value);
       },
       {
-        message: "Enter LinkedIn profile URL (/in/) or just your username",
-      },
-    ),
+        message: "Enter LinkedIn profile URL (/in/) or just your username"
+      }
+    )
 });
 
 type SubmitLinkFormValues = z.infer<typeof submitLinkFormSchema>;
@@ -45,11 +45,11 @@ export function SubmitLinkForm() {
   const form = useForm<SubmitLinkFormValues>({
     resolver: zodResolver(submitLinkFormSchema),
     defaultValues: {
-      linkedInUrl: "",
-    },
+      linkedInUrl: ""
+    }
   });
 
-  const router = useRouter();
+  const { push } = useRouter();
   const params = useSearchParams();
 
   const setProfileData = useProfileStore((state) => state.setProfile);
@@ -61,12 +61,12 @@ export function SubmitLinkForm() {
     mutate(username, {
       onSuccess: (data: ProfileData) => {
         setProfileData(data);
-        router.push(
+        push(
           `/generate/choose?${buildQueryString(params, {
-            set: { username: data.username },
-          })}`,
+            set: { username: data.username }
+          })}`
         );
-      },
+      }
     });
   }
 

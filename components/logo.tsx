@@ -12,7 +12,7 @@ export default function BuildAnyCVLogo({
     <Link
       href={props.href || "/"}
       className={cn(
-        "-m-1.5 p-1.5 font-semibold text-xl text-foreground",
+        "-m-1.5 p-1.5 text-xl font-semibold text-foreground",
         className
       )}
       {...props}

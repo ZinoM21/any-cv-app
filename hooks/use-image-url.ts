@@ -68,8 +68,6 @@ export function useSignedUrlsMap(profile: Partial<ProfileData> | null) {
     enabled
   });
 
-  console.log("query", query);
-
   return {
     ...query,
     data: new Map<string, ImageUrl>(

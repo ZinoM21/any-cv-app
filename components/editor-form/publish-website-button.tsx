@@ -1,10 +1,10 @@
 "use client";
 
-import SignInDialog from "@/components/auth/sign-in-dialog";
 import { Button } from "@/components/ui/button";
 import useSession from "@/hooks/use-session";
 import { Loader2, Ship } from "lucide-react";
 import { useState } from "react";
+import SignUpDialog from "../auth/sign-up-dialog";
 import PublishWebsiteDialog from "./publish-website-dialog";
 
 const PublishButton = ({
@@ -51,10 +51,10 @@ export default function PublishWebsiteButton({
       {isSignedIn ? (
         <PublishButton onClick={() => setOpen(true)} loading={false} />
       ) : (
-        <SignInDialog
+        <SignUpDialog
           trigger={<PublishButton loading={false} />}
           onSuccess={async () => setOpen(true)}
-          customTitle="Log in to publish your site"
+          customTitle="Create account to publish your site"
           customDescription="Please enter your credentials to publish your site."
         />
       )}

@@ -71,7 +71,6 @@ function SignedImage({
   src,
   ...restProps
 }: Omit<ImageProps, "slug"> & { src: string }) {
-  console.log("src", src);
   const { isFetching, data: signedUrl } = useSignedUrl(src);
 
   return (

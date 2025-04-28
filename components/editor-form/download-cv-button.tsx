@@ -4,7 +4,7 @@ import { FileDown } from "lucide-react";
 import { usePdfPlugins } from "@/hooks/use-pdf-plugins";
 import useSession from "@/hooks/use-session";
 import { toast } from "sonner";
-import SignInDialog from "@/components/auth/sign-in-dialog";
+import SignUpDialog from "../auth/sign-up-dialog";
 
 const DownloadButton = ({ onClick }: { onClick?: () => void }) => {
   return (
@@ -24,7 +24,7 @@ const DownloadButton = ({ onClick }: { onClick?: () => void }) => {
 };
 
 export default function DownloadCVButton({
-  onSuccess,
+  onSuccess
 }: {
   onSuccess?: () => void;
 }) {
@@ -51,13 +51,13 @@ export default function DownloadCVButton({
             }}
           />
         ) : (
-          <SignInDialog
+          <SignUpDialog
             trigger={<DownloadButton />}
             onSuccess={async () => {
               downloadCV();
               onDownloadSuccess();
             }}
-            customTitle="Log in to download your CV"
+            customTitle="Create account to download your CV"
             customDescription="Please enter your credentials to get your CV."
           />
         );

@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-import { Plugin, Viewer, Worker } from "@react-pdf-viewer/core";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
 
 import { getPDFTemplateById } from "@/components/templates/cv/cv-template-gate";
+import { usePdfPlugins } from "@/hooks/use-pdf-plugins";
 import {
   CVTemplate,
   ProfileData,
@@ -19,15 +20,14 @@ import { PDFLoadingSkeleton } from "./pdf-loading";
 export const PDF = ({
   data,
   template,
-  plugins,
   imageUrls
 }: {
   data: Partial<ProfileData>;
   template: CVTemplate;
-  plugins?: Plugin[];
   imageUrls?: Map<string, ImageUrl>;
 }) => {
   const [url, setUrl] = useState<string>();
+  const { filePluginInstance, zoomPluginInstance } = usePdfPlugins();
 
   const generateUrl = async (
     data: Partial<ProfileData>,
@@ -58,7 +58,7 @@ export const PDF = ({
     >
       <Viewer
         fileUrl={url}
-        plugins={plugins}
+        plugins={[filePluginInstance, zoomPluginInstance]}
         renderLoader={() => (
           <div className="flex h-full w-full justify-center bg-muted pt-5">
             <PDFLoadingSkeleton />

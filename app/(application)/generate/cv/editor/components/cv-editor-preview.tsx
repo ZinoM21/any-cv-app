@@ -20,8 +20,7 @@ import { useEffect } from "react";
 export function CVEditorPreview({ template }: { template: CVTemplate }) {
   const profileData = useProfileStore((state) => state.profile);
 
-  const { filePluginInstance, zoomPluginInstance, ZoomIn, ZoomOut, Zoom } =
-    usePdfPlugins();
+  const { ZoomIn, ZoomOut, Zoom } = usePdfPlugins();
 
   const {
     isLoading: isLoadingImages,
@@ -73,12 +72,7 @@ export function CVEditorPreview({ template }: { template: CVTemplate }) {
             <PDFLoadingSkeleton />
           </div>
         ) : (
-          <PDF
-            data={profileData}
-            plugins={[zoomPluginInstance, filePluginInstance]}
-            template={template}
-            imageUrls={imageUrls}
-          />
+          <PDF data={profileData} template={template} imageUrls={imageUrls} />
         )}
       </div>
     </div>

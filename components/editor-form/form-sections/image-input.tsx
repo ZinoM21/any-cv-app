@@ -1,4 +1,4 @@
-import SignInDialog from "@/components/auth/sign-in-dialog";
+import SignUpDialog from "@/components/auth/sign-up-dialog";
 import { Button } from "@/components/ui/button";
 import { useSignedUploadUrl, useSignedUrl } from "@/hooks/use-image-url";
 import { useProfileStore } from "@/hooks/use-profile";
@@ -166,11 +166,11 @@ export function ImageInput({
       {isSignedIn ? (
         UploadButton
       ) : (
-        <SignInDialog
+        <SignUpDialog
           trigger={UploadButton}
           onSuccess={selectFile}
-          customTitle="Sign in to upload images"
-          customDescription="You need to be signed in to upload or change images."
+          customTitle="Create account to upload images"
+          customDescription="You need to have an account to upload or change images."
         />
       )}
     </>

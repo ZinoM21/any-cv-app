@@ -13,7 +13,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { SignInFormValues, signInSchema } from "@/lib/schemas/auth-schema";
@@ -35,8 +35,8 @@ export function SignInForm({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
-      password: "",
-    },
+      password: ""
+    }
   });
 
   const submit = signInForm.handleSubmit(async (credentials) => {
@@ -160,7 +160,7 @@ export function SignInForm({
           Don&apos;t have an account?{" "}
           <Button
             type="button"
-            className="text-primary hover:underline font-normal p-0"
+            className="p-0 font-normal text-primary hover:underline"
             variant="link"
             onClick={() => signUp()}
           >
