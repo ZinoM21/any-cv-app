@@ -62,7 +62,7 @@ export function HeaderDropdownMenu({
               {dashboardNav.map((item) => (
                 <DropdownMenuItem
                   key={item.name}
-                  className={item.href !== "/account" ? "lg:hidden" : ""}
+                  className={item.href !== "/dashboard/account" ? "lg:hidden" : ""}
                   asChild
                 >
                   <Link

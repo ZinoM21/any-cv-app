@@ -24,7 +24,7 @@ export const dashboardNav: NavItem[] = [
   },
   {
     name: "Account Settings",
-    href: "/account",
+    href: "/dashboard/account",
     variant: "ghost",
     icon: Settings
   },
