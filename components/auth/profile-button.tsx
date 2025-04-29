@@ -46,7 +46,7 @@ export function HeaderDropdownMenu({
           <Menu className="lg:hidden" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end">
+      <DropdownMenuContent className="w-56" align="end" alignOffset={-52}>
         {isSignedIn && (
           <>
             <DropdownMenuLabel className="flex gap-2">
@@ -62,7 +62,9 @@ export function HeaderDropdownMenu({
               {dashboardNav.map((item) => (
                 <DropdownMenuItem
                   key={item.name}
-                  className={item.href !== "/dashboard/account" ? "lg:hidden" : ""}
+                  className={
+                    item.href !== "/dashboard/account" ? "lg:hidden" : ""
+                  }
                   asChild
                 >
                   <Link
