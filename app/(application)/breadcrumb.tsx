@@ -24,8 +24,11 @@ import { useSession } from "@/hooks/use-session";
 import { buildQueryString } from "@/lib/utils";
 import { ChevronsUpDown } from "lucide-react";
 
+import { getTemplateById } from "@/components/templates/cv/cv-template-gate";
 import { RouteMapping, routeMappings } from "@/config/breadcrumb-routes";
+import { cvTemplates, websiteTemplates } from "@/config/templates";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { TemplateId } from "@/lib/types";
 import { useEffect } from "react";
 
 export default function BreadCrumb({
@@ -42,6 +45,7 @@ export default function BreadCrumb({
   } = useUserProfiles();
   const searchParams = useSearchParams();
   const username = searchParams.get("username");
+  const templateId = searchParams.get("templateId") as TemplateId;
 
   // expecting /generate/[format]/[action]
   const pathSegments = pathname.split("/").filter(Boolean);
@@ -49,16 +53,11 @@ export default function BreadCrumb({
   // Format (cv, website, etc.)
   const currentFormat = pathSegments.length > 1 ? pathSegments[1] : "";
   // Action (template, editor, etc.)
-  const currentAction = pathSegments.length > 2 ? pathSegments[2] : "";
+  const currentAction = pathSegments.length > 2 ? pathSegments[2] : undefined;
 
   // Get current format mapping from route config
   const formatConfig = routeMappings.find(
     (route) => route.path === currentFormat
-  );
-
-  // Get current action from format's available actions
-  const actionConfig = formatConfig?.children?.find(
-    (child) => child.path === currentAction
   );
 
   /**
@@ -81,14 +80,21 @@ export default function BreadCrumb({
   /**
    * Create a navigation URL for a given format and action
    */
-  const createNavigationUrl = (format: string, action?: string) => {
+  const createNavigationUrl = (
+    format: string,
+    action?: string,
+    templateId?: string
+  ) => {
     const basePath = `/generate/${format}`;
     const fullPath = action ? `${basePath}/${action}` : basePath;
-    return `${fullPath}?${buildQueryString(searchParams)}`;
+    return `${fullPath}?${buildQueryString(searchParams, {
+      exclude: !templateId ? ["templateId"] : undefined,
+      set: templateId ? { templateId } : undefined
+    })}`;
   };
 
   useEffect(() => {
-    refetch();
+    refetch?.();
   }, [refetch, username]);
 
   return (
@@ -169,7 +175,10 @@ export default function BreadCrumb({
                         key={formatOption.path}
                         href={createNavigationUrl(
                           formatOption.path,
-                          resolveActionForFormat(formatOption)
+                          resolveActionForFormat(formatOption),
+                          formatOption.path !== "choose"
+                            ? templateId
+                            : undefined
                         )}
                       >
                         <DropdownMenuCheckboxItem
@@ -187,48 +196,78 @@ export default function BreadCrumb({
           </>
         )}
 
-        {/* Action dropdown (Template, Editor) */}
-        {actionConfig &&
-          formatConfig?.children &&
-          formatConfig.children.length > 0 && (
-            <>
-              <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
-              <BreadcrumbItem>
-                <DropdownMenu>
-                  {isMobile ? (
-                    <DropdownMenuTrigger>
-                      <BreadcrumbEllipsis />
-                    </DropdownMenuTrigger>
-                  ) : (
-                    <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
-                      {actionConfig.label}
-                      <ChevronsUpDown className="size-4" />
-                    </DropdownMenuTrigger>
-                  )}
-                  <DropdownMenuContent align="start">
-                    <DropdownMenuLabel>Action</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {formatConfig.children.map((actionOption) => (
-                      <Link
-                        key={actionOption.path}
-                        href={createNavigationUrl(
-                          currentFormat,
-                          actionOption.path
-                        )}
+        {/* Combined Template/Action dropdown */}
+        {formatConfig && currentAction && (
+          <>
+            <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
+            <BreadcrumbItem>
+              <DropdownMenu>
+                {isMobile ? (
+                  <DropdownMenuTrigger>
+                    <BreadcrumbEllipsis />
+                  </DropdownMenuTrigger>
+                ) : (
+                  <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
+                    {currentAction === "editor" && templateId
+                      ? getTemplateById(templateId)?.name
+                      : "Select Template"}
+                    <ChevronsUpDown className="size-4" />
+                  </DropdownMenuTrigger>
+                )}
+                <DropdownMenuContent align="start">
+                  <DropdownMenuLabel>Template</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+
+                  {/* Select Template action */}
+                  <Link href={createNavigationUrl(currentFormat, "template")}>
+                    <DropdownMenuCheckboxItem
+                      checked={currentAction === "template"}
+                      className="cursor-pointer"
+                    >
+                      Select Template
+                    </DropdownMenuCheckboxItem>
+                  </Link>
+
+                  {/* Available templates */}
+                  {(currentFormat === "cv"
+                    ? cvTemplates
+                    : websiteTemplates
+                  ).map((template: { id: TemplateId; name: string }) => (
+                    <Link
+                      key={template.id}
+                      href={createNavigationUrl(
+                        currentFormat,
+                        "editor",
+                        template.id
+                      )}
+                    >
+                      <DropdownMenuCheckboxItem
+                        checked={template.id === templateId}
+                        className="cursor-pointer"
                       >
-                        <DropdownMenuCheckboxItem
-                          checked={actionOption.path === currentAction}
-                          className="cursor-pointer"
-                        >
-                          {actionOption.label}
-                        </DropdownMenuCheckboxItem>
-                      </Link>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </BreadcrumbItem>
-            </>
-          )}
+                        {template.name}
+                      </DropdownMenuCheckboxItem>
+                    </Link>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </BreadcrumbItem>
+          </>
+        )}
+        {currentAction === "editor" && templateId && (
+          <>
+            <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
+            <BreadcrumbItem>
+              {isMobile ? (
+                <BreadcrumbEllipsis />
+              ) : (
+                <span className="flex cursor-default items-center gap-1 rounded px-2 py-1 text-base">
+                  Editor
+                </span>
+              )}
+            </BreadcrumbItem>
+          </>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   );
