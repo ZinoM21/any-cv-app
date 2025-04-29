@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useProfileStore } from "@/hooks/use-profile";
 import useSession from "@/hooks/use-session";
 import { Loader2, Ship } from "lucide-react";
 import { useState } from "react";
@@ -36,13 +37,12 @@ const PublishButton = ({
 };
 
 export default function PublishWebsiteButton({
-  username,
   onSuccess
 }: {
-  username: string;
   onSuccess: (slug?: string) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const profileData = useProfileStore((state) => state.profile);
 
   const { isSignedIn } = useSession();
 
@@ -59,7 +59,7 @@ export default function PublishWebsiteButton({
         />
       )}
       <PublishWebsiteDialog
-        username={username}
+        profile={profileData}
         open={open}
         setOpen={setOpen}
         onSuccess={(slug) => {

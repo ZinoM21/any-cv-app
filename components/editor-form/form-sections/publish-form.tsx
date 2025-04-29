@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useProfilePublishMutation } from "@/hooks/use-profile-publish-mutation";
 import { ApiErrorType } from "@/lib/errors";
-import { TemplateId } from "@/lib/types";
+import { TemplateId, type ProfileData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Moon, Ship, Sun } from "lucide-react";
 
@@ -60,25 +60,26 @@ const publishFormSchema = z.object({
 export type PublishFormValues = z.infer<typeof publishFormSchema>;
 
 export default function PublishForm({
-  username,
+  profile,
   onSuccess
 }: {
-  username: string;
+  profile: Partial<ProfileData>;
   onSuccess: (slug?: string) => void;
 }) {
   const { resolvedTheme } = useTheme();
 
-  const { mutateAsync, isPending: isPublishing } =
-    useProfilePublishMutation(username);
+  const isPublished = !!profile?.publishingOptions;
 
   const searchParams = useSearchParams();
   const templateId = getValidTemplateId(searchParams.get("templateId"));
 
-  const defaultValues = {
-    appearance: resolvedTheme as "light" | "dark",
-    templateId: templateId,
-    slug: ""
-  };
+  const defaultValues = isPublished
+    ? profile?.publishingOptions
+    : {
+        appearance: resolvedTheme as "light" | "dark",
+        templateId: templateId,
+        slug: ""
+      };
 
   const formMethods = useForm<PublishFormValues>({
     resolver: zodResolver(publishFormSchema),
@@ -90,8 +91,12 @@ export default function PublishForm({
     handleSubmit,
     reset,
     setError,
-    formState: { isValid }
+    formState: { isValid, isDirty, dirtyFields }
   } = formMethods;
+
+  const { mutateAsync, isPending: isPublishing } = useProfilePublishMutation(
+    profile.username!
+  );
 
   const publish = async (data: PublishFormValues) => {
     await mutateAsync(data, {
@@ -135,7 +140,7 @@ export default function PublishForm({
                   <RadioGroup
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={resolvedTheme}
+                    defaultValue={defaultValues?.appearance}
                     className="grid max-w-md grid-cols-2 gap-8 pt-2"
                     disabled={isPublishing}
                   >
@@ -190,17 +195,29 @@ export default function PublishForm({
                   </RadioGroup>
                 </FormControl>
                 <FormDescription>
-                  Your current theme is set to{" "}
-                  <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
-                    {resolvedTheme}
-                  </code>
-                  . Checkout how it looks by pressing the{" "}
-                  {resolvedTheme === "light" ? (
-                    <Sun className="mb-0.5 inline-block size-3" />
+                  {isPublished ? (
+                    <>
+                      Your website is currently published in
+                      <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
+                        {profile.publishingOptions?.appearance}
+                      </code>
+                      mode.
+                    </>
                   ) : (
-                    <Moon className="mb-0.5 inline-block size-3" />
-                  )}{" "}
-                  in the top right corner.
+                    <>
+                      Your current theme is set to{" "}
+                      <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
+                        {defaultValues?.appearance}
+                      </code>{" "}
+                      . Checkout a different appearance by pressing the{" "}
+                      {defaultValues?.appearance === "light" ? (
+                        <Sun className="mb-0.5 inline-block size-3" />
+                      ) : (
+                        <Moon className="mb-0.5 inline-block size-3" />
+                      )}{" "}
+                      in the top right corner.
+                    </>
+                  )}
                 </FormDescription>
               </FormItem>
             )}
@@ -231,14 +248,7 @@ export default function PublishForm({
                 </Select>
               </FormControl>
               <FormDescription>
-                Choose a template for your published website.
-                {templateId &&
-                  "Currently viewing " +
-                  (
-                    <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
-                      {templateId}
-                    </code>
-                  )}
+                Choose a site template for your published website.
               </FormDescription>
             </FormItem>
           )}
@@ -265,7 +275,8 @@ export default function PublishForm({
                     https://buildanycv.com/
                     {field.value.length > 0 ? field.value : "my-slug"}
                   </code>{" "}
-                  will be your personal website link
+                  {dirtyFields.slug || !field.value ? "will be" : "is"} your
+                  personal website link
                 </FormDescription>
               )}
             </FormItem>
@@ -274,7 +285,7 @@ export default function PublishForm({
         <DialogFooter>
           <Button
             type="submit"
-            disabled={!isValid || isPublishing}
+            disabled={!isValid || !isDirty || isPublishing}
             className={cn("relative")}
           >
             {isPublishing ? (
@@ -288,7 +299,7 @@ export default function PublishForm({
               <Ship className="mr-1" />
             )}
 
-            {isPublishing ? "Shipping..." : "Ship"}
+            {isPublishing ? "Shipping..." : isPublished ? "Update" : "Ship"}
           </Button>
         </DialogFooter>
       </form>

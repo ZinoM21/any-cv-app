@@ -6,17 +6,18 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
+import type { ProfileData } from "@/lib/types";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import PublishForm from "./form-sections/publish-form";
 
 export default function PublishWebsiteDialog({
-  username,
+  profile,
   trigger,
   open,
   setOpen,
   onSuccess
 }: {
-  username: string;
+  profile: Partial<ProfileData>;
   trigger?: ReactNode;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -32,7 +33,7 @@ export default function PublishWebsiteDialog({
             This will publish your website to the public.
           </DialogDescription>
         </DialogHeader>
-        <PublishForm username={username} onSuccess={onSuccess} />
+        <PublishForm profile={profile} onSuccess={onSuccess} />
       </DialogContent>
     </Dialog>
   );

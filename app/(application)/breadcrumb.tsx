@@ -26,6 +26,7 @@ import { ChevronsUpDown } from "lucide-react";
 
 import { RouteMapping, routeMappings } from "@/config/breadcrumb-routes";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useEffect } from "react";
 
 export default function BreadCrumb({
   className,
@@ -34,7 +35,11 @@ export default function BreadCrumb({
   const pathname = usePathname();
   const { isSignedIn } = useSession();
   const isMobile = useIsMobile();
-  const { data: profiles, isLoading: isLoadingProfiles } = useUserProfiles();
+  const {
+    data: profiles,
+    isLoading: isLoadingProfiles,
+    refetch
+  } = useUserProfiles();
   const searchParams = useSearchParams();
   const username = searchParams.get("username");
 
@@ -82,6 +87,10 @@ export default function BreadCrumb({
     return `${fullPath}?${buildQueryString(searchParams)}`;
   };
 
+  useEffect(() => {
+    refetch();
+  }, [refetch, username]);
+
   return (
     <Breadcrumb className={className} {...props}>
       <BreadcrumbList>
@@ -109,7 +118,7 @@ export default function BreadCrumb({
                       <Link
                         key={profile._id}
                         href={`${pathname}?${buildQueryString(searchParams, {
-                          set: { username: profile.username }
+                          set: { username: profile.username! }
                         })}`}
                       >
                         <DropdownMenuCheckboxItem

@@ -35,6 +35,20 @@ export async function getPublishedProfiles() {
 }
 
 /**
+ * Fetches a single published profile by slug
+ *
+ * @param api The API client to use
+ * @param slug The slug of the profile to fetch
+ * @returns ProfileData if successful
+ */
+export async function getPublishedProfile(
+  api: ReturnType<typeof createApiClient>,
+  slug: string
+): Promise<ProfileData> {
+  return await api.get<ProfileData>(`/v1/profile/published/${slug}`);
+}
+
+/**
  * Fetches a single published profile from the API and redirects to a given URL if the profile is not found.
  *
  * @param slug The slug of the profile to fetch
@@ -47,7 +61,7 @@ export async function getPublishedProfileOrRedirect(
 ): Promise<ProfileData> {
   const serverApi = await getServerApi();
   try {
-    return await serverApi.get<ProfileData>(`/v1/profile/published/${slug}`);
+    return await getPublishedProfile(serverApi, slug);
   } catch (error) {
     if (error instanceof ApiError) {
       if (error.status === 404) {
@@ -136,8 +150,11 @@ export const transferProfileFromCacheToUser = async (
 export const getUserProfiles = async (
   api: ReturnType<typeof createApiClient>,
   options: ApiRequestOptions = {}
-): Promise<ProfileData[]> => {
-  return await api.get<ProfileData[]>("/v1/profile/user/list", options);
+) => {
+  return await api.get<Partial<ProfileData>[]>(
+    "/v1/profile/user/list",
+    options
+  );
 };
 
 export const createProfileFromRemoteData = async (

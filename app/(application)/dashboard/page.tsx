@@ -59,7 +59,11 @@ export default async function DashboardPage() {
                 className="rounded-full"
                 src={profile.profilePictureUrl}
                 alt={`Profile picture of ${profile.firstName} ${profile.lastName}`}
-                fallback={getInitials(profile.firstName, profile.lastName)}
+                fallback={
+                  profile.firstName &&
+                  profile.lastName &&
+                  getInitials(profile.firstName, profile.lastName)
+                }
               />
               <div className="w-full">
                 <div className="flex w-full flex-row items-center justify-between gap-2">

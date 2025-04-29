@@ -8,11 +8,7 @@ import PublishWebsiteButton from "@/components/editor-form/publish-website-butto
 import SuggestNextActionDialog from "@/components/editor-form/suggest-next-action-dialog";
 import { toast } from "sonner";
 
-export default function EditorFinalActionButton({
-  username
-}: {
-  username: string;
-}) {
+export default function EditorFinalActionButton() {
   const [open, setOpen] = useState(false);
   const [websiteUrl, setWebsiteUrl] = useState<string | undefined>();
 
@@ -33,12 +29,7 @@ export default function EditorFinalActionButton({
   return (
     <>
       {isCV && <DownloadCVButton onSuccess={() => setOpen(true)} />}
-      {isWebsite && (
-        <PublishWebsiteButton
-          username={username}
-          onSuccess={onPublishSuccess}
-        />
-      )}
+      {isWebsite && <PublishWebsiteButton onSuccess={onPublishSuccess} />}
       <SuggestNextActionDialog
         nextAction={nextAction}
         isOpen={open}

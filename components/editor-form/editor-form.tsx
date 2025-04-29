@@ -154,7 +154,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
 
           <div className="flex gap-2">
             {isLastTab ? (
-              <EditorFinalActionButton username={profileData!.username!} />
+              <EditorFinalActionButton />
             ) : (
               <Button
                 onClick={handleSubmit((data) => {
