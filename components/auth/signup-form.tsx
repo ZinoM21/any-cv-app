@@ -26,8 +26,6 @@ export function SignUpForm({
   onSuccess?: () => Promise<void>;
   redirect?: boolean;
 }) {
-  console.log("in form", onSuccess);
-
   const { signIn, signUp, isLoading, error } = useAuth();
 
   const form = useForm<SignUpFormValues>({

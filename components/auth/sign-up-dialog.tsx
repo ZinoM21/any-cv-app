@@ -36,7 +36,6 @@ export default function SignUpDialog({
   customTitle?: string;
   customDescription?: string;
 }) {
-  console.log("in dialog", onSuccess);
   const isMobile = useIsMobile();
 
   const [isOpen, setOpen] = useState(false);
@@ -90,11 +89,10 @@ export default function SignUpDialog({
             }}
           />
         </div>
-        <div className="hidden rounded-r-lg lg:flex lg:items-center lg:bg-muted lg:px-20">
+        <div className="hidden rounded-r-lg border-l lg:flex lg:items-center lg:bg-card lg:px-20">
           <Image
             src="/svgs/undraw_update_resume.svg"
             alt="Signup Image"
-            className="dark:brightness-[0.2] dark:grayscale"
             width={300}
             height={235}
           />
