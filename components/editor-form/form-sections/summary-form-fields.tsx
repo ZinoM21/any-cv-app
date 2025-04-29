@@ -69,7 +69,8 @@ export const SummaryFormFields = () => {
               />
             </FormControl>
             <FormDescription>
-              A brief statement that appears under your name
+              A brief statement that appears under your name. (Recommended: max
+              10 words)
             </FormDescription>
             <FormMessage />
           </FormItem>

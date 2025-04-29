@@ -34,7 +34,9 @@ export default function TheModernWebsite({
               {`${firstName} ${lastName}`}
             </h3>
             <h1 className="mb-4 text-3xl font-extrabold text-foreground md:text-5xl">
-              {headline || `${firstName} ${lastName}, Developer`}
+              {headline
+                ? headline.split(" ").slice(0, 12).join(" ")
+                : `${firstName} ${lastName}, Developer`}
             </h1>
             <p className="mx-auto max-w-3xl px-2 text-sm text-muted-foreground md:px-0 md:text-base">
               {location ||

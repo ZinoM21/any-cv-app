@@ -44,7 +44,9 @@ export default function TheCreativeWebsite({
             )}
             <h1 className="text-4xl font-bold">{`${firstName} ${lastName}`}</h1>
             {headline && (
-              <p className="text-xl text-muted-foreground">{headline}</p>
+              <p className="text-xl text-muted-foreground">
+                {headline.split(" ").slice(0, 15).join(" ")}
+              </p>
             )}
             {location && (
               <p className="text-sm text-muted-foreground">{location}</p>
