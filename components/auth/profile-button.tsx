@@ -52,7 +52,7 @@ export function HeaderDropdownMenu({
             <DropdownMenuLabel className="flex gap-2">
               <span className="whitespace-nowrap">My Account</span>
               <span className="min-w-0 truncate text-sm text-muted-foreground">
-                {session?.user?.email}
+                {session?.user?.name}
               </span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

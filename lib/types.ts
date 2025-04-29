@@ -124,6 +124,7 @@ export type DecodedToken = {
   email: string;
   exp: number;
   iat: number;
+  name?: string;
 };
 
 export type AuthValidity = {
