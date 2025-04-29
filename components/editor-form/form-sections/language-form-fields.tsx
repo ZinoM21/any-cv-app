@@ -6,7 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,7 @@ export default function LanguageFormFields() {
   const { fields, append, remove } = useFieldArray({
     control,
     // @ts-expect-error: useFieldArray is not build for string arrays and returns type never
-    name: "languages",
+    name: "languages"
   });
 
   const isNewUniqueLanguage = (languages: string[], newLanguage: string) => {
@@ -45,7 +45,7 @@ export default function LanguageFormFields() {
         name="languages"
         render={({ field }) => (
           <div className="flex gap-2">
-            <FormItem className="flex-1 flex flex-col gap-2 space-y-0">
+            <FormItem className="flex flex-1 flex-col gap-2 space-y-0">
               <FormLabel htmlFor="newLanguage" className="sr-only">
                 New Language
               </FormLabel>
@@ -60,7 +60,7 @@ export default function LanguageFormFields() {
                       addNewLanguage(field.value);
                     }
                   }}
-                  placeholder="e.g., JavaScript, Project Management, UX Design"
+                  placeholder="English - Fluent"
                   className="h-8"
                 />
               </FormControl>
