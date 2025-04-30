@@ -56,7 +56,7 @@ export default async function DashboardPage() {
           <Card key={profile._id} className="h-full">
             <CardHeader className="flex flex-row items-center gap-4 space-y-0">
               <Image
-                className="rounded-full"
+                className="flex-shrink-0 rounded-full"
                 src={profile.profilePictureUrl}
                 alt={`Profile picture of ${profile.firstName} ${profile.lastName}`}
                 fallback={
@@ -65,12 +65,15 @@ export default async function DashboardPage() {
                   getInitials(profile.firstName, profile.lastName)
                 }
               />
-              <div className="w-full">
+              <div className="w-full min-w-0">
                 <div className="flex w-full flex-row items-center justify-between gap-2">
-                  <CardTitle className="whitespace-nowrap text-lg">
-                    {profile.firstName} {profile.lastName}
-                  </CardTitle>
+                  <div className="min-w-0 flex-1">
+                    <CardTitle className="truncate text-lg">
+                      {profile.firstName} {profile.lastName}
+                    </CardTitle>
+                  </div>
                   <Badge
+                    className="flex-shrink-0"
                     variant={
                       isPublished(profile.publishingOptions)
                         ? "success"
