@@ -18,7 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import LanguageFormFields from "./language-form-fields";
 
 export const SummaryFormFields = () => {
-  const { control, getValues } = useFormContext();
+  const { control, getValues, formState } = useFormContext();
 
   const fullName = `${getValues("firstName") || ""} ${
     getValues("lastName") || ""
@@ -68,11 +68,18 @@ export const SummaryFormFields = () => {
                 {...field}
               />
             </FormControl>
-            <FormDescription>
-              A brief statement that appears under your name. (Recommended: max
-              10 words)
-            </FormDescription>
-            <FormMessage />
+            <div className="flex justify-between">
+              {!formState.errors.headline ? (
+                <FormDescription>
+                  A brief statement that appears under your name
+                </FormDescription>
+              ) : (
+                <FormMessage />
+              )}
+              <span className="ml-1 text-sm text-muted-foreground">
+                {field.value?.length || 0}/100
+              </span>
+            </div>
           </FormItem>
         )}
       />
@@ -90,10 +97,20 @@ export const SummaryFormFields = () => {
                 {...field}
               />
             </FormControl>
-            <FormDescription>
-              Provide a comprehensive overview of your professional background,
-              skills, and achievements
-            </FormDescription>
+
+            <div className="flex justify-between">
+              {!formState.errors.about ? (
+                <FormDescription>
+                  Provide a comprehensive overview of your professional
+                  background, skills, and achievements
+                </FormDescription>
+              ) : (
+                <FormMessage />
+              )}
+              <span className="ml-1 text-sm text-muted-foreground">
+                {field.value?.length || 0}/2,600
+              </span>
+            </div>
             <FormMessage />
           </FormItem>
         )}
