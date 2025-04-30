@@ -159,9 +159,12 @@ export const getUserProfiles = async (
 
 export const createProfileFromRemoteData = async (
   api: ReturnType<typeof createApiClient>,
-  username: string
+  username: string,
+  turnstileToken?: string
 ) => {
-  return await api.post<ProfileData>(`/v1/profile/${username}`);
+  return await api.post<ProfileData>(`/v1/profile/${username}`, {
+    turnstileToken
+  });
 };
 
 export const updateProfile = async (

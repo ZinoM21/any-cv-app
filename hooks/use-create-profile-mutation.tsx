@@ -1,5 +1,6 @@
 import { createProfileFromRemoteData } from "@/lib/api";
 import { ApiErrorType } from "@/lib/errors";
+import type { SubmitLinkFormValues } from "@/lib/schemas/submit-link-schema";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import useApi from "./use-api";
@@ -8,8 +9,11 @@ export function useCreateProfileMutation() {
   const api = useApi();
 
   return useMutation({
-    mutationFn: async (username: string) => {
-      return createProfileFromRemoteData(api, username);
+    mutationFn: async ({
+      linkedInUrl,
+      turnstileToken
+    }: SubmitLinkFormValues) => {
+      return createProfileFromRemoteData(api, linkedInUrl, turnstileToken);
     },
     onError: (error) => {
       if (error.message === ApiErrorType.ResourceAlreadyExists) {
