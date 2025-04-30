@@ -1,4 +1,5 @@
 import { useApi } from "@/hooks/use-api";
+import { useProfileStore } from "@/hooks/use-profile";
 import {
   getPublicUrl,
   getSignedUploadUrl,
@@ -10,7 +11,7 @@ import { ImageUrl, ProfileData } from "@/lib/types";
 import { getFilePaths, isUrl } from "@/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+
 import useSession from "./use-session";
 
 /**
@@ -23,8 +24,7 @@ export function useSignedUrl(filePath: string | undefined | null) {
   const api = useApi();
   const { isSignedIn } = useSession();
 
-  const enabled =
-    !!filePath && filePath !== "" && !isUrl(filePath) && isSignedIn;
+  const enabled = !!filePath && !isUrl(filePath) && isSignedIn;
 
   const query = useQuery({
     queryKey: ["imageUrl", filePath],
@@ -84,17 +84,19 @@ export function useSignedUrlsMap(profile: Partial<ProfileData> | null) {
  */
 export function useSignedUploadUrl() {
   const api = useApi();
+  const profile = useProfileStore((state) => state.profile);
+  const isPublic = !!profile?.publishingOptions?.slug;
 
   return useMutation({
     mutationFn: async ({ file }: { file: File }) => {
       const signedUrlResponse = await getSignedUploadUrl(api, file);
+      await uploadFileToSignedUrl(signedUrlResponse.url, file);
 
-      try {
-        await uploadFileToSignedUrl(signedUrlResponse.url, file);
-      } catch (error) {
-        toast.error("Failed to upload file");
-        throw error;
+      if (isPublic) {
+        const publicUrlResponse = await getSignedUploadUrl(api, file, isPublic);
+        await uploadFileToSignedUrl(publicUrlResponse.url, file);
       }
+
       return signedUrlResponse.path;
     }
   });

@@ -1,6 +1,10 @@
 import SignUpDialog from "@/components/auth/sign-up-dialog";
 import { Button } from "@/components/ui/button";
-import { useSignedUploadUrl, useSignedUrl } from "@/hooks/use-image-url";
+import {
+  usePublicUrl,
+  useSignedUploadUrl,
+  useSignedUrl
+} from "@/hooks/use-image-url";
 import { useProfileStore } from "@/hooks/use-profile";
 import { useSession } from "@/hooks/use-session";
 import { Loader2 } from "lucide-react";
@@ -43,6 +47,10 @@ export function ImageInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutateAsync: upload, isPending } = useSignedUploadUrl();
   const { refetch: refetchSignedImage } = useSignedUrl(field.value);
+  const { refetch: refetchPublicImage } = usePublicUrl(
+    profileData?.publishingOptions?.slug,
+    field.value
+  );
 
   const selectFile = async () => {
     fileInputRef.current?.click();
@@ -78,6 +86,7 @@ export function ImageInput({
           }
 
           await refetchSignedImage?.();
+          await refetchPublicImage?.();
         },
         onError: (error) => {
           if (error.message.includes("MB")) {

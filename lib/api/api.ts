@@ -218,19 +218,27 @@ export const getPublicUrl = async (
   slug: string,
   filePath: string
 ): Promise<ImageUrl> => {
-  return await api.post<ImageUrl>(`/v1/files/public/${slug}`, {
+  const response = await api.post<ImageUrl>(`/v1/files/public/${slug}`, {
     file_path: filePath
   });
+
+  // On refetch, url is not updating & next does not re-render image. Therefore add cache buster param
+  return {
+    ...response,
+    url: response.url + `?v=${Date.now()}`
+  };
 };
 
 export const getSignedUploadUrl = async (
   api: ReturnType<typeof createApiClient>,
-  file: File
+  file: File,
+  isPublic: boolean = false
 ) => {
   return await api.post<ImageUrl>(`/v1/files/signed-upload-url`, {
     file_name: file.name,
     file_type: file.type,
-    file_size: file.size
+    file_size: file.size,
+    public: isPublic
   });
 };
 
