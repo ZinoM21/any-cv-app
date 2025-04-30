@@ -56,15 +56,18 @@ export default function AddProfileDialog({
 
   function onSubmit(values: AddProfileFormValues) {
     const username = extractUsernameFromLinkedInUrl(values.username);
-    mutate(username, {
-      onSuccess: async () => {
-        toast.success("Profile created");
-        setIsOpen(false);
-        form.reset();
-        router.refresh(); // revalidate page / query -> must be done like this since NextJS's revalidatePath is not client-compatible
-        await onSuccess?.();
+    mutate(
+      { linkedInUrl: username },
+      {
+        onSuccess: async () => {
+          toast.success("Profile created");
+          setIsOpen(false);
+          form.reset();
+          router.refresh(); // revalidate page / query -> must be done like this since NextJS's revalidatePath is not client-compatible
+          await onSuccess?.();
+        }
       }
-    });
+    );
   }
 
   return (

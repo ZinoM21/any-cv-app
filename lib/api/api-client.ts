@@ -10,6 +10,7 @@ import {
   ApiError,
   ApiErrorType,
   AuthorizationError,
+  BadRequestError,
   ForbiddenError,
   InternalServerError,
   InvalidCredentialsError,
@@ -87,6 +88,9 @@ export async function apiRequest<T>(
         } else {
           signOutServer({ redirectTo: "/" });
         }
+      }
+      if (error.message === ApiErrorType.BadRequest) {
+        throw new BadRequestError();
       }
       if (error.message === ApiErrorType.InvalidCredentials) {
         throw new InvalidCredentialsError();

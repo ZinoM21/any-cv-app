@@ -23,6 +23,12 @@ export class AuthorizationError extends AuthError {
   }
 }
 
+export class BadRequestError extends Error {
+  constructor() {
+    super("Bad request. Please try again.");
+  }
+}
+
 export class InvalidCredentialsError extends CredentialsSignin {
   constructor() {
     super("Invalid credentials. Try a different email or password.");
@@ -56,6 +62,7 @@ export class InternalServerError extends Error {
 }
 
 export enum ApiErrorType {
+  BadRequest = "bad_request",
   TokenExpired = "token_expired",
   InvalidToken = "invalid_token",
   InvalidCredentials = "invalid_credentials",

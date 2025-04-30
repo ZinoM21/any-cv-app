@@ -17,10 +17,7 @@ export const submitLinkFormSchema = z.object({
         message: "Enter LinkedIn profile URL (/in/) or just your username"
       }
     ),
-  turnstileToken: z
-    .string()
-    .min(1, "Please complete the security check")
-    .optional()
+  turnstileToken: z.string().min(1, "Please complete the security check")
 });
 
 export type SubmitLinkFormValues = z.infer<typeof submitLinkFormSchema>;
