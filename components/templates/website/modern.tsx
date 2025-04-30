@@ -1,8 +1,9 @@
-import { PublicImage } from "@/components/editor-form/form-sections/public-image";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { Image } from "@/components/editor-form/form-sections/image";
+import { Button } from "@/components/ui/button";
 import { ProfileData } from "@/lib/types";
 import { formatDateRange } from "@/lib/utils";
 import { Calendar, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 export default function TheModernWebsite({
   profileData
@@ -35,7 +36,9 @@ export default function TheModernWebsite({
               {`${firstName} ${lastName}`}
             </h3>
             <h1 className="mb-4 text-3xl font-extrabold text-foreground md:text-5xl">
-              {headline || `${firstName} ${lastName}, Developer`}
+              {headline
+                ? headline.split(" ").slice(0, 12).join(" ")
+                : `${firstName} ${lastName}, Developer`}
             </h1>
             <p className="mx-auto max-w-3xl px-2 text-sm text-muted-foreground md:px-0 md:text-base">
               {location ||
@@ -45,25 +48,14 @@ export default function TheModernWebsite({
             {/* Profile Image */}
             <div className="mb-8 mt-10 md:mt-16">
               <div className="mx-auto h-48 w-48 overflow-hidden rounded-full bg-violet-600 md:h-60 md:w-60">
-                {profilePictureUrl &&
-                  (publishingOptions?.slug ? (
-                    <PublicImage
-                      slug={publishingOptions.slug}
-                      path={profilePictureUrl}
-                      alt={`${firstName} ${lastName}`}
-                      width={240}
-                      height={240}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <SignedImage
-                      path={profilePictureUrl}
-                      alt={`${firstName} ${lastName}`}
-                      width={240}
-                      height={240}
-                      className="h-full w-full object-cover"
-                    />
-                  ))}
+                {profilePictureUrl && (
+                  <Image
+                    slug={publishingOptions?.slug}
+                    src={profilePictureUrl}
+                    alt={`${firstName} ${lastName}`}
+                    className="h-full w-full object-cover"
+                  />
+                )}
               </div>
             </div>
 
@@ -127,9 +119,9 @@ export default function TheModernWebsite({
                 experience.positions.map((position, posIndex) => (
                   <div
                     key={`${expIndex}-${posIndex}`}
-                    className="relative mb-12 flex flex-col md:mb-16 md:flex-row"
+                    className="relative mb-8 flex flex-col md:mb-10 md:flex-row"
                   >
-                    <div className="mb-4 w-full text-left md:mb-0 md:w-1/3 md:pr-8 md:text-right">
+                    <div className="mb-4 w-full space-y-2 text-left md:mb-0 md:w-1/3 md:pr-8 md:text-right">
                       <h3 className="text-base leading-loose text-foreground md:text-xl">
                         {formatDateRange(position.startDate, position.endDate)}
                       </h3>
@@ -143,12 +135,38 @@ export default function TheModernWebsite({
                       <div className="absolute left-0 top-5 h-32 w-px bg-muted"></div>
                     </div>
 
-                    <div className="w-full md:w-2/3 md:pl-8">
-                      <h3 className="text-base leading-loose text-foreground md:text-xl">
-                        {experience.company}
-                      </h3>
+                    <div className="w-full space-y-2 whitespace-nowrap md:w-2/3 md:pl-8">
+                      <div className="flex items-baseline gap-4">
+                        <h3 className="text-base text-foreground md:text-xl">
+                          {experience.company}
+                        </h3>
+                        {(position.location || position.workSetting) && (
+                          <div className="flex items-baseline gap-1">
+                            {position.location && (
+                              <p className="text-sm text-muted-foreground md:text-base">
+                                {position.location}
+                              </p>
+                            )}
+
+                            {position.workSetting && (
+                              <p className="text-sm text-muted-foreground md:text-base">
+                                {" · "}
+                                {position.workSetting}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                        {experience.companyProfileUrl && (
+                          <Button variant="link" asChild>
+                            <Link href={experience.companyProfileUrl}>
+                              Visit
+                              <ExternalLink className="ml-1 size-3 md:size-4" />
+                            </Link>
+                          </Button>
+                        )}
+                      </div>
                       {position.description && (
-                        <p className="text-sm leading-loose text-muted-foreground md:text-base">
+                        <p className="whitespace-normal text-sm leading-loose text-muted-foreground md:text-base">
                           {position.description}
                         </p>
                       )}
@@ -282,25 +300,16 @@ export default function TheModernWebsite({
                   {/* Project Thumbnail */}
                   <div className="relative overflow-hidden rounded-xl">
                     <div className="aspect-video bg-muted">
-                      {project.thumbnail &&
-                        (publishingOptions?.slug ? (
-                          <PublicImage
-                            slug={publishingOptions.slug}
-                            path={project.thumbnail}
-                            alt={project.title}
-                            width={356}
-                            height={241}
-                            className="h-full w-full"
-                          />
-                        ) : (
-                          <SignedImage
-                            path={project.thumbnail}
-                            alt={project.title}
-                            width={356}
-                            height={241}
-                            className="h-full w-full"
-                          />
-                        ))}
+                      {project.thumbnail && (
+                        <Image
+                          slug={publishingOptions?.slug}
+                          src={project.thumbnail}
+                          alt={project.title}
+                          width={356}
+                          height={241}
+                          className="h-full w-full"
+                        />
+                      )}
                     </div>
                   </div>
 

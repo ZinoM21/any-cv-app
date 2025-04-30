@@ -12,13 +12,14 @@ import { useProfileStore } from "./use-profile";
 import { useProfileTransfer } from "./use-transfer-profile";
 
 export const useSigninCredentialsMutation = () => {
-  const { replace } = useRouter();
+  const { push } = useRouter();
 
   const [profileData, setProfileData] = useProfileStore(
     useShallow((state) => [state.profile, state.setProfile])
   );
 
   const { mutateAsync: mutateProfileTransfer } = useProfileTransfer();
+
   const transferProfileIfPresent = async () => {
     // If a guest profile username was provided, call the transfer endpoint & update state
     if (profileData?.username) {
@@ -29,6 +30,7 @@ export const useSigninCredentialsMutation = () => {
       });
     }
   };
+
   return useMutation({
     mutationFn: async ({
       credentials
@@ -58,7 +60,7 @@ export const useSigninCredentialsMutation = () => {
         await onSuccess();
       }
       if (redirect) {
-        replace(response?.url || redirectTo || "/");
+        push(response?.url || redirectTo || "/");
       }
     },
     onError: (error) => {

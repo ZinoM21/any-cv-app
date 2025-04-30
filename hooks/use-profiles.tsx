@@ -8,10 +8,17 @@ export function useUserProfiles() {
   const { isSignedIn, data: session } = useSession();
   const api = useApi();
 
-  return useQuery({
+  const enabled = isSignedIn && !!session?.user.id;
+
+  const query = useQuery({
     queryKey: ["userProfiles", session?.user.id],
     queryFn: () => getUserProfiles(api),
-    enabled: isSignedIn,
-    staleTime: 1000 * 60 * 5,
+    enabled,
+    staleTime: 1000 * 60 * 5
   });
+
+  return {
+    ...query,
+    refetch: enabled ? query.refetch : undefined
+  };
 }

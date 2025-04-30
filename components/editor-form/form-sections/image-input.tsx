@@ -1,6 +1,10 @@
-import SignInDialog from "@/components/auth/sign-in-dialog";
+import SignUpDialog from "@/components/auth/sign-up-dialog";
 import { Button } from "@/components/ui/button";
-import { useSignedUploadUrl, useSignedUrl } from "@/hooks/use-image-url";
+import {
+  usePublicUrl,
+  useSignedUploadUrl,
+  useSignedUrl
+} from "@/hooks/use-image-url";
 import { useProfileStore } from "@/hooks/use-profile";
 import { useSession } from "@/hooks/use-session";
 import { Loader2 } from "lucide-react";
@@ -42,7 +46,11 @@ export function ImageInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutateAsync: upload, isPending } = useSignedUploadUrl();
-  const { refetch } = useSignedUrl(field.value);
+  const { refetch: refetchSignedImage } = useSignedUrl(field.value);
+  const { refetch: refetchPublicImage } = usePublicUrl(
+    profileData?.publishingOptions?.slug,
+    field.value
+  );
 
   const selectFile = async () => {
     fileInputRef.current?.click();
@@ -77,10 +85,8 @@ export function ImageInput({
             fileInputRef.current.value = "";
           }
 
-          if (field.value) {
-            // only refetch if the file path is not empty, otherwise will be 
-            await refetch();
-          }
+          await refetchSignedImage?.();
+          await refetchPublicImage?.();
         },
         onError: (error) => {
           if (error.message.includes("MB")) {
@@ -169,11 +175,11 @@ export function ImageInput({
       {isSignedIn ? (
         UploadButton
       ) : (
-        <SignInDialog
+        <SignUpDialog
           trigger={UploadButton}
           onSuccess={selectFile}
-          customTitle="Sign in to upload images"
-          customDescription="You need to be signed in to upload or change images."
+          customTitle="Create account to upload images"
+          customDescription="You need to have an account to upload or change images."
         />
       )}
     </>

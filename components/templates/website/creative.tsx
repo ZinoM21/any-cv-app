@@ -1,5 +1,4 @@
-import { PublicImage } from "@/components/editor-form/form-sections/public-image";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { Image } from "@/components/editor-form/form-sections/image";
 import { ProfileData } from "@/lib/types";
 import { formatDateRange } from "@/lib/utils";
 import { ArrowRight, Calendar, ExternalLink } from "lucide-react";
@@ -36,26 +35,18 @@ export default function TheCreativeWebsite({
         <div>
           {/* Header */}
           <header className="mb-16 space-y-2">
-            {profilePictureUrl &&
-              (publishingOptions?.slug ? (
-                <PublicImage
-                  slug={publishingOptions.slug}
-                  path={profilePictureUrl}
-                  alt={`${firstName} ${lastName}`}
-                  width={120}
-                  height={120}
-                />
-              ) : (
-                <SignedImage
-                  path={profilePictureUrl}
-                  alt={`${firstName} ${lastName}`}
-                  width={120}
-                  height={120}
-                />
-              ))}
+            {profilePictureUrl && (
+              <Image
+                slug={publishingOptions?.slug}
+                src={profilePictureUrl}
+                alt={`${firstName} ${lastName}`}
+              />
+            )}
             <h1 className="text-4xl font-bold">{`${firstName} ${lastName}`}</h1>
             {headline && (
-              <p className="text-xl text-muted-foreground">{headline}</p>
+              <p className="text-xl text-muted-foreground">
+                {headline.split(" ").slice(0, 15).join(" ")}
+              </p>
             )}
             {location && (
               <p className="text-sm text-muted-foreground">{location}</p>
@@ -122,6 +113,16 @@ export default function TheCreativeWebsite({
                     key={`${expIndex}-${posIndex}`}
                     className="mb-8 last:mb-0"
                   >
+                    {experience.companyLogoUrl && (
+                      <Image
+                        slug={publishingOptions?.slug}
+                        src={experience.companyLogoUrl}
+                        alt={experience.company}
+                        width={84}
+                        height={52}
+                        className="mb-4"
+                      />
+                    )}
                     <h3 className="mb-1 text-xl font-semibold">{`${position.title}, ${experience.company}`}</h3>
                     <p className="mb-2 text-muted-foreground">
                       {formatDateRange(position.startDate, position.endDate)}
@@ -154,21 +155,14 @@ export default function TheCreativeWebsite({
               </h2>
               {education.map((edu, index) => (
                 <div key={index} className="mb-4">
-                  {edu.schoolPictureUrl && publishingOptions?.slug ? (
-                    <PublicImage
-                      slug={publishingOptions.slug}
-                      path={edu.schoolPictureUrl}
+                  {edu.schoolPictureUrl && (
+                    <Image
+                      slug={publishingOptions?.slug}
+                      src={edu.schoolPictureUrl}
                       alt={edu.school}
                       width={84}
                       height={52}
                       className="mb-4"
-                    />
-                  ) : (
-                    <SignedImage
-                      path={edu.schoolPictureUrl}
-                      alt={edu.school}
-                      width={84}
-                      height={52}
                     />
                   )}
                   <h3 className="mb-1 text-xl font-semibold">{edu.school}</h3>
@@ -195,6 +189,16 @@ export default function TheCreativeWebsite({
               </h2>
               {volunteering.map((vol, index) => (
                 <div key={index} className="mb-8 last:mb-0">
+                  {vol.organizationLogoUrl && (
+                    <Image
+                      slug={publishingOptions?.slug}
+                      src={vol.organizationLogoUrl}
+                      alt={vol.organization}
+                      width={84}
+                      height={52}
+                      className="mb-4"
+                    />
+                  )}
                   <h3 className="mb-1 text-xl font-semibold">{`${vol.role}, ${vol.organization}`}</h3>
                   {vol.cause && (
                     <p className="mb-1 text-muted-foreground">{vol.cause}</p>

@@ -1,5 +1,5 @@
 import { auth, signOut } from "@/auth";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
+import { Image } from "@/components/editor-form/form-sections/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,18 +55,25 @@ export default async function DashboardPage() {
         {profiles.map((profile) => (
           <Card key={profile._id} className="h-full">
             <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-              <SignedImage
-                className="rounded-full"
-                path={profile.profilePictureUrl}
+              <Image
+                className="flex-shrink-0 rounded-full"
+                src={profile.profilePictureUrl}
                 alt={`Profile picture of ${profile.firstName} ${profile.lastName}`}
-                fallback={getInitials(profile.firstName, profile.lastName)}
+                fallback={
+                  profile.firstName &&
+                  profile.lastName &&
+                  getInitials(profile.firstName, profile.lastName)
+                }
               />
-              <div className="w-full">
+              <div className="w-full min-w-0">
                 <div className="flex w-full flex-row items-center justify-between gap-2">
-                  <CardTitle className="whitespace-nowrap text-lg">
-                    {profile.firstName} {profile.lastName}
-                  </CardTitle>
+                  <div className="min-w-0 flex-1">
+                    <CardTitle className="truncate text-lg">
+                      {profile.firstName} {profile.lastName}
+                    </CardTitle>
+                  </div>
                   <Badge
+                    className="flex-shrink-0"
                     variant={
                       isPublished(profile.publishingOptions)
                         ? "success"

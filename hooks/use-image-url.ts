@@ -1,4 +1,5 @@
 import { useApi } from "@/hooks/use-api";
+import { useProfileStore } from "@/hooks/use-profile";
 import {
   getPublicUrl,
   getSignedUploadUrl,
@@ -7,9 +8,11 @@ import {
   uploadFileToSignedUrl
 } from "@/lib/api";
 import { ImageUrl, ProfileData } from "@/lib/types";
-import { getFilePaths } from "@/lib/utils";
+import { getFilePaths, isUrl } from "@/lib/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
+
+import useSession from "./use-session";
 
 /**
  * Custom hook to get a signed URL for a file
@@ -19,12 +22,20 @@ import { toast } from "sonner";
  */
 export function useSignedUrl(filePath: string | undefined | null) {
   const api = useApi();
+  const { isSignedIn } = useSession();
 
-  return useQuery({
+  const enabled = !!filePath && !isUrl(filePath) && isSignedIn;
+
+  const query = useQuery({
     queryKey: ["imageUrl", filePath],
     queryFn: async () => getSignedUrl(api, filePath!),
-    enabled: !!filePath && filePath !== ""
+    enabled
   });
+
+  return {
+    ...query,
+    refetch: enabled ? query.refetch : undefined
+  };
 }
 
 /**
@@ -35,26 +46,35 @@ export function useSignedUrl(filePath: string | undefined | null) {
  */
 export function useSignedUrlsMap(profile: Partial<ProfileData> | null) {
   const api = useApi();
+  const { isSignedIn } = useSession();
+  const [filePaths, setFilePaths] = useState<string[]>([]);
 
-  return useQuery({
+  useEffect(() => {
+    if (!!profile) {
+      const filePaths = getFilePaths(profile);
+      setFilePaths(filePaths);
+    }
+  }, [profile]);
+
+  const enabled =
+    !!profile &&
+    isSignedIn &&
+    filePaths.length > 0 &&
+    filePaths.every((filePath) => !isUrl(filePath));
+
+  const query = useQuery({
     queryKey: ["profileSignedUrls", profile?._id],
-    queryFn: async () => {
-      const filePaths = getFilePaths(profile!); // assert here because we check for null in the enabled clause
-
-      if (filePaths.length === 0) return new Map<string, ImageUrl>();
-
-      const signedUrls = await getSignedUrls(api, filePaths);
-
-      const urlMap = new Map<string, ImageUrl>();
-
-      signedUrls.forEach((url) => {
-        urlMap.set(url.path, url);
-      });
-
-      return urlMap;
-    },
-    enabled: !!profile
+    queryFn: async () => getSignedUrls(api, filePaths),
+    enabled
   });
+
+  return {
+    ...query,
+    data: new Map<string, ImageUrl>(
+      query.data && query.data.map((url) => [url.path, url])
+    ),
+    refetch: enabled ? query.refetch : undefined
+  };
 }
 
 /**
@@ -64,17 +84,19 @@ export function useSignedUrlsMap(profile: Partial<ProfileData> | null) {
  */
 export function useSignedUploadUrl() {
   const api = useApi();
+  const profile = useProfileStore((state) => state.profile);
+  const isPublic = !!profile?.publishingOptions?.slug;
 
   return useMutation({
     mutationFn: async ({ file }: { file: File }) => {
       const signedUrlResponse = await getSignedUploadUrl(api, file);
+      await uploadFileToSignedUrl(signedUrlResponse.url, file);
 
-      try {
-        await uploadFileToSignedUrl(signedUrlResponse.url, file);
-      } catch (error) {
-        toast.error("Failed to upload file");
-        throw error;
+      if (isPublic) {
+        const publicUrlResponse = await getSignedUploadUrl(api, file, isPublic);
+        await uploadFileToSignedUrl(publicUrlResponse.url, file);
       }
+
       return signedUrlResponse.path;
     }
   });
@@ -88,14 +110,21 @@ export function useSignedUploadUrl() {
  * @returns An object with loading state and the public URL
  */
 export function usePublicUrl(
-  slug: string,
+  slug: string | undefined,
   filePath: string | undefined | null
 ) {
   const api = useApi();
 
-  return useQuery({
+  const enabled = !!slug && !!filePath && !isUrl(filePath);
+
+  const query = useQuery({
     queryKey: ["publicImageUrl", slug, filePath],
-    queryFn: async () => getPublicUrl(api, slug, filePath!),
-    enabled: !!slug && !!filePath
+    queryFn: async () => getPublicUrl(api, slug!, filePath!), // assert here because we check for undefined in the enabled clause
+    enabled
   });
+
+  return {
+    ...query,
+    refetch: enabled ? query.refetch : undefined
+  };
 }

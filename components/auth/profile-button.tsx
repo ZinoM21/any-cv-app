@@ -46,13 +46,13 @@ export function HeaderDropdownMenu({
           <Menu className="lg:hidden" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end">
+      <DropdownMenuContent className="w-56" align="end" alignOffset={-52}>
         {isSignedIn && (
           <>
             <DropdownMenuLabel className="flex gap-2">
               <span className="whitespace-nowrap">My Account</span>
               <span className="min-w-0 truncate text-sm text-muted-foreground">
-                {session?.user?.email}
+                {session?.user?.name || session?.user?.email}
               </span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -62,7 +62,9 @@ export function HeaderDropdownMenu({
               {dashboardNav.map((item) => (
                 <DropdownMenuItem
                   key={item.name}
-                  className={item.href !== "/account" ? "lg:hidden" : ""}
+                  className={
+                    item.href !== "/dashboard/account" ? "lg:hidden" : ""
+                  }
                   asChild
                 >
                   <Link

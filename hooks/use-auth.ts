@@ -16,7 +16,7 @@ import { useSignupCredentialsMutation } from "./use-signup-credentials-mutation"
  * const { signIn, signUp, isLoading, error } = useAuth();
  */
 export function useAuth(): UseAuthReturn {
-  const { replace } = useRouter();
+  const { push } = useRouter();
   const searchParams = useSearchParams();
 
   const {
@@ -55,7 +55,7 @@ export function useAuth(): UseAuthReturn {
     // If no creds are provided, redirect to signin page
     if (!credentials) {
       const baseUrl = `${window.location.protocol}//${window.location.host}`;
-      replace(
+      push(
         `${baseUrl}/signin?${
           //  attach callbackUrl to if provided
           redirect && redirectTo
@@ -98,7 +98,7 @@ export function useAuth(): UseAuthReturn {
     // If no creds are provided, redirect to signup page
     if (!credentials) {
       const baseUrl = `${window.location.protocol}//${window.location.host}`;
-      replace(
+      push(
         `${baseUrl}/signup?${
           //  attach callbackUrl to if provided
           redirect && redirectTo

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import {
   addNewEducationFormSchema,
-  AddNewEducationFormValues,
+  AddNewEducationFormValues
 } from "@/lib/schemas/editor-forms-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,12 +16,12 @@ const initialValues = {
   fieldOfStudy: "",
   grade: "",
   description: "",
-  activities: "",
+  activities: ""
 };
 
 export default function AddNewEducationForm({
   onSubmit,
-  onCancel,
+  onCancel
 }: {
   onSubmit: (data: AddNewEducationFormValues) => void;
   onCancel: () => void;
@@ -29,13 +29,13 @@ export default function AddNewEducationForm({
   const formMethods = useForm<AddNewEducationFormValues>({
     resolver: zodResolver(addNewEducationFormSchema),
     defaultValues: initialValues,
-    mode: "all",
+    mode: "all"
   });
 
   const {
     handleSubmit,
     reset,
-    formState: { isValid },
+    formState: { isValid }
   } = formMethods;
 
   const onSubmitNewEducation = (data: AddNewEducationFormValues) => {
@@ -51,7 +51,7 @@ export default function AddNewEducationForm({
       >
         <EducationFormFields />
 
-        <div className="flex gap-2 justify-end">
+        <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>

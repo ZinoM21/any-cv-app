@@ -14,11 +14,11 @@ import TheModern from "./modern";
 const templateComponentMap: {
   [P in TemplateId]: (props: {
     profileData: Partial<ProfileData>;
-    signedUrlsMap: Map<string, ImageUrl>;
+    signedUrlsMap?: Map<string, ImageUrl>;
   }) => ReactElement<DocumentProps>;
 } = {
   [TemplateId.Classic]: TheClassic,
-  [TemplateId.Modern]: TheModern,
+  [TemplateId.Modern]: TheModern
   // [TemplateId.Creative]: ResumeDocument
   // [TemplateId.Minimal]: ResumeDocument
 };
@@ -29,11 +29,9 @@ const templateComponentMap: {
 export const getPDFTemplateById = async (
   templateId: TemplateId,
   profileData: Partial<ProfileData>,
-  signedUrlsMap: Map<string, ImageUrl>
+  signedUrlsMap?: Map<string, ImageUrl>
 ) => {
-  const PDFTemplate =
-    templateComponentMap[templateId] ||
-    templateComponentMap[TemplateId.Classic];
+  const PDFTemplate = templateComponentMap[templateId];
 
   return PDFTemplate({ profileData, signedUrlsMap });
 };

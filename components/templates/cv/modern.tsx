@@ -1,11 +1,5 @@
-import {
-  Education,
-  ProfileData,
-  Project,
-  VolunteeringExperience,
-  type ImageUrl
-} from "@/lib/types";
-import { formatDate, getUrlFromMap } from "@/lib/utils";
+import { ProfileData, type ImageUrl } from "@/lib/types";
+import { formatDate } from "@/lib/utils";
 import {
   Document,
   Font,
@@ -104,7 +98,7 @@ const RichText: React.FC<RichTextProps> = ({ children, style }) => {
 
   return (
     <Text style={style}>
-      {parts.map((part: string, index: number) => {
+      {parts.map((part, index) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           // Bold text
           return (
@@ -124,7 +118,7 @@ const RichText: React.FC<RichTextProps> = ({ children, style }) => {
 // Interface for TheModern component props
 interface TheModernProps {
   profileData: Partial<ProfileData>;
-  signedUrlsMap: Map<string, ImageUrl>;
+  signedUrlsMap?: Map<string, ImageUrl>;
 }
 
 // Create Document Component
@@ -185,9 +179,11 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
                   overflow: "hidden"
                 }}
               >
-                {/* eslint-disable-next-line */}
                 <Image
-                  src={getUrlFromMap(signedUrlsMap, profilePictureUrl)}
+                  src={
+                    signedUrlsMap?.get(profilePictureUrl)?.url ||
+                    profilePictureUrl
+                  }
                   cache={false}
                 />
               </View>
@@ -223,7 +219,7 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
                     textTransform: "capitalize"
                   }}
                 >
-                  {headline.split(' ').slice(0, 3).join(' ')}
+                  {headline.split(" ").slice(0, 3).join(" ")}
                 </Text>
               )}
             </View>
@@ -334,7 +330,7 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
           {projects && projects.length > 0 && (
             <View style={sharedStyles.sectionContainer}>
               <Text style={sharedStyles.sectionTitle}>Projects</Text>
-              {projects.map((project: Project, index: number) => (
+              {projects.map((project, index) => (
                 <View key={index} style={sharedStyles.sectionItem} wrap={false}>
                   <Text style={sharedStyles.sectionItemTitle}>
                     {project.title}
@@ -360,41 +356,32 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
           {volunteering && volunteering.length > 0 && (
             <View style={sharedStyles.sectionContainer}>
               <Text style={sharedStyles.sectionTitle}>Volunteering</Text>
-              {volunteering.map(
-                (vol: VolunteeringExperience, index: number) => (
-                  <View
-                    key={index}
-                    style={sharedStyles.sectionItem}
-                    wrap={false}
-                  >
-                    <Text>
-                      <Text style={sharedStyles.sectionItemTitle}>
-                        {vol.role} -
-                      </Text>
-                      <Text
-                        style={[
-                          sharedStyles.sectionItemTitle,
-                          sharedStyles.link
-                        ]}
-                      >
-                        {" "}
-                        {vol.organization}
-                      </Text>
+              {volunteering.map((vol, index) => (
+                <View key={index} style={sharedStyles.sectionItem} wrap={false}>
+                  <Text>
+                    <Text style={sharedStyles.sectionItemTitle}>
+                      {vol.role} -
                     </Text>
-
-                    <Text style={sharedStyles.sectionItemDate}>
-                      {formatDate(vol.startDate)} -{" "}
-                      {vol.endDate ? formatDate(vol.endDate) : "Present"}
+                    <Text
+                      style={[sharedStyles.sectionItemTitle, sharedStyles.link]}
+                    >
+                      {" "}
+                      {vol.organization}
                     </Text>
+                  </Text>
 
-                    {vol.description && (
-                      <RichText style={sharedStyles.sectionItemDescription}>
-                        {vol.description}
-                      </RichText>
-                    )}
-                  </View>
-                )
-              )}
+                  <Text style={sharedStyles.sectionItemDate}>
+                    {formatDate(vol.startDate)} -{" "}
+                    {vol.endDate ? formatDate(vol.endDate) : "Present"}
+                  </Text>
+
+                  {vol.description && (
+                    <RichText style={sharedStyles.sectionItemDescription}>
+                      {vol.description}
+                    </RichText>
+                  )}
+                </View>
+              ))}
             </View>
           )}
 
@@ -402,7 +389,7 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
           {education && education.length > 0 && (
             <View style={sharedStyles.sectionContainer}>
               <Text style={sharedStyles.sectionTitle}>Education</Text>
-              {education.map((edu: Education, index: number) => (
+              {education.map((edu, index) => (
                 <View key={index} style={sharedStyles.sectionItem} wrap={false}>
                   <Text style={sharedStyles.sectionItemTitle}>
                     {edu.degree}{" "}

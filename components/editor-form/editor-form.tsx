@@ -154,7 +154,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
 
           <div className="flex gap-2">
             {isLastTab ? (
-              <EditorFinalActionButton username={profileData!.username!} />
+              <EditorFinalActionButton />
             ) : (
               <Button
                 onClick={handleSubmit((data) => {
@@ -171,6 +171,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
                   }
                 }}
               >
+                {isDirty && <Save className="mr-1" />}
                 Next: {capitalize(nextTab)}
               </Button>
             )}

@@ -34,7 +34,8 @@ export const authConfig: NextAuthConfig = {
           const {
             exp: access_until,
             sub: user_id,
-            email
+            email,
+            name
           } = await getDecodedToken(tokens.access);
 
           const { exp: refresh_until } = await getDecodedToken(tokens.refresh);
@@ -48,7 +49,8 @@ export const authConfig: NextAuthConfig = {
             tokens,
             user: {
               id: user_id,
-              email
+              email,
+              name
             },
             validity
           };

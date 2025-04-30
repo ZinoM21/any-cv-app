@@ -40,7 +40,7 @@ export default async function LoginPage() {
 
                 <SignInForm />
               </div>
-              <div className="hidden md:flex md:items-center md:bg-muted md:px-20">
+              <div className="hidden border-l md:flex md:items-center md:bg-card md:px-20">
                 <Image
                   src="/svgs/undraw_update_resume.svg"
                   alt="Login Image"

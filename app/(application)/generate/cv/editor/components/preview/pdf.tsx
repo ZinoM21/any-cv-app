@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-import { Plugin, Viewer, Worker } from "@react-pdf-viewer/core";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
 
 import { getPDFTemplateById } from "@/components/templates/cv/cv-template-gate";
+import { usePdfPlugins } from "@/hooks/use-pdf-plugins";
 import {
   CVTemplate,
   ProfileData,
@@ -19,41 +20,29 @@ import { PDFLoadingSkeleton } from "./pdf-loading";
 export const PDF = ({
   data,
   template,
-  plugins,
-  signedUrlsMap
+  imageUrls
 }: {
   data: Partial<ProfileData>;
   template: CVTemplate;
-  plugins?: Plugin[];
-  signedUrlsMap: Map<string, ImageUrl>;
+  imageUrls?: Map<string, ImageUrl>;
 }) => {
   const [url, setUrl] = useState<string>();
+  const { filePluginInstance, zoomPluginInstance } = usePdfPlugins();
+
+  const generateUrl = async (
+    data: Partial<ProfileData>,
+    templateId: TemplateId,
+    imageUrls?: Map<string, ImageUrl>
+  ) => {
+    const PDFComponent = await getPDFTemplateById(templateId, data, imageUrls);
+    const PDFBlob = await pdf(PDFComponent).toBlob();
+    const pdfUrl = URL.createObjectURL(PDFBlob);
+    setUrl(pdfUrl);
+  };
 
   useEffect(() => {
-    const getBlob = async (
-      data: Partial<ProfileData>,
-      templateId: TemplateId
-    ) => {
-      const DocComponent = await getPDFTemplateById(
-        templateId,
-        data,
-        signedUrlsMap
-      );
-      const blob = await pdf(DocComponent).toBlob();
-      return blob;
-    };
-
-    const generateUrl = async (
-      data: Partial<ProfileData>,
-      templateId: TemplateId
-    ) => {
-      const blob = await getBlob(data, templateId);
-      const url = URL.createObjectURL(blob);
-      setUrl(url);
-    };
-
-    generateUrl(data, template.id);
-  }, [data, template.id, signedUrlsMap]);
+    generateUrl(data, template.id, imageUrls);
+  }, [data, template.id, imageUrls]);
 
   if (!url || url === "") {
     return (
@@ -69,7 +58,7 @@ export const PDF = ({
     >
       <Viewer
         fileUrl={url}
-        plugins={plugins}
+        plugins={[filePluginInstance, zoomPluginInstance]}
         renderLoader={() => (
           <div className="flex h-full w-full justify-center bg-muted pt-5">
             <PDFLoadingSkeleton />

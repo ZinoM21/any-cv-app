@@ -1,5 +1,6 @@
 import { auth, signOut } from "@/auth";
 import BuildAnyCVLogo from "@/components/logo";
+import { Card } from "@/components/ui/card";
 import { redirect } from "next/navigation";
 import { SignUpForm } from "../../../components/auth/signup-form";
 
@@ -43,7 +44,9 @@ export default async function SignUpPage() {
               Enter your details below to create your account with BuildAnyCV
             </p>
           </div>
-          <SignUpForm />
+          <Card className="p-6">
+            <SignUpForm />
+          </Card>
         </div>
       </div>
     </div>

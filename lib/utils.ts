@@ -269,8 +269,8 @@ export const getSnakeCaseFileName = (str: string): string => {
  * @param profile The profile to extract file paths from
  * @returns An array of file paths
  */
-export const getFilePaths = (profile: Partial<ProfileData>): string[] => {
-  const filePaths: string[] = [];
+export const getFilePaths = (profile: Partial<ProfileData>): string[] | [] => {
+  const filePaths = [];
 
   if (!!profile.profilePictureUrl) {
     filePaths.push(profile.profilePictureUrl);
@@ -311,9 +311,21 @@ export const getFilePaths = (profile: Partial<ProfileData>): string[] => {
  * @returns The signed URL or undefined if not found
  */
 export function getUrlFromMap(
-  urlMap: Map<string, ImageUrl> | undefined,
-  path: string | undefined
+  urlMap: Map<string, ImageUrl>,
+  path: string
 ): string | undefined {
-  if (!urlMap || !path) return undefined;
   return urlMap.get(path)?.url;
+}
+
+/**
+ * Determines if an input is a URL
+ *
+ * @param src The input to check
+ * @returns true if the input is a URL, false if it's a file path
+ */
+export function isUrl(src: string | Blob | undefined): boolean {
+  if (!src || src instanceof Blob) return false;
+
+  // Check if the string starts with http:// or https:// or //
+  return /^(https?:\/\/|\/\/)/.test(src);
 }

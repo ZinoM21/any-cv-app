@@ -10,7 +10,6 @@ import {
 
 import { FileUser } from "lucide-react";
 
-import { SignInForm } from "@/components/auth/login-form";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,8 +23,9 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "../ui/drawer";
+import { SignUpForm } from "./signup-form";
 
-export default function SignInDialog({
+export default function SignUpDialog({
   trigger,
   onSuccess,
   customTitle,
@@ -41,7 +41,7 @@ export default function SignInDialog({
   const [isOpen, setOpen] = useState(false);
   const [isOpenMobile, setOpenMobile] = useState(false);
 
-  const title = customTitle || "Log in to BuildAnyCV";
+  const title = customTitle || "Create account";
   const description =
     customDescription || "Generate beautiful resumes and websites in seconds.";
 
@@ -55,7 +55,7 @@ export default function SignInDialog({
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
           <div className="max-h-[calc(100vh-10rem)] overflow-y-auto border-t p-4">
-            <SignInForm
+            <SignUpForm
               className="flex-1"
               redirect={false}
               onSuccess={async () => {
@@ -80,7 +80,7 @@ export default function SignInDialog({
               {description}
             </DialogDescription>
           </DialogHeader>
-          <SignInForm
+          <SignUpForm
             className="flex-1"
             redirect={false}
             onSuccess={async () => {
@@ -92,7 +92,7 @@ export default function SignInDialog({
         <div className="hidden rounded-r-lg border-l lg:flex lg:items-center lg:bg-card lg:px-20">
           <Image
             src="/svgs/undraw_update_resume.svg"
-            alt="Login Image"
+            alt="Signup Image"
             width={300}
             height={235}
           />

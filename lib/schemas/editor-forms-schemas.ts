@@ -4,8 +4,8 @@ import { z } from "zod";
 export const editSummaryFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  headline: z.string().optional(),
-  about: z.string().optional(),
+  headline: z.string().max(100, "Keep it short! Maximum 100 characters").optional(),
+  about: z.string().max(2600, "Input too long! Maximum 2600 characters").optional(),
   email: z.string().email("Enter a valid email").optional().or(z.literal("")),
   phone: z.string().optional(),
   website: z.string().optional(),

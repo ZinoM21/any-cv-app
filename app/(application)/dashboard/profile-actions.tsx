@@ -25,10 +25,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import DeleteProfileDialog from "./delete-profile-dialog";
 
-const ProfileActions = ({ profile }: { profile: ProfileData }) => {
+const ProfileActions = ({ profile }: { profile: Partial<ProfileData> }) => {
   const [isPublishOpen, setIsPublishOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const { mutateAsync: unpublishAsync } = useUnpublishProfile(profile.username);
+  const { mutateAsync: unpublishAsync } = useUnpublishProfile(
+    profile.username!
+  );
   const router = useRouter();
 
   const unpublishProfile = async () => {
@@ -111,13 +113,13 @@ const ProfileActions = ({ profile }: { profile: ProfileData }) => {
       Therefore, we are also controlling the open states manually instead of using the trigger component.
       */}
       <PublishWebsiteDialog
-        username={profile.username}
+        profile={profile}
         open={isPublishOpen}
         setOpen={setIsPublishOpen}
         onSuccess={onPublishSuccess}
       />
       <DeleteProfileDialog
-        username={profile.username}
+        username={profile.username!}
         open={isDeleteOpen}
         setIsOpen={setIsDeleteOpen}
       />

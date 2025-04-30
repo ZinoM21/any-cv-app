@@ -19,8 +19,8 @@ import { Label } from "@/components/ui/label";
 
 import { Plus } from "lucide-react";
 
+import { Image } from "@/components/editor-form/form-sections/image";
 import { ImageInput } from "@/components/editor-form/form-sections/image-input";
-import { SignedImage } from "@/components/editor-form/form-sections/signed-image";
 import { Position } from "@/lib/types";
 import { getSnakeCaseFileName } from "@/lib/utils";
 import { format } from "date-fns";
@@ -95,12 +95,7 @@ export default function ExperienceFormFields({
             </FormLabel>
             <FormControl>
               <div className="flex items-center gap-4">
-                <SignedImage
-                  path={field?.value}
-                  alt={companyName}
-                  width={80}
-                  height={80}
-                />
+                <Image src={field?.value} alt={companyName} />
                 <ImageInput
                   field={field}
                   fileName={getSnakeCaseFileName(companyName)}
