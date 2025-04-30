@@ -171,6 +171,7 @@ export function EditorForm<T extends z.ZodTypeAny>({
                   }
                 }}
               >
+                {isDirty && <Save className="mr-1" />}
                 Next: {capitalize(nextTab)}
               </Button>
             )}
