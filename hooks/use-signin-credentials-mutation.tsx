@@ -60,7 +60,7 @@ export const useSigninCredentialsMutation = () => {
         await onSuccess();
       }
       if (redirect) {
-        push(response?.url || redirectTo || "/");
+        push(redirectTo || response?.url || "/");
       }
     },
     onError: (error, { options }) => {
