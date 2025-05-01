@@ -56,7 +56,7 @@ export default function DashboardSidebar({
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
-      <div className="size-full p-4 sm:p-6">{children}</div>
+      <div className="size-full overflow-y-auto p-4 sm:p-6">{children}</div>
     </SidebarProvider>
   );
 }

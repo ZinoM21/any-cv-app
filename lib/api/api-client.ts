@@ -70,7 +70,11 @@ export async function apiRequest<T>(
       throw new ApiError(message, response.status);
     }
 
-    return response.json();
+    if (response.status === 204) {
+      return {} as T;
+    }
+
+    return await response.json();
   } catch (error) {
     // Handle all known errors (thrown above intentionally)
     if (error instanceof ApiError) {

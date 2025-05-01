@@ -130,7 +130,8 @@ export function ResetPasswordForm({ token }: { token?: string }) {
 
         <Button
           type="submit"
-          className="w-full"
+          className={token && "w-full"}
+          variant={token ? "default" : "outline"}
           disabled={isPending || !isValid || !isDirty}
         >
           {isPending ? "Resetting..." : "Reset Password"}

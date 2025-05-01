@@ -5,6 +5,7 @@ import {
   type ResetPasswordFormValues,
   type SignUpFormValues
 } from "../schemas/auth-schema";
+import type { UpdateUserFormValues } from "../schemas/user-schemas";
 import {
   ProfileData,
   Tokens,
@@ -337,4 +338,32 @@ export const resetPassword = async (
       token: token
     }
   );
+};
+
+/**
+ * Updates user account information
+ *
+ * @param api The API client to use
+ * @param userData The user data to update
+ * @returns Updated user data
+ */
+export const updateUser = async (
+  api: ReturnType<typeof createApiClient>,
+  userData: UpdateUserFormValues
+) => {
+  return await api.patch<User>("/v1/user/", userData);
+};
+
+export const getUser = async (api: ReturnType<typeof createApiClient>) => {
+  return await api.get<User>("/v1/user/");
+};
+
+/**
+ * Deletes the current user's account and all associated data
+ *
+ * @param api The API client to use
+ * @returns void
+ */
+export const deleteUser = async (api: ReturnType<typeof createApiClient>) => {
+  return await api.delete<void>("/v1/user/");
 };

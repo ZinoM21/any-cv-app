@@ -110,6 +110,7 @@ export type User = {
   email: string;
   firstName?: string;
   lastName?: string;
+  email_verified?: boolean;
 };
 
 export type Tokens = {

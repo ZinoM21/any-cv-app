@@ -61,7 +61,7 @@ export function SubmitLinkForm() {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
-        className="space-y-4"
+        className="space-y-8"
       >
         <div className="flex flex-col gap-2 sm:flex-row">
           <FormField
