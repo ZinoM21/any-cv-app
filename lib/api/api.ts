@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { ApiError } from "../errors";
 import {
   SignInFormValues,
+  type ResetPasswordFormValues,
   type SignUpFormValues
 } from "../schemas/auth-schema";
 import {
@@ -112,6 +113,22 @@ export const registerUser = async (
   credentials: SignUpFormValues
 ): Promise<User> => {
   return await api.post<User>("/v1/auth/register", credentials);
+};
+
+/**
+ * Verifies a user's email with the provided token
+ *
+ * @param api The API client to use
+ * @param token The verification token
+ * @returns Verification result
+ */
+export const verifyEmail = async (
+  api: ReturnType<typeof createApiClient>,
+  token: string
+): Promise<{ message: string }> => {
+  return await api.post<{ message: string }>("/v1/auth/verify-email", {
+    token
+  });
 };
 
 /**
@@ -283,4 +300,41 @@ export const deleteProfile = async (
   username: string
 ) => {
   return await api.delete<void>(`/v1/profile/${username}`);
+};
+
+/**
+ * Initiates the password reset process by sending a reset link to the user's email
+ *
+ * @param api The API client to use
+ * @param email Email address to send password reset link to
+ * @returns Message confirming the request was processed
+ */
+export const forgotPassword = async (
+  api: ReturnType<typeof createApiClient>,
+  email: string
+): Promise<{ message: string }> => {
+  return await api.post<{ message: string }>("/v1/auth/forgot-password", {
+    email
+  });
+};
+
+/**
+ * Resets a user's password using the provided token
+ *
+ * @param api The API client to use
+ * @param passwords The new password and old password
+ * @returns Message confirming the password was reset successfully along with user credentials for auto sign-in
+ */
+export const resetPassword = async (
+  api: ReturnType<typeof createApiClient>,
+  passwords: ResetPasswordFormValues,
+  token?: string
+): Promise<{ message: string; email?: string }> => {
+  return await api.post<{ message: string; email?: string }>(
+    "/v1/auth/reset-password",
+    {
+      password: passwords.password,
+      token: token
+    }
+  );
 };

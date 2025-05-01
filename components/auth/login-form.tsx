@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SignInFormValues, signInSchema } from "@/lib/schemas/auth-schema";
 import { Loader2 } from "lucide-react";
-// import Link from "next/link";
+import Link from "next/link";
 
 export function SignInForm({
   className,
@@ -76,12 +76,12 @@ export function SignInForm({
             <FormItem>
               <div className="flex items-center">
                 <FormLabel>Password</FormLabel>
-                {/* <Link
-                  href="#"
+                <Link
+                  href="/forgot-password"
                   className="ml-auto text-sm underline-offset-2 hover:underline"
                 >
                   Forgot your password?
-                </Link> */}
+                </Link>
               </div>
               <FormControl>
                 <Input

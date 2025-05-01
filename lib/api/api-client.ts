@@ -10,7 +10,6 @@ import {
   ApiError,
   ApiErrorType,
   AuthorizationError,
-  BadRequestError,
   ForbiddenError,
   InternalServerError,
   InvalidCredentialsError,
@@ -89,9 +88,6 @@ export async function apiRequest<T>(
           signOutServer({ redirectTo: "/" });
         }
       }
-      if (error.message === ApiErrorType.BadRequest) {
-        throw new BadRequestError();
-      }
       if (error.message === ApiErrorType.InvalidCredentials) {
         throw new InvalidCredentialsError();
       }
@@ -112,7 +108,8 @@ export async function apiRequest<T>(
       }
       if (
         error.message === ApiErrorType.ResourceNotFound ||
-        error.message === ApiErrorType.ResourceAlreadyExists
+        error.message === ApiErrorType.ResourceAlreadyExists ||
+        error.message === ApiErrorType.BadRequest
       ) {
         // Throw error hear so it can be handled by the caller
         throw error;

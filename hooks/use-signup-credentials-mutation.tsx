@@ -24,6 +24,9 @@ export const useSignupCredentialsMutation = () => {
         credentials: { email: user.email, password: credentials.password },
         options
       });
+    },
+    onError: (error, { options }) => {
+      options?.onError?.(error);
     }
   });
 };

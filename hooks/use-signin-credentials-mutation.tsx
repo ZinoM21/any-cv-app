@@ -60,15 +60,16 @@ export const useSigninCredentialsMutation = () => {
         await onSuccess();
       }
       if (redirect) {
-        push(response?.url || redirectTo || "/");
+        push(redirectTo || response?.url || "/");
       }
     },
-    onError: (error) => {
+    onError: (error, { options }) => {
       if (error.message === "CredentialsSignin") {
         toast.error("Invalid credentials. Try another email or password.");
       } else {
         toast.error(error.message);
       }
+      options?.onError?.(error);
     }
   });
 };
