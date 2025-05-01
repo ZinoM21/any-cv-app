@@ -14,8 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
+import { ApiErrorType } from "@/lib/errors";
 import { SignUpFormValues, signUpSchema } from "@/lib/schemas/auth-schema";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export function SignUpForm({
   className,
@@ -26,7 +28,7 @@ export function SignUpForm({
   onSuccess?: () => Promise<void>;
   redirect?: boolean;
 }) {
-  const { signIn, signUp, isLoading, error } = useAuth();
+  const { signIn, signUp, isLoading } = useAuth();
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -40,7 +42,25 @@ export function SignUpForm({
   });
 
   const submit = form.handleSubmit(
-    async (credentials) => await signUp(credentials, { redirect, onSuccess })
+    async (credentials) =>
+      await signUp(credentials, {
+        redirect,
+        onSuccess: async () => {
+          if (onSuccess) await onSuccess();
+          toast.success(
+            "Account created successfully. Please verify your email in the next 24 hours."
+          );
+        },
+        onError: (error) => {
+          if (error.message === ApiErrorType.ResourceAlreadyExists) {
+            form.setError("email", {
+              message: "This email already exists. Please try another one."
+            });
+          } else {
+            toast.error(error.message);
+          }
+        }
+      })
   );
 
   return (
@@ -121,8 +141,6 @@ export function SignUpForm({
             </FormItem>
           )}
         />
-
-        {error && <div className="text-sm text-destructive">{error}</div>}
 
         <Button
           type="submit"

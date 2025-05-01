@@ -144,4 +144,5 @@ export type SignInOptions = Pick<
   "redirectTo" | "redirect"
 > & {
   onSuccess?: () => Promise<void>;
+  onError?: (error: Error) => void;
 };

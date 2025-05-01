@@ -25,7 +25,7 @@ export class AuthorizationError extends AuthError {
 
 export class BadRequestError extends Error {
   constructor() {
-    super("Bad request. Please try again.");
+    super("Something about your request is not right. Please try again.");
   }
 }
 

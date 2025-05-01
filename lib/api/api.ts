@@ -115,6 +115,22 @@ export const registerUser = async (
 };
 
 /**
+ * Verifies a user's email with the provided token
+ *
+ * @param api The API client to use
+ * @param token The verification token
+ * @returns Verification result
+ */
+export const verifyEmail = async (
+  api: ReturnType<typeof createApiClient>,
+  token: string
+): Promise<{ message: string }> => {
+  return await api.post<{ message: string }>("/v1/auth/verify-email", {
+    token
+  });
+};
+
+/**
  * Fetches a new access token from the backend using the refresh token
  *
  * @param refreshToken Refresh token to use for fetching a new access token
