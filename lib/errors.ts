@@ -63,7 +63,7 @@ export class InternalServerError extends Error {
 
 export class ConnectionFailedError extends Error {
   constructor() {
-    super("Connection to server failed. ");
+    super("Connection to server failed. Please try again later.");
   }
 }
 
