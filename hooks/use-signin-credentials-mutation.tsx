@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 
+import { InternalServerError, InvalidCredentialsError } from "@/lib/errors";
 import { SignInFormValues } from "@/lib/schemas/auth-schema";
 import { SignInOptions } from "@/lib/types";
 import { signIn } from "next-auth/react";
@@ -48,7 +49,13 @@ export const useSigninCredentialsMutation = () => {
       });
 
       if (response?.error) {
-        throw new Error(response.error);
+        if (response?.error === "CredentialsSignin") {
+          throw new InvalidCredentialsError();
+        }
+        if (response?.error === "Configuration") {
+          throw new InternalServerError();
+        }
+        throw new Error(response?.error);
       }
 
       return response;
@@ -64,11 +71,7 @@ export const useSigninCredentialsMutation = () => {
       }
     },
     onError: (error, { options }) => {
-      if (error.message === "CredentialsSignin") {
-        toast.error("Invalid credentials. Try another email or password.");
-      } else {
-        toast.error(error.message);
-      }
+      toast.error(error.message);
       options?.onError?.(error);
     }
   });

@@ -10,6 +10,7 @@ import {
   ApiError,
   ApiErrorType,
   AuthorizationError,
+  ConnectionFailedError,
   ForbiddenError,
   InternalServerError,
   InvalidCredentialsError,
@@ -118,6 +119,11 @@ export async function apiRequest<T>(
         // Throw error hear so it can be handled by the caller
         throw error;
       }
+    }
+
+    if (error instanceof TypeError && error.message === "fetch failed") {
+      console.error(error);
+      throw new ConnectionFailedError();
     }
 
     // Handle unknown errors

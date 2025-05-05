@@ -61,6 +61,12 @@ export class InternalServerError extends Error {
   }
 }
 
+export class ConnectionFailedError extends Error {
+  constructor() {
+    super("Connection to server failed. ");
+  }
+}
+
 export enum ApiErrorType {
   BadRequest = "bad_request",
   TokenExpired = "token_expired",

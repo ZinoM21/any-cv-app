@@ -1,5 +1,5 @@
 import { authenticateUser, getNewAccessToken } from "@/lib/api";
-import { InvalidCredentialsError } from "@/lib/errors";
+// import { InvalidCredentialsError } from "@/lib/errors";
 import { signInSchema } from "@/lib/schemas/auth-schema";
 import { AuthValidity } from "@/lib/types";
 import { getDecodedToken, isValidToken } from "@/lib/utils";
@@ -23,48 +23,36 @@ export const authConfig: NextAuthConfig = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        try {
-          const parsedCreds = await signInSchema.parseAsync({
-            email: credentials.email,
-            password: credentials.password
-          });
+        const parsedCreds = await signInSchema.parseAsync({
+          email: credentials.email,
+          password: credentials.password
+        });
 
-          const tokens = await authenticateUser(parsedCreds);
+        const tokens = await authenticateUser(parsedCreds);
 
-          const {
-            exp: access_until,
-            sub: user_id,
+        const {
+          exp: access_until,
+          sub: user_id,
+          email,
+          name
+        } = await getDecodedToken(tokens.access);
+
+        const { exp: refresh_until } = await getDecodedToken(tokens.refresh);
+
+        const validity: AuthValidity = {
+          access_until,
+          refresh_until
+        };
+
+        return {
+          tokens,
+          user: {
+            id: user_id,
             email,
             name
-          } = await getDecodedToken(tokens.access);
-
-          const { exp: refresh_until } = await getDecodedToken(tokens.refresh);
-
-          const validity: AuthValidity = {
-            access_until,
-            refresh_until
-          };
-
-          return {
-            tokens,
-            user: {
-              id: user_id,
-              email,
-              name
-            },
-            validity
-          };
-        } catch (error) {
-          console.error(error);
-
-          if (error instanceof InvalidCredentialsError) {
-            // Throw Invalid Credentials Error to user
-            throw error;
-          }
-
-          // Fallback: don't show other errors to user
-          return null;
-        }
+          },
+          validity
+        };
       }
     })
   ],
