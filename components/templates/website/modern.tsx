@@ -26,6 +26,9 @@ export default function TheModernWebsite({
     publishingOptions
   } = profileData;
 
+  const fullName =
+    firstName && lastName ? `${firstName} ${lastName}` : "John Doe";
+
   return (
     <main className="mt-16 min-h-screen bg-background">
       {/* Hero Section */}
@@ -33,16 +36,15 @@ export default function TheModernWebsite({
         <div className="container relative mx-auto flex flex-1 flex-col px-4 pb-16 pt-28 text-center">
           <div>
             <h3 className="mb-2 text-xl font-bold text-violet-600 md:text-2xl">
-              {`${firstName} ${lastName}`}
+              {fullName}
             </h3>
             <h1 className="mb-4 text-3xl font-extrabold text-foreground md:text-5xl">
               {headline
                 ? headline.split(" ").slice(0, 12).join(" ")
-                : `${firstName} ${lastName}, Developer`}
+                : `${fullName}, Developer`}
             </h1>
             <p className="mx-auto max-w-3xl px-2 text-sm text-muted-foreground md:px-0 md:text-base">
-              {location ||
-                "Mission-driven full stack developer with a passion for thoughtful UI design, collaboration, and teaching."}
+              {location || "San Francisco, CA"}
             </p>
 
             {/* Profile Image */}
@@ -52,7 +54,7 @@ export default function TheModernWebsite({
                   <Image
                     slug={publishingOptions?.slug}
                     src={profilePictureUrl}
-                    alt={`${firstName} ${lastName}`}
+                    alt={fullName}
                     className="h-full w-full object-cover"
                   />
                 )}
@@ -60,28 +62,36 @@ export default function TheModernWebsite({
             </div>
 
             {/* Contact Info with Separator */}
-            <div className="mt-8 flex flex-col items-center justify-center space-y-4 md:mt-12 md:flex-row md:space-y-0">
-              <div className="text-center">
-                <h3 className="mb-1 text-lg text-foreground md:text-xl">
-                  Phone
-                </h3>
-                <p className="text-sm text-muted-foreground md:text-base">
-                  {phone || "Not provided"}
-                </p>
-              </div>
+            {(phone || email) && (
+              <div className="mt-8 flex flex-col items-center justify-center space-y-4 md:mt-12 md:flex-row md:space-y-0">
+                {phone && (
+                  <div className="text-center">
+                    <h3 className="mb-1 text-lg text-foreground md:text-xl">
+                      Phone
+                    </h3>
+                    <p className="text-sm text-muted-foreground md:text-base">
+                      {phone}
+                    </p>
+                  </div>
+                )}
 
-              <div className="mx-8 hidden h-7 w-px bg-muted md:block"></div>
-              <div className="my-2 block h-px w-24 bg-muted md:hidden"></div>
+                {email && (
+                  <>
+                    <div className="mx-8 hidden h-7 w-px bg-muted md:block"></div>
+                    <div className="my-2 block h-px w-24 bg-muted md:hidden"></div>
 
-              <div className="text-center">
-                <h3 className="mb-1 text-lg text-foreground md:text-xl">
-                  Email
-                </h3>
-                <p className="text-sm text-muted-foreground md:text-base">
-                  {email || "Not provided"}
-                </p>
+                    <div className="text-center">
+                      <h3 className="mb-1 text-lg text-foreground md:text-xl">
+                        Email
+                      </h3>
+                      <p className="text-sm text-muted-foreground md:text-base">
+                        {email}
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
-            </div>
+            )}
           </div>
 
           {/* "Scroll to see experience" text at bottom */}
@@ -96,24 +106,28 @@ export default function TheModernWebsite({
         <div className="container mx-auto px-4 text-center">
           <h2 className="mb-4 text-xl font-extrabold md:text-2xl">
             <span className="text-foreground">Hi, </span>
-            <span className="text-violet-600">I&apos;m {firstName}</span>
+            <span className="text-violet-600">
+              I&apos;m {fullName.split(" ")[0]}
+            </span>
             <span className="text-foreground">. Nice to meet you.</span>
           </h2>
           <p className="mx-auto max-w-xl px-2 text-sm leading-loose text-muted-foreground md:px-0 md:text-base">
-            {about || "No information provided."}
+            {about ||
+              "Passionate software engineer with 5+ years of experience building web and mobile applications. Currently focusing on AI-driven solutions."}
           </p>
         </div>
       </section>
 
       {/* Experience Section */}
-      <section className="bg-background py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-6 text-center text-xl font-extrabold text-foreground md:text-2xl">
-            EXPERIENCE
-          </h2>
-          <div className="mb-10 h-px bg-muted md:mb-16"></div>
 
-          {experiences && experiences.length > 0 ? (
+      {experiences && experiences.length > 0 && (
+        <section className="bg-background py-12 md:py-16">
+          <div className="container mx-auto px-4">
+            <h2 className="mb-6 text-center text-xl font-extrabold text-foreground md:text-2xl">
+              EXPERIENCE
+            </h2>
+            <div className="mb-10 h-px bg-muted md:mb-16"></div>
+
             <div className="mx-auto max-w-5xl">
               {experiences.map((experience, expIndex) =>
                 experience.positions.map((position, posIndex) => (
@@ -175,23 +189,19 @@ export default function TheModernWebsite({
                 ))
               )}
             </div>
-          ) : (
-            <p className="text-center text-muted-foreground">
-              No experience information provided.
-            </p>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Skills Section */}
-      <section className="bg-background py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-6 text-center text-xl font-extrabold text-foreground md:text-2xl">
-            SKILLS
-          </h2>
-          <div className="mb-10 h-px bg-muted md:mb-16"></div>
+      {skills && skills.length > 0 && (
+        <section className="bg-background py-12 md:py-16">
+          <div className="container mx-auto px-4">
+            <h2 className="mb-6 text-center text-xl font-extrabold text-foreground md:text-2xl">
+              SKILLS
+            </h2>
+            <div className="mb-10 h-px bg-muted md:mb-16"></div>
 
-          {skills && skills.length > 0 ? (
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
               {skills.map((skill, index) => (
                 <div key={index} className="h-16">
@@ -212,23 +222,19 @@ export default function TheModernWebsite({
                 </div>
               ))}
             </div>
-          ) : (
-            <p className="text-center text-muted-foreground">
-              No skills information provided.
-            </p>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Education Section */}
-      <section className="bg-muted py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-6 text-center text-xl font-extrabold text-foreground md:text-2xl">
-            EDUCATION
-          </h2>
-          <div className="mb-10 h-px bg-muted md:mb-16"></div>
+      {education && education.length > 0 && (
+        <section className="bg-muted py-12 md:py-16">
+          <div className="container mx-auto px-4">
+            <h2 className="mb-6 text-center text-xl font-extrabold text-foreground md:text-2xl">
+              EDUCATION
+            </h2>
+            <div className="mb-10 h-px bg-muted md:mb-16"></div>
 
-          {education && education.length > 0 ? (
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 md:grid-cols-3 md:gap-12">
               {education.map((edu, index) => (
                 <div key={index} className="relative">
@@ -272,13 +278,9 @@ export default function TheModernWebsite({
                 </div>
               ))}
             </div>
-          ) : (
-            <p className="text-center text-muted-foreground">
-              No education information provided.
-            </p>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Projects Section */}
       {projects && projects.length > 0 && (
