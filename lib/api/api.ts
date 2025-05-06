@@ -46,8 +46,17 @@ export async function getPublishedProfiles() {
 export async function getPublishedProfile(
   api: ReturnType<typeof createApiClient>,
   slug: string
-): Promise<ProfileData> {
-  return await api.get<ProfileData>(`/v1/profile/published/${slug}`);
+): Promise<ProfileData | null> {
+  try {
+    return await api.get<ProfileData>(`/v1/profile/published/${slug}`);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      if (error.status === 404) {
+        return null;
+      }
+    }
+    throw error;
+  }
 }
 
 /**
@@ -58,21 +67,14 @@ export async function getPublishedProfile(
  * @returns The fetched profile data
  */
 export async function getPublishedProfileOrRedirect(
-  slug: string,
-  redirectTo: string = "/"
+  slug: string
 ): Promise<ProfileData> {
   const serverApi = await getServerApi();
-  try {
-    return await getPublishedProfile(serverApi, slug);
-  } catch (error) {
-    if (error instanceof ApiError) {
-      if (error.status === 404) {
-        notFound();
-      }
-      redirect(redirectTo);
-    }
-    throw error;
+  const profile = await getPublishedProfile(serverApi, slug);
+  if (!profile) {
+    notFound();
   }
+  return profile;
 }
 
 /**
