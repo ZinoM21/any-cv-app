@@ -1,5 +1,3 @@
-import { CredentialsSignin } from "next-auth";
-
 import { AuthError } from "next-auth";
 
 export class ApiError extends Error {
@@ -29,7 +27,7 @@ export class BadRequestError extends Error {
   }
 }
 
-export class InvalidCredentialsError extends CredentialsSignin {
+export class InvalidCredentialsError extends Error {
   constructor() {
     super("Invalid credentials. Try a different email or password.");
   }

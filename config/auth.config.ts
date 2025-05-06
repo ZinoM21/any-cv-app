@@ -1,4 +1,5 @@
 import { authenticateUser, getNewAccessToken } from "@/lib/api";
+import { InvalidCredentialsError } from "@/lib/errors";
 // import { InvalidCredentialsError } from "@/lib/errors";
 import { signInSchema } from "@/lib/schemas/auth-schema";
 import { AuthValidity } from "@/lib/types";
@@ -23,36 +24,43 @@ export const authConfig: NextAuthConfig = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        const parsedCreds = await signInSchema.parseAsync({
-          email: credentials.email,
-          password: credentials.password
-        });
+        try {
+          const parsedCreds = await signInSchema.parseAsync({
+            email: credentials.email,
+            password: credentials.password
+          });
 
-        const tokens = await authenticateUser(parsedCreds);
+          const tokens = await authenticateUser(parsedCreds);
 
-        const {
-          exp: access_until,
-          sub: user_id,
-          email,
-          name
-        } = await getDecodedToken(tokens.access);
-
-        const { exp: refresh_until } = await getDecodedToken(tokens.refresh);
-
-        const validity: AuthValidity = {
-          access_until,
-          refresh_until
-        };
-
-        return {
-          tokens,
-          user: {
-            id: user_id,
+          const {
+            exp: access_until,
+            sub: user_id,
             email,
             name
-          },
-          validity
-        };
+          } = await getDecodedToken(tokens.access);
+
+          const { exp: refresh_until } = await getDecodedToken(tokens.refresh);
+
+          const validity: AuthValidity = {
+            access_until,
+            refresh_until
+          };
+
+          return {
+            tokens,
+            user: {
+              id: user_id,
+              email,
+              name
+            },
+            validity
+          };
+        } catch (error: unknown) {
+          if (error instanceof InvalidCredentialsError) {
+            return null;
+          }
+          return null;
+        }
       }
     })
   ],
