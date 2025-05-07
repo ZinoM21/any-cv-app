@@ -207,7 +207,7 @@ export const unpublishProfile = async (
   api: ReturnType<typeof createApiClient>,
   username: string
 ) => {
-  return await api.patch<ProfileData>(`/v1/profile/${username}/unpublish`);
+  return await api.get<ProfileData>(`/v1/profile/${username}/unpublish`);
 };
 
 export const getSignedUrl = async (
