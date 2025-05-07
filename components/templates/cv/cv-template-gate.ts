@@ -9,7 +9,6 @@ import { DocumentProps } from "@react-pdf/renderer";
 import { ReactElement } from "react";
 import TheClassic from "./classic";
 import TheModern from "./modern";
-// import { ResumeDocument } from "./resume-two";
 
 const templateComponentMap: {
   [P in TemplateId]: (props: {
@@ -19,8 +18,6 @@ const templateComponentMap: {
 } = {
   [TemplateId.Classic]: TheClassic,
   [TemplateId.Modern]: TheModern
-  // [TemplateId.Creative]: ResumeDocument
-  // [TemplateId.Minimal]: ResumeDocument
 };
 
 /**
