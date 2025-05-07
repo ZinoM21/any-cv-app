@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
 
 import {
   Breadcrumb,
@@ -29,7 +30,6 @@ import { RouteMapping, routeMappings } from "@/config/breadcrumb-routes";
 import { cvTemplates, websiteTemplates } from "@/config/templates";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { TemplateId } from "@/lib/types";
-import { useEffect } from "react";
 
 export default function BreadCrumb({
   className,
@@ -93,6 +93,17 @@ export default function BreadCrumb({
     })}`;
   };
 
+  // Determine which items to show based on mobile status
+  const showProfileDropdown = useMemo(
+    () => isSignedIn && username && !isMobile,
+    [isSignedIn, username, isMobile]
+  );
+
+  const showFormatDropdown = useMemo(
+    () => formatConfig && (!isMobile || !currentAction),
+    [formatConfig, isMobile, currentAction]
+  );
+
   useEffect(() => {
     refetch?.();
   }, [refetch, username]);
@@ -100,8 +111,8 @@ export default function BreadCrumb({
   return (
     <Breadcrumb className={className} {...props}>
       <BreadcrumbList>
-        {/* Profiles dropdown (only for authenticated users) */}
-        {isSignedIn && username && (
+        {/* Profiles dropdown (only for authenticated desktop users) */}
+        {showProfileDropdown && (
           <>
             <BreadcrumbSeparator className="hidden md:block [&>svg]:h-5 [&>svg]:w-5" />
             <BreadcrumbItem className="hidden md:block">
@@ -150,8 +161,8 @@ export default function BreadCrumb({
           </>
         )}
 
-        {/* Format dropdown (CV, Website) */}
-        {formatConfig && (
+        {/* Format dropdown (CV, Website) - hidden on mobile if we have a template */}
+        {showFormatDropdown && (
           <>
             <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
             <BreadcrumbItem>
@@ -162,7 +173,7 @@ export default function BreadCrumb({
                   </DropdownMenuTrigger>
                 ) : (
                   <DropdownMenuTrigger className="flex items-center gap-1 rounded px-2 py-1 text-base hover:bg-accent">
-                    {formatConfig.label}
+                    {formatConfig?.label || "Format"}
                     <ChevronsUpDown className="size-4" />
                   </DropdownMenuTrigger>
                 )}
@@ -196,7 +207,7 @@ export default function BreadCrumb({
           </>
         )}
 
-        {/* Combined Template/Action dropdown */}
+        {/* Template/Action dropdown - always show on mobile if available */}
         {formatConfig && currentAction && (
           <>
             <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
@@ -254,17 +265,15 @@ export default function BreadCrumb({
             </BreadcrumbItem>
           </>
         )}
-        {currentAction === "editor" && templateId && (
+
+        {/* Editor label - desktop only */}
+        {currentAction === "editor" && templateId && !isMobile && (
           <>
             <BreadcrumbSeparator className="[&>svg]:h-5 [&>svg]:w-5" />
             <BreadcrumbItem>
-              {isMobile ? (
-                <BreadcrumbEllipsis />
-              ) : (
-                <span className="flex cursor-default items-center gap-1 rounded px-2 py-1 text-base">
-                  Editor
-                </span>
-              )}
+              <span className="flex cursor-default items-center gap-1 rounded px-2 py-1 text-base">
+                Editor
+              </span>
             </BreadcrumbItem>
           </>
         )}

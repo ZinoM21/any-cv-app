@@ -287,24 +287,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="mt-12 w-full bg-primary/5 py-16 md:py-28">
-        <div className="container mx-auto px-2 sm:px-4 md:px-6">
-          <div className="flex flex-col items-center gap-6 text-center">
-            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl">
-              Ready to elevate your professional profile?
-            </h2>
-            <p className="max-w-[700px] text-muted-foreground">
-              Create your standout CV in minutes and increase your chances of
-              landing interviews.
-            </p>
-
-            <div className="w-full max-w-md">
-              <SubmitLinkForm />
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="mt-12 w-full border-t py-8">
