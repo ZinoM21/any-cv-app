@@ -51,31 +51,6 @@ const EducationFieldArray = () => {
     name: "education"
   });
 
-  // const handleSchoolPictureUpload = (index?: number) => {
-  //   // In a real app, this would open a file picker and handle the upload
-  //   const url = prompt("Enter URL for school picture (for demo purposes):");
-  //   if (url) {
-  //     // Update the form field
-  //     if (typeof index === 'number') {
-  //       // Update existing education
-  //       control._fields.education[index].schoolPictureUrl = url;
-  //     } else {
-  //       // For new education entry
-  //       append({
-  //         school: "",
-  //         degree: "",
-  //         fieldOfStudy: "",
-  //         startDate: "",
-  //         endDate: "",
-  //         grade: "",
-  //         activities: "",
-  //         description: "",
-  //         schoolPictureUrl: url,
-  //       });
-  //     }
-  //   }
-  // };
-
   return (
     <div className="mb-60 flex flex-col gap-6">
       {fields.length > 0 && (

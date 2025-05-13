@@ -146,12 +146,15 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
                         <View key={pos.title}>
                           <View style={styles.subSectionHeader}>
                             <Text style={styles.text}>{pos.title}</Text>
-                            <Text style={styles.text}>
-                              {formatDate(pos.startDate)} -{" "}
-                              {pos?.endDate
-                                ? formatDate(pos.endDate)
-                                : "Present"}
-                            </Text>
+                            {pos.startDate && (
+                              <Text style={styles.text}>
+                                {formatDate(pos.startDate) +
+                                  " - " +
+                                  (pos?.endDate
+                                    ? formatDate(pos.endDate)
+                                    : "Present")}
+                              </Text>
+                            )}
                           </View>
                           {pos?.description && (
                             <View style={styles.description}>
@@ -176,12 +179,15 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
                   <View key={project.title} style={styles.subSection}>
                     <View style={styles.subSectionHeader}>
                       <Text>{project.title}</Text>
-                      <Text style={styles.text}>
-                        {formatDate(project.startDate)} -{" "}
-                        {project?.endDate
-                          ? formatDate(project.endDate)
-                          : "Present"}
-                      </Text>
+                      {project.startDate && (
+                        <Text style={styles.text}>
+                          {formatDate(project.startDate) +
+                            " - " +
+                            (project?.endDate
+                              ? formatDate(project.endDate)
+                              : "Present")}
+                        </Text>
+                      )}
                     </View>
 
                     {project.associatedWith && (
@@ -211,10 +217,13 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
                   <View key={edu.school} style={styles.subSection}>
                     <View style={styles.subSectionHeader}>
                       <Text>{edu.degree}</Text>
-                      <Text style={styles.text}>
-                        {formatDate(edu.startDate)} -{" "}
-                        {edu.endDate ? formatDate(edu.endDate) : "Present"}
-                      </Text>
+                      {edu.startDate && (
+                        <Text style={styles.text}>
+                          {formatDate(edu.startDate) +
+                            " - " +
+                            (edu.endDate ? formatDate(edu.endDate) : "Present")}
+                        </Text>
+                      )}
                     </View>
                     <Text style={styles.subSectionHeader}>{edu.school} </Text>
                     {edu.description && (
@@ -278,8 +287,9 @@ const TheClassic = ({ profileData }: { profileData: Partial<ProfileData> }) => {
                       <Text>{vol.organization}</Text>
                       {vol.startDate && (
                         <Text style={styles.text}>
-                          {formatDate(vol.startDate)} -{" "}
-                          {vol.endDate ? formatDate(vol.endDate) : "Present"}
+                          {formatDate(vol.startDate) +
+                            " - " +
+                            (vol.endDate ? formatDate(vol.endDate) : "Present")}
                         </Text>
                       )}
                     </View>

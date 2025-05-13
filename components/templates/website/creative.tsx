@@ -67,10 +67,12 @@ export default function TheCreativeWebsite({
                   >
                     <div className="mb-2 flex flex-col items-start justify-between">
                       <h3 className="text-xl font-semibold">{project.title}</h3>
-                      <span className="flex items-center text-sm text-muted-foreground">
-                        <Calendar className="mr-1 h-3 w-3" />
-                        {formatDateRange(project.startDate, project.endDate)}
-                      </span>
+                      {project.startDate && (
+                        <span className="flex items-center text-sm text-muted-foreground">
+                          <Calendar className="mr-1 h-3 w-3" />
+                          {formatDateRange(project.startDate, project.endDate)}
+                        </span>
+                      )}
                     </div>
 
                     {project.associatedWith && (
@@ -124,9 +126,11 @@ export default function TheCreativeWebsite({
                       />
                     )}
                     <h3 className="mb-1 text-xl font-semibold">{`${position.title}, ${experience.company}`}</h3>
-                    <p className="mb-2 text-muted-foreground">
-                      {formatDateRange(position.startDate, position.endDate)}
-                    </p>
+                    {position.startDate && (
+                      <p className="mb-2 text-muted-foreground">
+                        {formatDateRange(position.startDate, position.endDate)}
+                      </p>
+                    )}
                     {position.description && (
                       <p className="mb-2 text-muted-foreground">
                         {position.description}
@@ -170,9 +174,11 @@ export default function TheCreativeWebsite({
                     {edu.degree}
                     {edu.fieldOfStudy ? ` in ${edu.fieldOfStudy}` : ""}
                   </p>
-                  <p className="mb-4 text-muted-foreground">
-                    {formatDateRange(edu.startDate, edu.endDate)}
-                  </p>
+                  {edu.startDate && (
+                    <p className="mb-4 text-muted-foreground">
+                      {formatDateRange(edu.startDate, edu.endDate)}
+                    </p>
+                  )}
                   {edu.description && (
                     <p className="text-muted-foreground">{edu.description}</p>
                   )}
@@ -203,9 +209,11 @@ export default function TheCreativeWebsite({
                   {vol.cause && (
                     <p className="mb-1 text-muted-foreground">{vol.cause}</p>
                   )}
-                  <p className="mb-2 text-muted-foreground">
-                    {formatDateRange(vol.startDate, vol.endDate)}
-                  </p>
+                  {vol.startDate && (
+                    <p className="mb-2 text-muted-foreground">
+                      {formatDateRange(vol.startDate, vol.endDate)}
+                    </p>
+                  )}
                   {vol.description && (
                     <p className="mb-2 text-muted-foreground">
                       {vol.description}

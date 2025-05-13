@@ -43,7 +43,7 @@ export const useEditorFormInitialValues = () => {
           schoolProfileUrl: edu.schoolProfileUrl || "",
           degree: edu.degree,
           fieldOfStudy: edu.fieldOfStudy || "",
-          startDate: new Date(edu.startDate),
+          startDate: edu.startDate && new Date(edu.startDate),
           endDate: edu.endDate && new Date(edu.endDate),
           grade: edu.grade || "",
           activities: edu.activities || "",
@@ -66,7 +66,7 @@ export const useEditorFormInitialValues = () => {
             (exp.positions
               ? exp.positions.map((pos) => ({
                   title: pos.title,
-                  startDate: new Date(pos.startDate),
+                  startDate: pos.startDate && new Date(pos.startDate),
                   endDate: pos.endDate && new Date(pos.endDate),
                   duration: pos.duration,
                   description: pos.description || "",
@@ -103,7 +103,7 @@ export const useEditorFormInitialValues = () => {
         profileData?.volunteering.map((vol) => ({
           organization: vol.organization,
           role: vol.role,
-          startDate: vol.startDate,
+          startDate: vol.startDate && new Date(vol.startDate),
           endDate: vol.endDate && new Date(vol.endDate),
           description: vol.description || "",
           organizationProfileUrl: vol.organizationProfileUrl || "",
@@ -121,8 +121,8 @@ export const useEditorFormInitialValues = () => {
       projects: profileData?.projects
         ? profileData.projects.map((project) => ({
             title: project.title,
-            startDate: new Date(project.startDate),
-            endDate: project.endDate ? new Date(project.endDate) : undefined,
+            startDate: project.startDate && new Date(project.startDate),
+            endDate: project.endDate && new Date(project.endDate),
             description: project.description || "",
             url: project.url || "",
             associatedWith: project.associatedWith || "",

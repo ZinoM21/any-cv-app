@@ -4,8 +4,14 @@ import { z } from "zod";
 export const editSummaryFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  headline: z.string().max(100, "Keep it short! Maximum 100 characters").optional(),
-  about: z.string().max(2600, "Input too long! Maximum 2600 characters").optional(),
+  headline: z
+    .string()
+    .max(100, "Keep it short! Maximum 100 characters")
+    .optional(),
+  about: z
+    .string()
+    .max(2600, "Input too long! Maximum 2600 characters")
+    .optional(),
   email: z.string().email("Enter a valid email").optional().or(z.literal("")),
   phone: z.string().optional(),
   website: z.string().optional(),
@@ -19,7 +25,7 @@ export type EditSummaryFormValues = z.infer<typeof editSummaryFormSchema>;
 // Position
 export const positionSchema = z.object({
   title: z.string().min(1, "Enter a job title"),
-  startDate: z.coerce.date({ required_error: "Enter a start date" }),
+  startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
   duration: z.string().optional().nullable(),
   description: z.string().optional(),
@@ -59,7 +65,7 @@ export type AddNewExperienceFormValues = z.infer<
 const educationSchema = z.object({
   school: z.string().min(1, "Enter a school name"),
   degree: z.string().min(1, "Enter a degree"),
-  startDate: z.coerce.date({ required_error: "Enter a start date" }),
+  startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
   fieldOfStudy: z.string().optional(),
   description: z.string().optional(),
@@ -92,7 +98,7 @@ export type EditSkillsFormValues = z.infer<typeof editSkillsFormSchema>;
 const volunteeringSchema = z.object({
   role: z.string().min(1, "Enter a role"),
   organization: z.string().min(1, "Enter an organization"),
-  startDate: z.coerce.date({ required_error: "Enter a start date" }),
+  startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
   description: z.string().optional(),
   organizationProfileUrl: z.string().optional(),
@@ -116,7 +122,7 @@ export type AddNewVolunteeringFormValues = z.infer<
 // Projects
 const projectSchema = z.object({
   title: z.string().min(1, "Enter a project title"),
-  startDate: z.coerce.date({ required_error: "Enter a start date" }),
+  startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
   description: z.string().optional(),
   url: z.string().optional(),

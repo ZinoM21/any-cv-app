@@ -136,9 +136,14 @@ export default function TheModernWebsite({
                     className="relative mb-8 flex flex-col md:mb-10 md:flex-row"
                   >
                     <div className="mb-4 w-full space-y-2 text-left md:mb-0 md:w-1/3 md:pr-8 md:text-right">
-                      <h3 className="text-base leading-loose text-foreground md:text-xl">
-                        {formatDateRange(position.startDate, position.endDate)}
-                      </h3>
+                      {position.startDate && (
+                        <h3 className="text-base leading-loose text-foreground md:text-xl">
+                          {formatDateRange(
+                            position.startDate,
+                            position.endDate
+                          )}
+                        </h3>
+                      )}
                       <p className="text-sm leading-loose text-muted-foreground md:text-base">
                         {position.title}
                       </p>
@@ -238,9 +243,11 @@ export default function TheModernWebsite({
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 md:grid-cols-3 md:gap-12">
               {education.map((edu, index) => (
                 <div key={index} className="relative">
-                  <div className="text-base leading-loose text-foreground md:text-xl">
-                    {formatDateRange(edu.startDate, edu.endDate)}
-                  </div>
+                  {edu.startDate && (
+                    <div className="text-base leading-loose text-foreground md:text-xl">
+                      {formatDateRange(edu.startDate, edu.endDate)}
+                    </div>
+                  )}
                   <div className="min-h-[3.5rem] text-sm leading-loose text-muted-foreground md:text-base">
                     {edu.degree}
                     {edu.fieldOfStudy ? ` in ${edu.fieldOfStudy}` : ""}
@@ -319,9 +326,11 @@ export default function TheModernWebsite({
                   <div className="mt-4 rounded-xl bg-muted p-4 md:p-6">
                     <div className="mb-3 flex items-center">
                       <Calendar className="mr-2 h-3 w-3 text-violet-600 md:h-4 md:w-4" />
-                      <span className="text-xs text-muted-foreground md:text-sm">
-                        {formatDateRange(project.startDate, project.endDate)}
-                      </span>
+                      {project.startDate && (
+                        <span className="text-xs text-muted-foreground md:text-sm">
+                          {formatDateRange(project.startDate, project.endDate)}
+                        </span>
+                      )}
                     </div>
 
                     {project.associatedWith && (

@@ -40,7 +40,7 @@ export type Experience = {
 
 export type Position = {
   title: string;
-  startDate: Date;
+  startDate?: Date;
   endDate?: Date;
   duration?: string;
   description?: string;
@@ -54,7 +54,7 @@ export type Education = {
   schoolPictureUrl?: string;
   degree: string;
   fieldOfStudy?: string;
-  startDate: Date;
+  startDate?: Date;
   endDate?: Date;
   grade?: string;
   activities?: string;
@@ -67,14 +67,14 @@ export type VolunteeringExperience = {
   organizationProfileUrl?: string;
   organizationLogoUrl?: string;
   cause?: string;
-  startDate: Date;
+  startDate?: Date;
   endDate?: Date;
   description?: string;
 };
 
 export type Project = {
   title: string;
-  startDate: Date;
+  startDate?: Date;
   endDate?: Date;
   description?: string;
   url?: string;

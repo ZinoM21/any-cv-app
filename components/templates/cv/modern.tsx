@@ -306,13 +306,16 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
                           </Link>
                         </Text>
 
-                        <Text style={sharedStyles.sectionItemDate}>
-                          {formatDate(position.startDate)} -{" "}
-                          {position.endDate
-                            ? formatDate(position.endDate)
-                            : "Present"}
-                          {position.location ? ` | ${position.location}` : ""}
-                        </Text>
+                        {position.startDate && (
+                          <Text style={sharedStyles.sectionItemDate}>
+                            {formatDate(position.startDate) +
+                              " - " +
+                              (position.endDate
+                                ? formatDate(position.endDate)
+                                : "Present")}
+                            {position.location ? ` | ${position.location}` : ""}
+                          </Text>
+                        )}
 
                         {position.description && (
                           <RichText style={sharedStyles.sectionItemDescription}>
@@ -337,10 +340,15 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
                     {project.associatedWith && ` - ${project.associatedWith}`}
                   </Text>
 
-                  <Text style={sharedStyles.sectionItemDate}>
-                    {formatDate(project.startDate)} -{" "}
-                    {project.endDate ? formatDate(project.endDate) : "Present"}
-                  </Text>
+                  {project.startDate && (
+                    <Text style={sharedStyles.sectionItemDate}>
+                      {formatDate(project.startDate) +
+                        " - " +
+                        (project.endDate
+                          ? formatDate(project.endDate)
+                          : "Present")}
+                    </Text>
+                  )}
 
                   {project.description && (
                     <RichText style={sharedStyles.sectionItemDescription}>
@@ -370,10 +378,13 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
                     </Text>
                   </Text>
 
-                  <Text style={sharedStyles.sectionItemDate}>
-                    {formatDate(vol.startDate)} -{" "}
-                    {vol.endDate ? formatDate(vol.endDate) : "Present"}
-                  </Text>
+                  {vol.startDate && (
+                    <Text style={sharedStyles.sectionItemDate}>
+                      {formatDate(vol.startDate) +
+                        " - " +
+                        (vol.endDate ? formatDate(vol.endDate) : "Present")}
+                    </Text>
+                  )}
 
                   {vol.description && (
                     <RichText style={sharedStyles.sectionItemDescription}>
@@ -398,8 +409,10 @@ const TheModern = ({ profileData, signedUrlsMap }: TheModernProps) => {
                   </Text>
 
                   <Text style={sharedStyles.sectionItemDate}>
-                    {formatDate(edu.startDate)} -{" "}
-                    {edu.endDate ? formatDate(edu.endDate) : "present"}
+                    {edu.startDate &&
+                      formatDate(edu.startDate) +
+                        " - " +
+                        (edu.endDate ? formatDate(edu.endDate) : "present")}
                     {edu.school ? ` | ${edu.school}` : ""}
                     {edu.description ? ` | ${edu.description}` : ""}
                   </Text>
