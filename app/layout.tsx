@@ -2,6 +2,7 @@ import { auth, signOut } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { geistSans } from "@/styles/fonts";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -35,6 +36,7 @@ export default async function RootLayout({
             {children}
           </div>
           <Toaster position="top-center" richColors closeButton theme="light" />
+          <SpeedInsights />
           <Analytics />
         </Providers>
       </body>
