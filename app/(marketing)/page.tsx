@@ -8,7 +8,7 @@ export default function Home() {
       <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></Script>
 
       {/* Hero Section */}
-      <section className="flex min-h-screen w-full items-center justify-center py-16 md:py-28 lg:py-36">
+      <section className="sm:h-[calc(100vh-64px) flex h-[calc(100vh-56px)] min-h-0 w-full items-center justify-center py-4 sm:py-16 md:py-28 lg:py-36">
         <div className="container mx-auto px-2 sm:px-4 md:px-6">
           <div className="flex flex-col items-center gap-8 text-center">
             <div className="max-w-3xl space-y-4">
@@ -286,7 +286,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
 
       {/* Footer */}
       <footer className="mt-12 w-full border-t py-8">

@@ -1,8 +1,8 @@
 import { auth, signOut } from "@/auth";
+import { SignUpForm } from "@/components/auth/signup-form";
 import BuildAnyCVLogo from "@/components/logo";
 import { Card } from "@/components/ui/card";
 import { redirect } from "next/navigation";
-import { SignUpForm } from "../../../components/auth/signup-form";
 
 export default async function SignUpPage() {
   const session = await auth();

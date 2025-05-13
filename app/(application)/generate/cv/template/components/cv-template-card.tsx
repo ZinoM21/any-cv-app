@@ -11,7 +11,7 @@ import CVPreviewPopup from "./cv-preview-popup";
 export default function CVTemplateCard({
   template,
   username,
-  params,
+  params
 }: {
   template: CVTemplate;
   username: string;
@@ -38,8 +38,8 @@ export default function CVTemplateCard({
         </div>
       </CardContent>
 
-      <CardFooter className="flex flex-1 flex-col p-4 items-stretch border-t">
-        <h3 className="mb-1 font-medium  ">{template.name}</h3>
+      <CardFooter className="flex flex-1 flex-col items-stretch border-t p-4">
+        <h3 className="mb-1 font-medium">{template.name}</h3>
         <p className="mb-4 flex-1 text-sm text-muted-foreground">
           {template.description}
         </p>
@@ -47,7 +47,7 @@ export default function CVTemplateCard({
         <Button asChild className="group/button">
           <Link
             href={`/generate/cv/editor/?${buildQueryString(params, {
-              set: { username, templateId: template.id },
+              set: { username, templateId: template.id }
             })}`}
           >
             Use this template

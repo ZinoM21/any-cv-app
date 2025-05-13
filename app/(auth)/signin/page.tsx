@@ -1,11 +1,11 @@
 import { auth, signOut } from "@/auth";
+import { SignInForm } from "@/components/auth/login-form";
 import BuildAnyCVLogo from "@/components/logo";
 import { Card, CardContent } from "@/components/ui/card";
 import { FileUser } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SignInForm } from "../../../components/auth/login-form";
 
 export default async function LoginPage() {
   const session = await auth();

@@ -1,16 +1,13 @@
-import { createContext, useContext, ReactNode, JSX, ReactElement } from "react";
+import { createContext, JSX, ReactElement, ReactNode, useContext } from "react";
 
+import { Plugin, type SpecialZoomLevel } from "@react-pdf-viewer/core";
 import { DownloadProps, getFilePlugin } from "@react-pdf-viewer/get-file";
 import {
-  zoomPlugin,
   ZoomInProps,
   ZoomOutProps,
-  ZoomProps,
+  zoomPlugin,
+  ZoomProps
 } from "@react-pdf-viewer/zoom";
-import {
-  // OpenFile,
-  Plugin,
-} from "@react-pdf-viewer/core";
 
 interface PdfPluginsContextValue {
   // File plugin exports
@@ -22,6 +19,7 @@ interface PdfPluginsContextValue {
   ZoomIn: (props: ZoomInProps) => ReactElement;
   ZoomOut: (props: ZoomOutProps) => ReactElement;
   Zoom: (props: ZoomProps) => ReactElement;
+  zoomTo: (scale: number | SpecialZoomLevel) => void;
 }
 
 const PdfPluginsContext = createContext<PdfPluginsContextValue | null>(null);
@@ -31,17 +29,12 @@ interface PdfPluginsProviderProps {
 }
 
 export function PdfPluginsProvider({
-  children,
+  children
 }: PdfPluginsProviderProps): JSX.Element {
   const filePluginInstance = getFilePlugin({
     fileNameGenerator: () => {
-      // (file: OpenFile) => {
-      // `file.name` is the URL of opened file
-      //   TODO: add custom name
-      //   const fileName = file.name.substring(file.name.lastIndexOf("/") + 1);
-      //   return `my-${fileName}-cv`;
       return "my-stunning-new-cv";
-    },
+    }
   });
   const zoomPluginInstance = zoomPlugin();
 
@@ -55,6 +48,7 @@ export function PdfPluginsProvider({
     ZoomIn: zoomPluginInstance.ZoomIn,
     ZoomOut: zoomPluginInstance.ZoomOut,
     Zoom: zoomPluginInstance.Zoom,
+    zoomTo: zoomPluginInstance.zoomTo
   };
 
   return (

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Header } from "../../../components/header";
+import { Header } from "@/components/header";
 import BreadCrumb from "../breadcrumb";
 
 export default function GeneratingLayout({

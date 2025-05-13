@@ -2,13 +2,19 @@ import { auth, signOut } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { geistSans } from "@/styles/fonts";
 import { Analytics } from "@vercel/analytics/react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "BuildAnyCV",
   description: "CV & Site in seconds"
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1
 };
 
 export default async function RootLayout({

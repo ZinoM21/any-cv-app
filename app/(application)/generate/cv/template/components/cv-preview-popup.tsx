@@ -1,23 +1,23 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 
 import { PDFLoadingSkeleton } from "../../editor/components/preview/pdf-loading";
 
-import "@react-pdf-viewer/core/lib/styles/index.css";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
+import "@react-pdf-viewer/core/lib/styles/index.css";
 
 export default function CVPreviewPopup({
   templateId,
-  templateName,
+  templateName
 }: {
   templateId: string;
   templateName: string;
@@ -56,9 +56,9 @@ export default function CVPreviewPopup({
                 buildPageStyles: ({ pageIndex }) => {
                   return {
                     paddingTop: pageIndex === 0 ? 20 : 0,
-                    backgroundColor: "hsl(var(--muted))",
+                    backgroundColor: "hsl(var(--muted))"
                   };
-                },
+                }
               }}
             />
           </Worker>
