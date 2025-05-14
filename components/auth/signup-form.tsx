@@ -18,6 +18,7 @@ import { ApiErrorType } from "@/lib/errors";
 import { SignUpFormValues, signUpSchema } from "@/lib/schemas/auth-schema";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { PasswordInput } from "./PasswordInput";
 
 export function SignUpForm({
   className,
@@ -121,9 +122,9 @@ export function SignUpForm({
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <PasswordInput placeholder="••••••••" {...field} />
               </FormControl>
-              <FormMessage />
+              {/* <FormMessage /> */}
             </FormItem>
           )}
         />

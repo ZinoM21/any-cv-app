@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+export const passwordRequirements = [
+  { regex: /.{8,}/, text: "At least 8 characters" },
+  { regex: /[0-9]/, text: "At least 1 number" },
+  { regex: /[a-z]/, text: "At least 1 lowercase letter" },
+  { regex: /[A-Z]/, text: "At least 1 uppercase letter" }
+] as const;
+
 export const emailSchema = z
   .string({ required_error: "Email is required" })
   .min(1, "Email is required")
@@ -8,7 +15,9 @@ export const passwordSchema = z
   .string({ required_error: "Password is required" })
   .min(1, "Password is required")
   .min(8, "Password must be more than 8 characters")
-  .max(32, "Password must be less than 32 characters");
+  .regex(passwordRequirements[1].regex, passwordRequirements[1].text)
+  .regex(passwordRequirements[2].regex, passwordRequirements[2].text)
+  .regex(passwordRequirements[3].regex, passwordRequirements[3].text);
 
 export const signInSchema = z.object({
   email: emailSchema,

@@ -37,6 +37,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.11.3",
     "jose": "^6.0.10",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.1",

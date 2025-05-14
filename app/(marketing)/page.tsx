@@ -1,6 +1,9 @@
 import Script from "next/script";
-import { RotatingText } from "./components/rotating-text";
+
+import RotatingText from "@/components/RotatingText";
 import { SubmitLinkForm } from "./components/submit-link-form";
+
+const words = ["Professional CV", "Standout Site"];
 
 export default function Home() {
   return (
@@ -13,7 +16,8 @@ export default function Home() {
           <div className="flex flex-col items-center gap-8 text-center">
             <div className="max-w-3xl space-y-4">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                Create Your <RotatingText />
+                Create Your{" "}
+                <RotatingText words={words} className="text-primary" />
                 <span className="whitespace-nowrap"> in Seconds</span>
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
