@@ -16,12 +16,14 @@ function PasswordInput<T extends HTMLInputElement>(
 
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
-  const checkStrength = (pass: string) => {
+  const checkStrength = (pw: string) => {
     return passwordRequirements.map((req) => ({
-      met: req.regex.test(pass),
+      met: req.regex.test(pw),
       text: req.text
     }));
   };
+
+  const numberOfTotalRequirements = passwordRequirements.length;
 
   const strength = checkStrength(props.value ?? "");
 
@@ -77,12 +79,14 @@ function PasswordInput<T extends HTMLInputElement>(
         role="progressbar"
         aria-valuenow={strengthScore}
         aria-valuemin={0}
-        aria-valuemax={4}
+        aria-valuemax={numberOfTotalRequirements}
         aria-label="Password strength"
       >
         <div
           className={`h-full ${getStrengthColor(strengthScore)} transition-all duration-500 ease-out`}
-          style={{ width: `${(strengthScore / 4) * 100}%` }}
+          style={{
+            width: `${(strengthScore / numberOfTotalRequirements) * 100}%`
+          }}
         ></div>
       </div>
 

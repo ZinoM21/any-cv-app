@@ -25,6 +25,7 @@ import {
   resetPasswordSchema
 } from "@/lib/schemas/auth-schema";
 import { toast } from "sonner";
+import { PasswordInput } from "./PasswordInput";
 
 export function ResetPasswordForm({ token }: { token?: string }) {
   const router = useRouter();
@@ -38,7 +39,7 @@ export function ResetPasswordForm({ token }: { token?: string }) {
       password: "",
       confirmPassword: ""
     },
-    mode: "onChange"
+    mode: "all"
   });
 
   const { isDirty, isValid } = form.formState;
@@ -95,16 +96,11 @@ export function ResetPasswordForm({ token }: { token?: string }) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>New Password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter your new password"
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <PasswordInput placeholder="••••••••" {...field} />
               </FormControl>
-              <FormMessage />
+              {/* <FormMessage /> */}
             </FormItem>
           )}
         />
