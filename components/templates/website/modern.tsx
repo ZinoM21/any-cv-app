@@ -43,9 +43,11 @@ export default function TheModernWebsite({
                 ? headline.split(" ").slice(0, 12).join(" ")
                 : `${fullName}, Developer`}
             </h1>
-            <p className="mx-auto max-w-3xl px-2 text-sm text-muted-foreground md:px-0 md:text-base">
-              {location || "San Francisco, CA"}
-            </p>
+            {location && (
+              <p className="mx-auto max-w-3xl px-2 text-sm text-muted-foreground md:px-0 md:text-base">
+                {location}
+              </p>
+            )}
 
             {/* Profile Image */}
             <div className="mb-8 mt-10 md:mt-16">
@@ -111,10 +113,11 @@ export default function TheModernWebsite({
             </span>
             <span className="text-foreground">. Nice to meet you.</span>
           </h2>
-          <p className="mx-auto max-w-xl px-2 text-sm leading-loose text-muted-foreground md:px-0 md:text-base">
-            {about ||
-              "Passionate software engineer with 5+ years of experience building web and mobile applications. Currently focusing on AI-driven solutions."}
-          </p>
+          {about && (
+            <p className="mx-auto max-w-xl px-2 text-sm leading-loose text-muted-foreground md:px-0 md:text-base">
+              {about}
+            </p>
+          )}
         </div>
       </section>
 
